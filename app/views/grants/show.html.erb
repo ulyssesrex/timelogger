@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @grant.name %>
+</p>
+
+<p>
+  <strong>Comments:</strong>
+  <%= @grant.comments %>
+</p>
+
+<p>
+  <strong>Ppd hours percent:</strong>
+  <%= @grant.ppd_hours_percent %>
+</p>
+
+<p>
+  <strong>Ppd hours:</strong>
+  <%= @grant.ppd_hours %>
+</p>
+
+<p>
+  <strong>Organization:</strong>
+  <%= @grant.organization %>
+</p>
+
+<%= link_to 'Edit', edit_grant_path(@grant) %> |
+<%= link_to 'Back', grants_path %>

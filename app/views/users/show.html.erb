@@ -1,0 +1,26 @@
+<% provide(:title, 'Home') %>
+
+<div class="row">
+	<div class="col-md-6">
+		<section class="user_info">
+			<%= 
+				render partial: 'shared/user_info', locals: { user: @user } 
+			%>
+		</section>
+		<section>
+			<%= 
+				render partial: 'shared/grants_fulfillments', 
+					locals: { user: @user } 
+			%>
+		</section>
+		<section>
+			<%= 
+				render partial: 'shared/timelog_feed_selectors', 
+					locals: { user: @user } 
+			%>
+			<%= 
+				render partial: 'shared/timelog_feed', locals: { user: @user } 
+			%>
+		</section>
+	</div>
+</div>

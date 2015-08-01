@@ -1,0 +1,28 @@
+# TODO: should i even keep the Chart.js?
+# TODO: dynamic labels, dynamic data, color scheme should be greenish, figure out the ERB equivalent of the next line and stick it in the view with the right proportions:
+# %canvas#canvas{:height => "450", :width => "600"}
+
+
+# Grants Graph -->
+
+
+
+# Timer -->
+	
+doTimer = (length, resolution, oninstance, oncomplete) ->
+  steps = length / 100 * resolution / 10
+  speed = length / steps
+  count = 0
+  start = (new Date).getTime()
+
+  instance = ->
+    if count++ == steps
+      oncomplete steps, count
+    else
+      oninstance steps, count
+      diff = (new Date).getTime() - start - (count * speed)
+      window.setTimeout instance, speed - diff
+    return
+
+  window.setTimeout instance, speed
+  return

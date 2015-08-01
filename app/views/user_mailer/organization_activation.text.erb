@@ -1,0 +1,14 @@
+<%= @greeting %>
+
+Thanks for enrolling your organization with Timelogger! Here's what you'll need to get started.
+
+1. As other users sign up for Timelogger, they will be prompted to enter the <%= @organization.name %> keyword you selected. You will need to distribute this keyword internally to whomever will be registering. Note: any person with this keyword can sign up for your organization, so just keep security in mind as you distribute it.
+
+2. As <%= @organization.name %>'s first user, you have been granted admin status. When you log in you'll be taken to a help screen that will tell you exactly what that means (basically, you have Timelogger superpowers). If you need help at any other time, just click 'Help' on the navigation bar on the upper right.
+
+3. Click the link below to activate your Timelogger account and log in.
+
+<%= edit_account_activation_url(@admin.activation_token, email: @admin.email) %>
+
+Happy Logging,
+Timelogger Staff

@@ -1,0 +1,13 @@
+<div id="user-info-blurb">
+	<%= link_to gravatar_for(user, size: 50), user %>
+	<ul>
+		<li><%= link_to full_name(user), user %></li>
+		<li>
+			<%= user.position %>
+			<% if user.admin? %>
+				(&#x2606; <%#= Star symbol %> Admin)
+			<% end %>
+		</li>
+		<li><%= user.organization.name %></li>
+	</ul>
+</div>
