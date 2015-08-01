@@ -115,7 +115,7 @@ describe OrganizationsController do
           expect(flash[:success]).to be_present
         end
 
-        it "redirects to the login page" do
+        it "redirects to root" do
           expect(response).to redirect_to(root_url)
         end
       end

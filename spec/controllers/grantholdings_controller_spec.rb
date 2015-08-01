@@ -75,8 +75,8 @@ describe GrantholdingsController do
           expect(flash[:success]).to be_present
         end
         
-        it "redirects to root" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to home" do
+          expect(response).to redirect_to(user_path(user))
         end
       end
       

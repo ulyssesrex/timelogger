@@ -6,7 +6,7 @@ class TimesheetsController < ApplicationController
   def new
     @user = User.find_by(id: params[:timesheet][:user_id])
     unless current_user?(@user) || current_user.admin?
-      redirect_to root_url and return 
+      redirect_to user_path(current_user) and return 
     end
     @timesheet = Timesheet.new  
     respond_to do |format|
@@ -18,11 +18,11 @@ class TimesheetsController < ApplicationController
   def create
     @timesheet = Timesheet.new(timesheet_params)
     unless current_user?(@timesheet.user) || current_user.admin?
-      redirect_to(root_url) and return
+      redirect_to user_path(current_user) and return
     end    
     if @timesheet.save
       flash[:success] = "Timesheet was saved."
-      redirect_to root_url and return
+      redirect_to user_path(current_user) and return
     else
       render 'new'
     end
@@ -32,7 +32,7 @@ class TimesheetsController < ApplicationController
     unless current_user?(@timesheet.user) || 
       current_user.supervisees.include?(@timesheet.user) || 
       current_user.admin? #-->
-      redirect_to root_url and return 
+      redirect_to user_path(current_user) and return 
     end
   end
   
@@ -42,7 +42,7 @@ class TimesheetsController < ApplicationController
   def update
     if @timesheet.update_attributes(timesheet_params)
       flash[:success] = "Timesheet was updated."
-      redirect_to root_url and return
+      redirect_to user_path(current_user) and return
     else
       render 'edit'
     end    
@@ -51,7 +51,7 @@ class TimesheetsController < ApplicationController
   def destroy
     @timesheet.destroy
     flash[:success] = "Timesheet deleted."
-    redirect_to root_url
+    redirect_to user_path(current_user)
   end
   
   private
@@ -70,7 +70,7 @@ class TimesheetsController < ApplicationController
     
     def current_user_or_admin
       unless current_user?(@timesheet.user) || current_user.admin?
-        redirect_to(root_url) and return
+        redirect_to user_path(current_user) and return
       end
     end
     

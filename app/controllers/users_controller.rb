@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
-  before_action :redirect_to_home, only:   [:show]
   before_action :logged_in,        except: [:new, :create]
   before_action :set_organization, except: [:new, :create]
-  before_action :find_user_by_id,  only:   [:edit, :update, :destroy]
+  before_action :find_user_by_id,  only:   [:show, :edit, :update, :destroy]
   before_action :find_activated,   only:   [:index, :destroy_other, :make_admin]  
   before_action :is_supervisor_or_user_or_admin, only: [:show]
   before_action :is_user_or_admin, only:   [:edit, :update, :destroy]
@@ -38,11 +37,7 @@ class UsersController < ApplicationController
   end
   
   def show
-    if params[:id]
-      @user = User.find(params[:id])
-    else
-      @user = current_user
-    end
+    redirect_to users_path unless @user.activated?
   end
   
   def edit
@@ -51,12 +46,12 @@ class UsersController < ApplicationController
   def update
     # Cancel -->
     if params[:commit] == "Cancel"
-      redirect_to root_url and return
+      redirect_to user_path(current_user) and return
     # Submit -->
     else
       if @user.update(user_params)
         flash[:success] = "Profile updated."
-        redirect_to root_url and return
+        redirect_to user_path(current_user) and return
       else
         render 'edit' and return
       end
@@ -125,7 +120,7 @@ class UsersController < ApplicationController
         current_user.admin? 
         #...
         flash_error_msg
-        redirect_to root_url
+        redirect_to user_path(current_user)
       end
     end
     
@@ -135,7 +130,7 @@ class UsersController < ApplicationController
         current_user.admin? 
         #...
         flash_error_msg
-        redirect_to root_url
+        redirect_to user_path(current_user)
       end
     end
     
@@ -143,7 +138,4 @@ class UsersController < ApplicationController
       flash[:danger] = "Cannot perform that action."
     end
     
-    def redirect_to_home
-      redirect_to home_path unless logged_in?
-    end
 end

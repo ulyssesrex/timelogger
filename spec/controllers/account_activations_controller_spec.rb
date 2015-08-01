@@ -9,7 +9,7 @@ describe AccountActivationsController do
   describe 'GET #edit' do
     it 'activates the user' do
       get :edit, id: user.activation_token, email: user.email
-      user.reload # because user#activate updates directly to db
+      user.reload # because database is directly changed
       expect(user.activated?).to be(true)
     end
     
@@ -39,9 +39,9 @@ describe AccountActivationsController do
       expect(flash[:success]).to be_present
     end
     
-    it 'redirects users to root' do
+    it 'redirects users to their home page' do
       get :edit, id: user.activation_token, email: user.email
-      expect(response).to redirect_to(root_url)
+      expect(response).to redirect_to(user_path(user))
     end
   end
 end
