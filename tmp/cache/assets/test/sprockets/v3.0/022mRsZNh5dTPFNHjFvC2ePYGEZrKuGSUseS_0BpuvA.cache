@@ -1,0 +1,24 @@
+I"d(function() {
+  var doTimer;
+
+  doTimer = function(length, resolution, oninstance, oncomplete) {
+    var count, instance, speed, start, steps;
+    steps = length / 100 * resolution / 10;
+    speed = length / steps;
+    count = 0;
+    start = (new Date).getTime();
+    instance = function() {
+      var diff;
+      if (count++ === steps) {
+        oncomplete(steps, count);
+      } else {
+        oninstance(steps, count);
+        diff = (new Date).getTime() - start - (count * speed);
+        window.setTimeout(instance, speed - diff);
+      }
+    };
+    window.setTimeout(instance, speed);
+  };
+
+}).call(this);
+:ET

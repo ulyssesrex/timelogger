@@ -1,0 +1,11 @@
+<%= f.fields_for :grantholdings do |ff| %>
+	<% user.grantholdings.each do |grantholding| %>
+		<div class="field">
+			<%= grantholding.check_box :_destroy %>
+			<%= "#{grantholding.grant.name}:" %><br>
+			<%= ff.text_field :hours_required %> / pay period
+		</div>
+	<% end %>
+<% end %>
+		
+	

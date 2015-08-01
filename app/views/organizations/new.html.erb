@@ -1,0 +1,45 @@
+<% provide(:title, 'Enroll organization') %>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+		<%= form_for(@organization) do |f| %>
+		
+		  <% if @organization.errors.any? %>
+		    <%= render partial: 'errors', locals: { organization: @organization } %>
+		  <% end %>
+
+			<h1>Organization information</h1>
+			<h2>This will be used to create your organization's profile.</h2>
+			<div class="field">
+			  Organization name<br>
+			  <%= f.text_field :name, class: 'form-control' %>
+			</div>
+			<div class="field">
+			  Organization description<br>
+			  <%= f.text_area :description, class: 'form-control' %>
+			</div>
+			<div class="field">
+			  Choose an organization keyword.<br> 
+				Make a note of it -- other employees will need it to register.<br>
+			  <%= f.password_field :password, class: 'form-control' %>
+			</div>
+			<div class="field">
+				Confirm your organization's keyword.<br>
+				<%= f.password_field :password_confirmation, class: 'form-control' %>
+			</div>
+			
+			<h1>Your information</h1>
+			<h2>This will be used to create your profile.</h2>
+			
+				<%= f.fields_for :users do |user_builder| %>
+					<%= render partial: 'admin_fields', locals: { f: user_builder } %>
+				<% end %>
+				
+		  <div class="actions">
+				<%= f.submit "Cancel", class: "btn btn-primary my-btn" %>
+		    <%= f.submit "Submit", class: "btn btn-primary my-btn" %>
+		  </div>
+
+		<% end %>
+	</div>
+</div>

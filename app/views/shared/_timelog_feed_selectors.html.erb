@@ -1,0 +1,28 @@
+<div class="btn-group" data-toggle="buttons">
+	<label class="btn btn-primary my-btn active">
+		<input type="checkbox" autocomplete="off" checked>My timelogs
+	</label>
+	<% if user.has_supervisees? %>
+		<label class="btn btn-primary my-btn">
+			<input type="checkbox" autocomplete="off">Supervisees' timelogs
+		</label>
+	<% end %>
+	Filter by:
+	<div class="btn-group" data-toggle="buttons">
+		<label class="btn btn-primary my-btn active">
+			<input type="checkbox" autocomplete="off" checked>Newest
+		</label>
+		<label class="btn btn-primary my-btn">
+			<input type="checkbox" autocomplete="off">Oldest
+		</label>
+		<label class="btn btn-primary my-btn">
+			<input type="checkbox" autocomplete="off">A&#8594;Z
+		</label>
+		<label class="btn btn-primary my-btn">
+			<input type="checkbox" autocomplete="off">Z&#8594;A
+		</label>
+		<label class="btn btn-primary my-btn">
+			<input type="checkbox" autocomplete="off">By Grant
+		</label>
+	</div>
+</div>
