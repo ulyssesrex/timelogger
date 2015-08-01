@@ -169,9 +169,9 @@ describe PasswordResetsController do
           expect(flash[:success]).to be_present
         end
         
-        it "redirects to the root_url" do
+        it "redirects to the user page" do
           update_password_reset
-          expect(response).to redirect_to(root_url)
+          expect(response).to redirect_to(user_path(user))
         end
       end
       

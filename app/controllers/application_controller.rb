@@ -13,11 +13,11 @@ class ApplicationController < ActionController::Base
     set_current_tenant(current_organization)
   end
   
-  # Redirects to root if user doesn't have admin status.
+  # Redirects to user page if user doesn't have admin status.
   def admin
     unless current_user.admin?
       flash[:danger] = "Sorry, you must be an admin to do that."
-      redirect_to root_url
+      redirect_to user_path(current_user)
     end
   end
   

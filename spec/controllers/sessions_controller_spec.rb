@@ -70,7 +70,7 @@ describe SessionsController do
       context "user is activated" do
         it "passes the filter successfully" do
           create_session(user)
-          expect(response).to redirect_to(root_url)
+          expect(response).to redirect_to(user_path(current_user))
         end
       end
     end
@@ -124,7 +124,7 @@ describe SessionsController do
         
         context "there is no forwarding url" do
           it "redirects to default url" do
-            expect(create_session(user)).to redirect_to(root_url)
+            expect(create_session(user)).to redirect_to(user_path(user))
           end
         end
       end     

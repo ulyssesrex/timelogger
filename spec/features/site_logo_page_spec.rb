@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe "Logged Out Home Page" do
-  describe "Visit homepage logged out" do
+describe "Site Logo Page" do
+  describe "Visit site logo page" do
     before(:each) { visit(root_url) }
     
     it "has a nav bar with login button" do

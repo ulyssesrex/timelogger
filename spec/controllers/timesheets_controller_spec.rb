@@ -22,7 +22,7 @@ describe TimesheetsController do
       it "redirects if the current user isn't the user or an admin" do
         current_user_is user
         get_new_timesheet_for other_user
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(user_path(user))
       end
       
       before(:each) do
@@ -31,7 +31,7 @@ describe TimesheetsController do
       end
       
       it "does not redirect for the same user" do
-        expect(response).not_to redirect_to(root_url)
+        expect(response).not_to redirect_to(user_path(user))
       end
             
       it "renders the :new template" do
@@ -78,7 +78,7 @@ describe TimesheetsController do
       it "redirects if current user isn't the timesheet's user or an admin" do
         current_user_is(other_user)
         create_timesheet_for(user)
-        expect(response).to redirect_to(root_url)        
+        expect(response).to redirect_to(user_path(other_user))        
       end
       
       it "passes if current user is the timesheet's user or an admin" do
@@ -102,8 +102,8 @@ describe TimesheetsController do
           expect(flash[:success]).to be_present
         end
         
-        it "redirects to the root url" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to the user page" do
+          expect(response).to redirect_to(user_path(user))
         end
       end
       
@@ -138,7 +138,7 @@ describe TimesheetsController do
       it "passes if current user is user" do
         current_user_is(timesheet.user)
         show_user_timesheet
-        expect(response).not_to redirect_to(root_url)
+        expect(response).not_to redirect_to(user_path(timesheet.user))
       end      
 
       it "passes if current user is user's supervisor" do
@@ -146,20 +146,20 @@ describe TimesheetsController do
         current_user_is(supervisor)
         supervisor.supervisees << timesheet.user        
         show_user_timesheet
-        expect(response).not_to redirect_to(root_url)
+        expect(response).not_to redirect_to(user_path(supervisor))
       end
       
       it "passes if current user is admin" do
         current_user_is(admin)
         show_user_timesheet
-        expect(response).not_to redirect_to(root_url)
+        expect(response).not_to redirect_to(user_path(admin))
       end
       
       it "redirects if current user is not user, 
         user's supervisor, or admin" do
         current_user_is(other_user)
         show_user_timesheet
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(user_path(other_user))
       end
       
       it "renders the :show template" do
@@ -183,19 +183,19 @@ describe TimesheetsController do
       it "passes if current_user is user" do
         current_user_is timesheet.user
         edit_timesheet
-        expect(response).not_to redirect_to(root_url)
+        expect(response).not_to redirect_to(user_path(timesheet.user))
       end
       
       it "passes if current_user is admin" do
         current_user_is admin
         edit_timesheet
-        expect(response).not_to redirect_to(root_url)
+        expect(response).not_to redirect_to(user_path(admin))
       end
       
-      it "redirects to root is current_user is not user or admin" do
+      it "redirects to user page if current_user is not user or admin" do
         current_user_is other_user
         edit_timesheet
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(user_path(other_user))
       end
       
       it "renders the :edit template" do
@@ -226,7 +226,7 @@ describe TimesheetsController do
         expect { update_timesheet }.to change(timesheet, :start_time)
       end
       
-      it "redirects to root if current_user is not user or admin" do
+      it "redirects if current_user is not user or admin" do
         current_user_is other_user
         expect { update_timesheet }.not_to change(timesheet, :start_time)
       end
@@ -251,8 +251,8 @@ describe TimesheetsController do
           expect(flash[:success]).to be_present          
         end
         
-        it "redirects to root" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to user page" do
+          expect(response).to redirect_to(user_path(timesheet.user))
         end        
       end
       
@@ -321,9 +321,10 @@ describe TimesheetsController do
         expect(flash[:success]).to be_present
       end
       
-      it "redirects to root url" do
+      it "redirects to user page" do
+        user = timesheet.user
         destroy_timesheet
-        expect(response).to redirect_to root_url
+        expect(response).to redirect_to(user_path(user))
       end
     end    
   end

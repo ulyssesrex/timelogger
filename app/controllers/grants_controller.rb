@@ -3,9 +3,7 @@ class GrantsController < ApplicationController
   before_action :logged_in
   before_action :set_grant, only:   [:show, :edit, :update, :destroy]
   before_action :admin,     except: [:show]
-  
-  # TODO: all root_url redirects here should go to organization page instead.
-  
+    
   def new
     @grant = Grant.new
   end
@@ -14,7 +12,7 @@ class GrantsController < ApplicationController
     @grant = Grant.new(grant_params)
     if @grant.save
       flash[:success] = "Grant created."
-      redirect_to root_url and return
+      redirect_to organization_path(@grant.organization_id) and return
     else
       render 'new'
     end
@@ -33,16 +31,17 @@ class GrantsController < ApplicationController
   def update
     if @grant.update(grant_params)
       flash[:success] = "Grant updated."
-      redirect_to root_url and return
+      redirect_to organization_path(@grant.organization_id) and return
     else
       render 'edit'
     end
   end
   
   def destroy
+    @organization = Organization.find(@grant.organization_id)
     @grant.destroy
     flash[:success] = "Grant deleted."
-    redirect_to root_url
+    redirect_to organization_path(@organization.id)
   end
   
   private
@@ -53,5 +52,9 @@ class GrantsController < ApplicationController
   
   def set_grant
     @grant = Grant.find_by(params[:id])
+  end
+  
+  def current_organization
+    ActsAsTenant.current_tenant
   end
 end

@@ -1,4 +1,5 @@
 Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+# TODO: different host.
 
 Rails.application.routes.draw do
   resources :users
@@ -22,5 +23,5 @@ Rails.application.routes.draw do
   get  'supervisees'    => 'supervisions#supervisees'
   get  'delete_user'    => 'users#destroy_other'
   get  'make_admin'     => 'users#make_admin'
-  root 'users#show'
+  root 'static_pages#home'
 end

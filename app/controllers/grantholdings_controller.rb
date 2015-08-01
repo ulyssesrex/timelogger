@@ -11,7 +11,7 @@ class GrantholdingsController < ApplicationController
       msg  = "#{@grantholding.grant.name} "
       msg += "has been added to your grants." 
       flash[:success] = msg
-      redirect_to root_url and return
+      redirect_to user_path(current_user) and return
     else
       render 'new'
     end

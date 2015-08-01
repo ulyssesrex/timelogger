@@ -56,8 +56,8 @@ describe GrantsController do
           expect(flash[:danger]).to be_present
         end
         
-        it "redirects to root_url when user is not an admin" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to user home when user is not an admin" do
+          expect(response).to redirect_to(user_path(user))
         end
       end
       
@@ -69,8 +69,8 @@ describe GrantsController do
           get :new
         end
         
-        it "does not redirect to root" do
-          expect(response).not_to redirect_to(root_url) 
+        it "does not redirect to user home" do
+          expect(response).not_to redirect_to(user_path(user)) 
         end
       end
     end
@@ -118,8 +118,8 @@ describe GrantsController do
           expect(flash[:success]).to be_present
         end
         
-        it "redirects to root" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to organization page" do
+          expect(response).to redirect_to(organization_path(organization))
         end
       end
       
@@ -181,8 +181,8 @@ describe GrantsController do
           expect(flash[:success]).to be_present
         end
         
-        it "redirects to root" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to organization page" do
+          expect(response).to redirect_to(organization_path(organization))
         end
       end
       
@@ -213,8 +213,8 @@ describe GrantsController do
         expect(flash[:success]).to be_present
       end
       
-      it "redirects to root" do
-        expect(response).to redirect_to(root_url)
+      it "redirects to organization page" do
+        expect(response).to redirect_to(organization_path(organization))
       end
     end    
   end

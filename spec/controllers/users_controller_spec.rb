@@ -4,7 +4,7 @@ describe UsersController do
   let(:user)   { create(:user) }
   let(:other_user) { create(:user) }
   let(:admin)  { create(:user, admin: true) }
-  let(:non)    { create(:user, activated: false) }
+  let(:non)    { create(:user, activated: false, activated_at: nil, activation_digest: nil) }
   let(:organization) { create(:organization) }
 
   before(:each) { organization }
@@ -93,7 +93,7 @@ describe UsersController do
         some_guy
         log_in some_guy
         get :show, id: supervisee.id
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(user_path(some_guy))
       end    
     end
     
@@ -113,7 +113,7 @@ describe UsersController do
       it "doesn't pass when current user is neither user nor admin" do
         log_in other_user
         get :edit, id: user.id
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(user_path(other_user))
       end
     end
     
@@ -126,7 +126,7 @@ describe UsersController do
       
       it "doesn't pass when current user is not admin" do
         get :destroy_other
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(user_path(user))
       end
     end
   end
@@ -251,8 +251,8 @@ describe UsersController do
           expect(flash[:success]).not_to be_empty
         end
       
-        it "redirects to root" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to user page" do
+          expect(response).to redirect_to(user_path(user))
         end
       end
     
@@ -283,10 +283,11 @@ describe UsersController do
         end
       end
       
-      it "redirects to root if @user isn't activated", :skip_show do
-        log_in user
+      it "redirects to :index if @user isn't activated", :skip_show do
+        user; log_in user
+        user.supervisees << non
         get :show, id: non.id
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(users_path)
       end
     
       it "assigns the requested user to @user" do
@@ -362,8 +363,8 @@ describe UsersController do
           expect(response).not_to render_template(:destroy_other)
         end
         
-        it "redirects to root" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to user page" do
+          expect(response).to redirect_to(user_path(user))
         end
       end
     end
@@ -394,8 +395,8 @@ describe UsersController do
           expect(response).not_to render_template(:make_admin)
         end
         
-        it "redirects to root" do
-          expect(response).to redirect_to(root_url)
+        it "redirects to user page" do
+          expect(response).to redirect_to(user_path(user))
         end
       end
     end
