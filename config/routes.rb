@@ -2,12 +2,22 @@ Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 # TODO: different host.
 
 Rails.application.routes.draw do
-  resources :users
+  resources :users do
+    member do
+      post 'grants_fulfillments_table'
+      get  'delete_user'
+      get  'make_admin'
+    end
+  end  
   resources :grants   
   resources :organizations,       except: [:index]
   resources :grantholdings,       except: [:show]
   resources :supervisions,        only:   [:create, :destroy]
-  resources :timesheets,          except: [:index]
+  resources :timesheets,          except: [:index] do
+    member do
+      get 'new_from_timer_button'
+    end
+  end
   resources :account_activations, only:   [:edit]
   resources :password_resets,     only:   [:new, :create, :edit, :update]
   
@@ -21,7 +31,5 @@ Rails.application.routes.draw do
   post 'logout'         => 'sessions#destroy'
   get  'all_coworkers'  => 'supervisions#all_coworkers'
   get  'supervisees'    => 'supervisions#supervisees'
-  get  'delete_user'    => 'users#destroy_other'
-  get  'make_admin'     => 'users#make_admin'
   root 'static_pages#home'
 end

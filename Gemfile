@@ -18,6 +18,7 @@ gem 'kaminari'
 gem 'activesupport'
 gem 'acts_as_tenant'
 gem 'chart-js-rails'
+gem 'jquery-turbolinks'
 
 group :development, :test do
   gem 'sqlite3'

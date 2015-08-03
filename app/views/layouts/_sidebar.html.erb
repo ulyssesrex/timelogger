@@ -1,6 +1,11 @@
 <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
 	<aside>
-		<%= link_to "Start Timelog", new_timesheet_path, remote: true %><br>
+		
+		<span id="timelog-button">
+			<%= link_to "Start Timelog", '#', id: 'timelog-button' %>
+		</span>
+		
+		<%= link_to "Cancel Timelog", '#', id: 'timelog-cancel-button' %>
 		<%= link_to "Timelog from Scratch", new_timesheet_path %>
 		
 	</aside>

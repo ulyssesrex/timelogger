@@ -1,13 +1,22 @@
-# TODO: should i even keep the Chart.js?
-# TODO: dynamic labels, dynamic data, color scheme should be greenish, figure out the ERB equivalent of the next line and stick it in the view with the right proportions:
-# %canvas#canvas{:height => "450", :width => "600"}
-
-
-# Grants Graph -->
-
-
-
-# Timer -->
+$(document).ready ->
+	
+	$('#since-date').change ->
+		$.ajax
+	    url: $(this).attr('ajax_path')
+			data: $(this).val()
+	  return
+		
+	$('#timelog-button').click ->
+		start_time = (new Date).getTime()
+		$(this).text("Finish Timelog")
+		$(this).toggleClass('tracking')
+		$('#timelog-cancel-button').fadeToggle('fast')
+		
+	$('#timelog-button')
+		
+		
+		
+# Timer function
 	
 doTimer = (length, resolution, oninstance, oncomplete) ->
   steps = length / 100 * resolution / 10
