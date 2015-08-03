@@ -45,7 +45,7 @@ formatTime = (time) ->
 	newTime
 	
 show = ->
-	$time = $(document).ready.getElementById('js-timer')
+	$time = document.getElementById('js-timer')
 	update()
 	return
 	
@@ -94,6 +94,7 @@ $(document).ready ->
 			success: (msg) ->
 				alert 'Does the button work?' + msg
 				return
+
 				
 		
 		
