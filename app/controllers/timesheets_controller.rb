@@ -4,19 +4,23 @@ class TimesheetsController < ApplicationController
   before_action :current_user_or_admin, except: [:new, :create, :show]
 
   def new
-    @user = User.find_by(id: params[:timesheet][:user_id])
-    unless current_user?(@user) || current_user.admin?
-      redirect_to user_path(current_user) and return 
-    end
-    @timesheet = Timesheet.new  
+    # @user = User.find_by(id: params[:timesheet][:user_id])
+    # unless current_user?(@user) || current_user.admin?
+    #   redirect_to user_path(current_user) and return
+    # end
+    
+    @timesheet = Timesheet.new
+    @timesheet.start_time = params[:start_time]
+    @timesheet.end_time   = params[:end_time]
   end
   
   def new_from_timer_button
     respond_to do |format|
       format.js { 
-        redirect_to new_timesheet_path, 
+        redirect_to new_timesheet_path(
           start_time: params[:start_time], 
-          end_time: params[:end_time] 
+          end_time:   params[:end_time]
+        )
       }
     end
   end
