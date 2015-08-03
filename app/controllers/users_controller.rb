@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  require 'date'
+  
   before_action :logged_in,        except: [:new, :create]
   before_action :set_organization, except: [:new, :create]
   before_action :find_user_by_id,  only:   [:show, :edit, :update, :destroy]
@@ -39,6 +41,17 @@ class UsersController < ApplicationController
   def show
     redirect_to users_path unless @user.activated?
   end
+  
+  def grants_fulfillments_table
+    respond_to do |format| 
+      format.js { 
+        render 'grants_fulfillments', 
+        locals: { since_date: params[:since_date] }
+      }
+    end
+  end
+  
+  # TODO: Allow user to specify their own 'since' date for grants fulfillments table.
   
   def edit
   end
@@ -137,5 +150,6 @@ class UsersController < ApplicationController
     def flash_error_msg
       flash[:danger] = "Cannot perform that action."
     end
+
     
 end

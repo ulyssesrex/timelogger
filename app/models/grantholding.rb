@@ -9,13 +9,15 @@ class Grantholding < ActiveRecord::Base
   validates :grant, presence: true
   validates :user,  presence: true
   
-  def total_time_allocated_since(date)
-    user = self.user
-    total = 0
-    timesheets_in_range = user.timesheets.where("end_time > ?", date)
-    timesheets_in_range.each do |t|
-      total += t.total_time
+  def time_allocated_since(datetime)
+    time_allocated = 0
+    time_allocations.where("end_time >= ?", datetime).each do |ta|
+      if ta.start_time < datetime
+        time_allocated += (ta.end_time - datetime)
+      else
+        time_allocated += ta.total_time
+      end
     end
-    total
+    time_allocated 
   end
 end

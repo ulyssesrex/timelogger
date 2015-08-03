@@ -9,9 +9,15 @@ class TimesheetsController < ApplicationController
       redirect_to user_path(current_user) and return 
     end
     @timesheet = Timesheet.new  
+  end
+  
+  def new_from_timer_button
     respond_to do |format|
-      format.html
-      format.json
+      format.js { 
+        redirect_to new_timesheet_path, 
+          start_time: params[:start_time], 
+          end_time: params[:end_time] 
+      }
     end
   end
   

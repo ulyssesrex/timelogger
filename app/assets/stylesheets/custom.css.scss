@@ -225,6 +225,17 @@ aside {
 	padding: 0;
 }
 
+#timelog-button {
+	@extend .my-btn
+	.tracking {
+		$background: black;
+	}
+}
+
+#timelog-cancel-button {
+	display: none;
+}
+
 /* forms */
 
 input, textarea, select, .uneditable-input {
