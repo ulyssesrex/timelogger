@@ -13,11 +13,7 @@ Rails.application.routes.draw do
   resources :organizations,       except: [:index]
   resources :grantholdings,       except: [:show]
   resources :supervisions,        only:   [:create, :destroy]
-  resources :timesheets,          except: [:index] do
-    member do
-      get 'new_from_timer_button'
-    end
-  end
+  resources :timesheets,          except: [:index]
   resources :account_activations, only:   [:edit]
   resources :password_resets,     only:   [:new, :create, :edit, :update]
   

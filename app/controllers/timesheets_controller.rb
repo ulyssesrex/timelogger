@@ -7,23 +7,20 @@ class TimesheetsController < ApplicationController
     # @user = User.find_by(id: params[:timesheet][:user_id])
     # unless current_user?(@user) || current_user.admin?
     #   redirect_to user_path(current_user) and return
-    # end
-    
+    # end    
     @timesheet = Timesheet.new
-    @timesheet.start_time = params[:start_time]
-    @timesheet.end_time   = params[:end_time]
-  end
-  
-  def new_from_timer_button
+    session[:timesheet_start]  ||= params[:timesheet_start]
+    session[:timesheet_finish] ||= params[:timesheet_finish]
+    @timesheet.start_time = session[:timesheet_start] 
+    @timesheet.end_time   = session[:timesheet_finish]
     respond_to do |format|
       format.js { 
-        redirect_to new_timesheet_path(
-          start_time: params[:start_time], 
-          end_time:   params[:end_time]
-        )
+        render 
       }
-    end
   end
+  
+  # def new_from_timer_button
+  # end
   
   def create
     @timesheet = Timesheet.new(timesheet_params)
