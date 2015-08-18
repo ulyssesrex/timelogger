@@ -117,15 +117,16 @@ describe UsersController do
       end
     end
     
-    describe '#is_admin' do
+    describe '#admin' do
       it "passes when current user is admin" do
         log_in admin
-        get :destroy_other
-        expect(response).to render_template(:destroy_other)
+        get :delete_other_user_index
+        expect(response).to render_template(:delete_other_user_index)
       end
       
       it "doesn't pass when current user is not admin" do
-        get :destroy_other
+        log_in user
+        get :delete_other_user_index
         expect(response).to redirect_to(user_path(user))
       end
     end
@@ -265,7 +266,7 @@ describe UsersController do
         it "does not update the user record" do
           expect {
             update_user_unsuccessfully
-          }.not_to change(user, :attributes)
+          }.not_to change(user, :first_name)
         end
       
         it "renders the :edit template" do
@@ -313,54 +314,43 @@ describe UsersController do
         expect(flash[:success]).not_to be_empty
       end
       
-      context "admin" do        
-        let(:admin) { create(:user, admin: true) }
-        
-        it "redirects to users_url" do
-          # Delete another user's profile as admin.
-          log_in admin
-          delete :destroy, { id: user.id }
-          expect(response).to redirect_to(users_url)
-        end
+      it "redirects to root_url" do
+        # Delete your own profile.
+        delete :destroy, { id: user.id }
+        expect(response).to redirect_to(root_url)
       end
-      
-      context "general user" do
-        it "redirects to root_url" do
-          # Delete your own profile as general user.
-          delete :destroy, { id: user.id }
-          expect(response).to redirect_to(root_url)
-        end
-      end         
     end
     
-    describe "GET #destroy_other" do     
+    describe "GET #delete_other_user_index" do     
       context "user is an admin" do    
         let(:non) { create(:user, activated: false) }
         
         before(:each) do |spec|
           unless spec.metadata[:skip_login]
             admin; non; log_in admin
-            get :destroy_other
+            get :delete_other_user_index
           end
         end
         
-        it "assigns all activated users to @users" do
-          expect(assigns(:users)).not_to include(non)
+        it "assigns all users to @users" do
+          expect(assigns(:users).count).to eq 3
         end
         
-        it "renders the :destroy_other template" do
-          expect(response).to render_template(:destroy_other)
+        it "renders the :delete_other_user_index template" do
+          expect(response).to render_template(:delete_other_user_index)
         end
       end
       
       context "user is not an admin" do
         before(:each) do
+          # Log in non-admin user
           user; log_in user
-          get :destroy_other
+          # Attempt to load 'delete_other_user_index' page
+          get :delete_other_user_index
         end
         
-        it "does not render the :destroy_other template" do
-          expect(response).not_to render_template(:destroy_other)
+        it "does not render the :delete_other_user_index template" do
+          expect(response).not_to render_template(:delete_other_user_index)
         end
         
         it "redirects to user page" do
@@ -368,34 +358,127 @@ describe UsersController do
         end
       end
     end
+
+    describe "DELETE #delete_other_user" do
+      def delete_other_user
+        admin; user; log_in admin
+        delete :delete_other_user, id: user.id
+      end
+
+      before(:each) do |spec|
+        unless spec.metadata[:skip_delete]
+          delete_other_user
+        end
+      end
+
+      it "creates an instance of @user" do
+        expect(assigns(:user)).not_to be_nil
+      end
+
+      it "destroys user", :skip_delete do
+        admin; user
+        log_in admin
+        expect do 
+          delete :delete_other_user, id: user.id
+        end.to change(User, :count).by(-1)
+      end
+
+      it "displays a success flash" do
+        expect(flash[:success]).to be_present
+      end
+
+      it "redirects to delete user index" do
+        expect(response).to redirect_to(users_delete_other_user_path)
+      end
+
+      context "user is not admin" do
+        it "does not delete user", :skip_delete do
+          expect do
+            user; log_in user
+            delete :delete_other_user, id: other_user.id
+          end.not_to change(User, :all)
+        end
+
+        it "redirects to user page", :skip_delete do
+          user; other_user; log_in user
+          delete :delete_other_user, id: other_user.id
+          expect(response).to redirect_to(user_path(current_user))
+        end
+      end
+    end
     
-    describe "GET #make_admin" do
+    describe "GET #make_admin_index" do
       context "user is admin" do
-        before(:each) do          
+        before(:each) do
+          # Log in admin user, load 'make_admin_index' page         
           admin; non; log_in admin
-          get :make_admin
+          get :make_admin_index
         end
         
         it "assigns all activated users to @users" do
           expect(assigns(:users)).not_to include(non)
         end
         
-        it "renders the :make_admin template" do
-          expect(response).to render_template(:make_admin)
+        it "renders the :make_admin_index template" do
+          expect(response).to render_template(:make_admin_index)
         end
       end
       
       context "user is not admin" do
         before(:each) do
+          # Log in non-admin user
           user; log_in user
-          get :make_admin
+          # Attempt to load 'make_admin'
+          get :make_admin_index
         end
         
         it "does not render the :make_admin template" do
-          expect(response).not_to render_template(:make_admin)
+          expect(response).not_to render_template(:make_admin_index)
         end
         
         it "redirects to user page" do
+          expect(response).to redirect_to(user_path(user))
+        end
+      end
+    end
+
+    describe "PUT #make_admin" do
+      def grant_admin_status_to(user)
+        admin; user; log_in admin
+        put :make_admin, id: user.id
+        user.reload
+      end
+
+      before(:each) do |spec|
+        grant_admin_status_to user unless spec.metadata[:skip_grant]
+      end
+
+      it "makes the selected user an admin" do
+        expect(user.admin?).to be true
+      end
+
+      it "displays a flash success message" do
+        expect(flash[:success]).to be_present
+      end
+
+      it "redirects to the user index" do
+        expect(response).to redirect_to(users_path)
+      end
+
+      context "current user is not admin" do
+        def no_admin_for_you
+          user; log_in user
+          put :make_admin, id: user.id
+          user.save
+        end
+
+        it "does not make the selected user an admin", :skip_grant do
+          no_admin_for_you
+          expect(user.admin?).to be false
+        end
+
+        it "redirects to user page", :skip_grant do
+          no_admin_for_you
           expect(response).to redirect_to(user_path(user))
         end
       end

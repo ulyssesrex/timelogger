@@ -4,7 +4,7 @@ feature "Register user" do
   before(:each) { create(:organization) }
   
   def correct_user_registration
-    visit root_url
+    visit root_path
     click_link 'Sign up'
     fill_in("user_first_name", with: "User")
     fill_in("user_last_name", with: "Van User")
@@ -18,7 +18,7 @@ feature "Register user" do
   end
   
   def incorrect_user_registration
-    visit root_url
+    visit root_path
     click_link 'Sign up'
     click_button 'Submit'
   end

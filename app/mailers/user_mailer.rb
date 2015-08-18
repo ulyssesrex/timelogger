@@ -1,4 +1,5 @@
 class UserMailer < ApplicationMailer
+  # TODO: password reset mailers.
 
   def account_activation(user)
     @user = user

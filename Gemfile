@@ -17,6 +17,7 @@ gem 'bootstrap-switch-rails', '~> 3.3.2'
 gem 'kaminari'
 gem 'activesupport'
 gem 'acts_as_tenant'
+gem 'nested_form'
 gem 'chart-js-rails'
 gem 'jquery-turbolinks'
 

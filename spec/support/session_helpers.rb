@@ -1,7 +1,7 @@
 module SessionHelpers
   def general_login
     create(:organization)
-    visit root_url
+    visit root_path
     click_link 'Sign up'
     fill_in("user_first_name", with: "User")
     fill_in("user_last_name", with: "Van User")
@@ -17,7 +17,7 @@ module SessionHelpers
   end
   
   def admin_login
-    visit root_url
+    visit root_path
     click_link 'Enroll organization'
     fill_in("organization_name", with: "TimeloggerTest")
     fill_in("organization_description", with: "Just a test.")

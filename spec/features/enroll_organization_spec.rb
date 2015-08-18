@@ -3,7 +3,7 @@ require 'rails_helper'
 feature "Enrolling organization" do
   
   def enroll_organization_steps
-    visit root_url
+    visit root_path
     click_link 'Enroll organization'
     # Redirects to :new
     fill_in("organization_name", with: "TimeloggerTest")
@@ -20,13 +20,13 @@ feature "Enrolling organization" do
   end
   
   def incorrect_enroll_organization_steps
-    visit root_url
+    visit root_path
     click_link 'Enroll organization'
     click_button "Submit"
   end
   
   def cancel_enroll_organization
-    visit root_url
+    visit root_path
     click_link 'Enroll organization'
     click_button "Cancel"
   end

@@ -3,30 +3,27 @@ class TimesheetsController < ApplicationController
   before_action :logged_in
   before_action :current_user_or_admin, except: [:new, :create, :show]
 
-  def new
-    # @user = User.find_by(id: params[:timesheet][:user_id])
-    # unless current_user?(@user) || current_user.admin?
-    #   redirect_to user_path(current_user) and return
-    # end    
+  def new   
     @timesheet = Timesheet.new
     session[:timesheet_start]  ||= params[:timesheet_start]
     session[:timesheet_finish] ||= params[:timesheet_finish]
     @timesheet.start_time = session[:timesheet_start] 
     @timesheet.end_time   = session[:timesheet_finish]
+    if session[:timesheet_start] && session[:timesheet_finish]
+      session[:timesheet_start] = session[:timesheet_finish] = nil
+    end
     respond_to do |format|
-      format.js { 
-        render 
-      }
+      format.html { render template: 'users/new' }
+      format.js   { render template: 'users/new' }
+    end
   end
-  
-  # def new_from_timer_button
-  # end
   
   def create
     @timesheet = Timesheet.new(timesheet_params)
     unless current_user?(@timesheet.user) || current_user.admin?
       redirect_to user_path(current_user) and return
-    end    
+    end
+    redirect_to user_path(current_user) if params[:commit] == "Cancel"    
     if @timesheet.save
       flash[:success] = "Timesheet was saved."
       redirect_to user_path(current_user) and return

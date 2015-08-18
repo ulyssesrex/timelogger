@@ -1,13 +1,42 @@
 class UsersController < ApplicationController
   require 'date'
   
-  before_action :logged_in,        except: [:new, :create]
-  before_action :set_organization, except: [:new, :create]
-  before_action :find_user_by_id,  only:   [:show, :edit, :update, :destroy]
-  before_action :find_activated,   only:   [:index, :destroy_other, :make_admin]  
-  before_action :is_supervisor_or_user_or_admin, only: [:show]
-  before_action :is_user_or_admin, only:   [:edit, :update, :destroy]
-  before_action :admin,            only:   [:destroy_other, :make_admin]
+  before_action :logged_in,        
+    except: [
+      :new, 
+      :create
+    ]
+  before_action :set_organization, 
+    except: [
+      :new, 
+      :create
+    ]
+  before_action :find_user_by_id,  
+    only: [
+      :show, 
+      :edit, 
+      :update, 
+      :destroy, 
+      :delete_other_user, 
+      :make_admin
+    ]
+  before_action :is_supervisor_or_current_user_or_admin, 
+    only: [
+      :show
+    ]
+  before_action :is_current_user_or_admin, 
+    only: [
+      :edit, 
+      :update, 
+      :destroy
+    ]
+  before_action :admin,            
+    only: [
+      :delete_other_user_index,
+      :delete_other_user,
+      :make_admin_index, 
+      :make_admin
+    ]
   
   def new
     @user = User.new
@@ -72,6 +101,7 @@ class UsersController < ApplicationController
   end
   
   def index
+    @users = User.where(activated: true)
   end
   
   def destroy
@@ -80,17 +110,31 @@ class UsersController < ApplicationController
       msg  = "Your Timelogger account"
       msg += " has been deleted."
       flash[:success] = msg
-      redirect_to root_url and return      
-    elsif current_user.admin?
-      flash[:success] = "User successfully deleted."
-      redirect_to users_url and return     
+      redirect_to root_url and return   
     end
   end
-  
-  def destroy_other
+
+  def delete_other_user_index
+    @users = User.all
   end
-  
+
+  def delete_other_user
+    # TODO: include 'are you sure?' prompt
+    if @user.destroy
+      flash[:success] = "User successfully deleted."
+      redirect_to users_delete_other_user_path and return
+    end
+  end
+
+  def make_admin_index
+    @users = User.where(activated: true)
+  end
+
   def make_admin
+    # TODO: include 'are you sure?' prompt
+    @user.toggle!(:admin)
+    flash[:success] = "User was given admin status."
+    redirect_to users_path
   end
   
   private
@@ -115,18 +159,16 @@ class UsersController < ApplicationController
     end
     
     def find_user_by_id
-      @user = User.find(params[:id])
-    end
-    
-    def find_activated
-      @users = User.where(activated: true)
+      if params[:id]
+        @user = User.find(params[:id])
+      end
     end
 
     # Before filters with 'or' conditions:
     # If current user meets conditions, proceed normally.
     # Else, redirect to root.
   	
-    def is_supervisor_or_user_or_admin
+    def is_supervisor_or_current_user_or_admin
       unless
         current_user.supervisees.include?(@user) ||
         current_user?(@user) ||
@@ -137,7 +179,7 @@ class UsersController < ApplicationController
       end
     end
     
-    def is_user_or_admin
+    def is_current_user_or_admin
       unless 
         current_user?(@user) ||
         current_user.admin? 
