@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "Site Logo Page" do
   describe "Visit site logo page" do
-    before(:each) { visit(root_url) }
+    before(:each) { visit(root_path) }
     
     it "has a nav bar with login button" do
       expect(find('.nav')).to have_content("Login")

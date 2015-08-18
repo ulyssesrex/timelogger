@@ -226,7 +226,7 @@ aside {
 }
 
 #timelog-button {
-	@extend .my-btn
+	@extend .my-btn;
 	.tracking {
 		$background: black;
 	}

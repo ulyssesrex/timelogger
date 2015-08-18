@@ -12,7 +12,7 @@
 		
 		<section>
 			<h2><%= "#{@user.first_name}'s grants:" %></h2>
-			<%= form_tag(grants_fulfillments_table_path, remote: true do %>
+			<%= form_tag(grants_fulfillments_table_path, remote: true) do %>
 				<%= select_tag(:since_date, 
 							options_for_select([
 								['Last Monday', date_of_last("Monday", previous: false) ],
