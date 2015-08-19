@@ -12197,3 +12197,318 @@ Started GET "/assets/tree-trunk-rings-b174c86f7f63a28f4f76f06367c09551d7b0922d32
   [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("first_name", "last_name", "position", "email", "password_digest", "organization_id", "created_at", "updated_at", "activation_digest") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)  [["first_name", "Admin"], ["last_name", "McAdmin"], ["position", "Admin"], ["email", "test@example.com"], ["password_digest", "$2a$10$7ERA7J2d3YrdaCEeHWY/n.eln5Ki9PRPt3YUVAku.kl75TIiVBS7."], ["organization_id", 4], ["created_at", "2015-07-28 15:00:54.249605"], ["updated_at", "2015-07-28 15:00:54.249605"], ["activation_digest", "$2a$10$wmgObjU5QfVYu39pIqTFi.f8Z1COXAiGQzVNSy4VOcJUK6awzOh6e"]]
   [1m[36m (3.0ms)[0m  [1mcommit transaction[0m
   [1m[35mUser Load (0.4ms)[0m  SELECT  "users".* FROM "users"  ORDER BY "users"."id" DESC LIMIT 1
+
+
+Started GET "/account_activations/yY501EUUJQRTIBneU8qn9g/edit?email=example%40test.com" for 127.0.0.1 at 2015-08-17 23:08:47 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by AccountActivationsController#edit as HTML
+  Parameters: {"email"=>"example@test.com", "id"=>"yY501EUUJQRTIBneU8qn9g"}
+  [1m[35mUser Load (12.7ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT 1  [["email", "example@test.com"]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 102ms (ActiveRecord: 13.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-17 23:08:47 -0400
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (437.3ms)
+  Rendered layouts/_shim.html.erb (6.0ms)
+  Rendered layouts/_header.html.erb (68.8ms)
+  Rendered layouts/_flash_handler.html.erb (1.7ms)
+  Rendered layouts/_footer.html.erb (1.1ms)
+Completed 200 OK in 11023ms (Views: 11010.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/custom.self-fae769010836ad36e4f6662c4632395b3ded0438e1d72c7aaacd7e7649d1e9c8.css?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/jquery.turbolinks.self-176b9819f30444d441e820bbccd3264fe57753aeafd54dec732b0dbc77129a2a.js?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/jquery.self-d03a5518f45df77341bdbe6201ba3bfa547ebba8ed64f0ea56bfa5f96ea7c074.js?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/Chart.self-041adbe451556e1fde170e0f1efb2dcd2874bbbe1872478ab37f21c47e2fb67b.js?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/jquery_ujs.self-8e98a7a072a6cee1372d19fff9ff3e6aa1e39a37d89d6f06861637d061113ee7.js?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/application.self-e80e8f2318043e8af94dddc2adad5a4f09739a8ebb323b3ab31cd71d45fd9113.css?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/turbolinks.self-c37727e9bd6b2735da5c311aa83fead54ed0be6cc8bd9a65309e9c5abe2cbfff.js?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/app.self-ea9c55378e7ce7bb017d9a6b808f73213aed7a6b0b9362f9d55f6e73b923ac06.js?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/application.self-b870f4765c2fcbf8cabec8478e3e32aa02ac855d9f609c451d170b187ee785a3.js?body=1" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/navbar-logo-4c17637993575320716b495fb4b8f05a03e8fa4b847627d31e07440e643df1e8.png" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/assets/tree-trunk-rings-b174c86f7f63a28f4f76f06367c09551d7b0922d32e967e0fc8432ac2b134ccd.jpg" for 127.0.0.1 at 2015-08-17 23:08:58 -0400
+
+
+Started GET "/account_activations/feMDw8IwC-hkY59HUBBotg/edit?email=example%40test.com" for 127.0.0.1 at 2015-08-17 23:09:08 -0400
+Processing by AccountActivationsController#edit as HTML
+  Parameters: {"email"=>"example@test.com", "id"=>"feMDw8IwC-hkY59HUBBotg"}
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT 1[0m  [["email", "example@test.com"]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 13ms (ActiveRecord: 0.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-17 23:09:08 -0400
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (5.2ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  Rendered layouts/_header.html.erb (8.3ms)
+  Rendered layouts/_flash_handler.html.erb (0.2ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 240ms (Views: 238.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/account_activations/RaHeMbxYU9QBed9oQSO2Ew/edit?email=example%40test.com" for 127.0.0.1 at 2015-08-17 23:09:18 -0400
+Processing by AccountActivationsController#edit as HTML
+  Parameters: {"email"=>"example@test.com", "id"=>"RaHeMbxYU9QBed9oQSO2Ew"}
+  [1m[35mUser Load (0.2ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT 1  [["email", "example@test.com"]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 9ms (ActiveRecord: 0.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-17 23:09:18 -0400
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (10.1ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  Rendered layouts/_header.html.erb (8.0ms)
+  Rendered layouts/_flash_handler.html.erb (0.3ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 229ms (Views: 227.8ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-18 12:26:39 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (475.8ms)
+  Rendered layouts/_shim.html.erb (0.5ms)
+  Rendered layouts/_header.html.erb (14.9ms)
+  Rendered layouts/_flash_handler.html.erb (0.8ms)
+  Rendered layouts/_footer.html.erb (4.3ms)
+Completed 200 OK in 854ms (Views: 814.6ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/custom.self-fae769010836ad36e4f6662c4632395b3ded0438e1d72c7aaacd7e7649d1e9c8.css?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/application.self-e80e8f2318043e8af94dddc2adad5a4f09739a8ebb323b3ab31cd71d45fd9113.css?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/jquery.turbolinks.self-176b9819f30444d441e820bbccd3264fe57753aeafd54dec732b0dbc77129a2a.js?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/Chart.self-041adbe451556e1fde170e0f1efb2dcd2874bbbe1872478ab37f21c47e2fb67b.js?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/jquery.self-d03a5518f45df77341bdbe6201ba3bfa547ebba8ed64f0ea56bfa5f96ea7c074.js?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/jquery_ujs.self-8e98a7a072a6cee1372d19fff9ff3e6aa1e39a37d89d6f06861637d061113ee7.js?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/turbolinks.self-c37727e9bd6b2735da5c311aa83fead54ed0be6cc8bd9a65309e9c5abe2cbfff.js?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/app.self-ea9c55378e7ce7bb017d9a6b808f73213aed7a6b0b9362f9d55f6e73b923ac06.js?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/application.self-b870f4765c2fcbf8cabec8478e3e32aa02ac855d9f609c451d170b187ee785a3.js?body=1" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/navbar-logo-4c17637993575320716b495fb4b8f05a03e8fa4b847627d31e07440e643df1e8.png" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/assets/tree-trunk-rings-b174c86f7f63a28f4f76f06367c09551d7b0922d32e967e0fc8432ac2b134ccd.jpg" for 127.0.0.1 at 2015-08-18 12:26:40 -0400
+
+
+Started GET "/login" for 127.0.0.1 at 2015-08-18 12:26:53 -0400
+Processing by SessionsController#new as HTML
+  Rendered sessions/new.html.erb within layouts/application (612.3ms)
+  Rendered layouts/_shim.html.erb (0.5ms)
+  Rendered layouts/_header.html.erb (4.6ms)
+  Rendered layouts/_flash_handler.html.erb (0.8ms)
+  Rendered layouts/_footer.html.erb (1.5ms)
+Completed 200 OK in 723ms (Views: 720.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-18 12:45:58 -0400
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (4.6ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  Rendered layouts/_header.html.erb (8.4ms)
+  Rendered layouts/_flash_handler.html.erb (0.2ms)
+  Rendered layouts/_footer.html.erb (0.4ms)
+Completed 200 OK in 115ms (Views: 113.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-18 13:02:34 -0400
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (7.3ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  Rendered layouts/_header.html.erb (2.9ms)
+  Rendered layouts/_flash_handler.html.erb (0.1ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 197ms (Views: 196.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/custom.self-fae769010836ad36e4f6662c4632395b3ded0438e1d72c7aaacd7e7649d1e9c8.css?body=1" for 127.0.0.1 at 2015-08-18 13:02:34 -0400
+
+
+Started GET "/assets/application.self-e80e8f2318043e8af94dddc2adad5a4f09739a8ebb323b3ab31cd71d45fd9113.css?body=1" for 127.0.0.1 at 2015-08-18 13:02:34 -0400
+
+
+Started GET "/assets/jquery_ujs.self-8e98a7a072a6cee1372d19fff9ff3e6aa1e39a37d89d6f06861637d061113ee7.js?body=1" for 127.0.0.1 at 2015-08-18 13:02:34 -0400
+
+
+Started GET "/assets/turbolinks.self-c37727e9bd6b2735da5c311aa83fead54ed0be6cc8bd9a65309e9c5abe2cbfff.js?body=1" for 127.0.0.1 at 2015-08-18 13:02:34 -0400
+
+
+Started GET "/assets/Chart.self-041adbe451556e1fde170e0f1efb2dcd2874bbbe1872478ab37f21c47e2fb67b.js?body=1" for 127.0.0.1 at 2015-08-18 13:02:34 -0400
+
+
+Started GET "/assets/jquery.turbolinks.self-176b9819f30444d441e820bbccd3264fe57753aeafd54dec732b0dbc77129a2a.js?body=1" for 127.0.0.1 at 2015-08-18 13:02:35 -0400
+
+
+Started GET "/assets/jquery.self-d03a5518f45df77341bdbe6201ba3bfa547ebba8ed64f0ea56bfa5f96ea7c074.js?body=1" for 127.0.0.1 at 2015-08-18 13:02:35 -0400
+
+
+Started GET "/assets/app.self-ea9c55378e7ce7bb017d9a6b808f73213aed7a6b0b9362f9d55f6e73b923ac06.js?body=1" for 127.0.0.1 at 2015-08-18 13:02:35 -0400
+
+
+Started GET "/assets/application.self-b870f4765c2fcbf8cabec8478e3e32aa02ac855d9f609c451d170b187ee785a3.js?body=1" for 127.0.0.1 at 2015-08-18 13:02:35 -0400
+
+
+Started GET "/assets/navbar-logo-4c17637993575320716b495fb4b8f05a03e8fa4b847627d31e07440e643df1e8.png" for 127.0.0.1 at 2015-08-18 13:02:35 -0400
+
+
+Started GET "/assets/tree-trunk-rings-b174c86f7f63a28f4f76f06367c09551d7b0922d32e967e0fc8432ac2b134ccd.jpg" for 127.0.0.1 at 2015-08-18 13:02:35 -0400
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-18 17:48:06 -0400
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (8.1ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  Rendered layouts/_header.html.erb (13.1ms)
+  Rendered layouts/_flash_handler.html.erb (0.1ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 218ms (Views: 216.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/signup" for 127.0.0.1 at 2015-08-18 17:48:25 -0400
+Processing by UsersController#new as HTML
+  Rendered users/_user_fields.html.erb (3.4ms)
+  [1m[35mOrganization Load (18.8ms)[0m  SELECT "organizations".* FROM "organizations"
+  Rendered users/new.html.erb within layouts/application (50.9ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  Rendered layouts/_header.html.erb (8.6ms)
+  Rendered layouts/_flash_handler.html.erb (2.3ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 259ms (Views: 196.1ms | ActiveRecord: 21.1ms)
+
+
+Started POST "/users" for 127.0.0.1 at 2015-08-18 17:49:05 -0400
+Processing by UsersController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"kSYMF6Me62LSdkA9Xh/8Y0eZCzgtoKeRkbvlnIvOOGWhTAeRW0EEGBbA3sClA95PPwKbbN+r+rXOV6FpLFFufA==", "user"=>{"first_name"=>"Dan", "last_name"=>"Wichman-Buescher", "position"=>"Janitor", "email"=>"danbuescher@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "organization_id"=>"1", "organization_password"=>"[FILTERED]"}, "commit"=>"Submit"}
+Unpermitted parameter: organization_id
+  [1m[36mOrganization Load (0.3ms)[0m  [1mSELECT  "organizations".* FROM "organizations" WHERE "organizations"."id" = ? LIMIT 1[0m  [["id", 1]]
+  Rendered users/_user_fields.html.erb (3.3ms)
+  [1m[35mOrganization Load (0.3ms)[0m  SELECT "organizations".* FROM "organizations"
+  Rendered users/new.html.erb within layouts/application (9.0ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  Rendered layouts/_header.html.erb (3.3ms)
+  Rendered layouts/_flash_handler.html.erb (0.1ms)
+  Rendered layouts/_footer.html.erb (0.2ms)
+Completed 200 OK in 681ms (Views: 149.4ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-19 10:27:54 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (311.3ms)
+  Rendered layouts/_shim.html.erb (0.5ms)
+  Rendered layouts/_header.html.erb (16.6ms)
+  Rendered layouts/_flash_handler.html.erb (0.8ms)
+  Rendered layouts/_footer.html.erb (0.9ms)
+Completed 200 OK in 1132ms (Views: 1087.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/custom.self-fae769010836ad36e4f6662c4632395b3ded0438e1d72c7aaacd7e7649d1e9c8.css?body=1" for 127.0.0.1 at 2015-08-19 10:27:55 -0400
+
+
+Started GET "/assets/jquery.self-d03a5518f45df77341bdbe6201ba3bfa547ebba8ed64f0ea56bfa5f96ea7c074.js?body=1" for 127.0.0.1 at 2015-08-19 10:27:55 -0400
+
+
+Started GET "/assets/application.self-e80e8f2318043e8af94dddc2adad5a4f09739a8ebb323b3ab31cd71d45fd9113.css?body=1" for 127.0.0.1 at 2015-08-19 10:27:55 -0400
+
+
+Started GET "/assets/jquery.turbolinks.self-176b9819f30444d441e820bbccd3264fe57753aeafd54dec732b0dbc77129a2a.js?body=1" for 127.0.0.1 at 2015-08-19 10:27:55 -0400
+
+
+Started GET "/assets/jquery_ujs.self-8e98a7a072a6cee1372d19fff9ff3e6aa1e39a37d89d6f06861637d061113ee7.js?body=1" for 127.0.0.1 at 2015-08-19 10:27:56 -0400
+
+
+Started GET "/assets/turbolinks.self-c37727e9bd6b2735da5c311aa83fead54ed0be6cc8bd9a65309e9c5abe2cbfff.js?body=1" for 127.0.0.1 at 2015-08-19 10:27:56 -0400
+
+
+Started GET "/assets/app.self-bbb5c6407c7e377a1be44cbcb91e3de572e958c38a110a9254acb8a24c37c8f0.js?body=1" for 127.0.0.1 at 2015-08-19 10:27:56 -0400
+
+
+Started GET "/assets/application.self-f98a0dd27ad1c55b2b9cfe97296d4887e5d4a4535b3bbbf9130c1050771738b2.js?body=1" for 127.0.0.1 at 2015-08-19 10:27:56 -0400
+
+
+Started GET "/assets/navbar-logo-4c17637993575320716b495fb4b8f05a03e8fa4b847627d31e07440e643df1e8.png" for 127.0.0.1 at 2015-08-19 10:27:56 -0400
+
+
+Started GET "/assets/tree-trunk-rings-b174c86f7f63a28f4f76f06367c09551d7b0922d32e967e0fc8432ac2b134ccd.jpg" for 127.0.0.1 at 2015-08-19 10:27:56 -0400
+
+
+Started GET "/login" for 127.0.0.1 at 2015-08-19 10:27:58 -0400
+Processing by SessionsController#new as HTML
+  Rendered sessions/new.html.erb within layouts/application (521.3ms)
+  Rendered layouts/_shim.html.erb (0.5ms)
+  Rendered layouts/_header.html.erb (14.2ms)
+  Rendered layouts/_flash_handler.html.erb (0.8ms)
+  Rendered layouts/_footer.html.erb (0.8ms)
+Completed 200 OK in 714ms (Views: 673.6ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/login" for 127.0.0.1 at 2015-08-19 10:28:12 -0400
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"aexTEpE8pIK/LZGcJsEnc022M+h+rrF9fgb20eqM5RJZhliUaWNL+HubD2Hd3QVfNS2jvIyl7Fkh6rIkTROzCw==", "session"=>{"email"=>"danbuescher@gmail.com", "password"=>"[FILTERED]"}, "commit"=>"Log in"}
+  [1m[35mUser Load (63.4ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT 1  [["email", "danbuescher@gmail.com"]]
+  Rendered sessions/new.html.erb within layouts/application (3.3ms)
+  Rendered layouts/_shim.html.erb (0.6ms)
+  Rendered layouts/_header.html.erb (8.7ms)
+  Rendered layouts/_flash_handler.html.erb (0.8ms)
+  Rendered layouts/_footer.html.erb (1.2ms)
+Filter chain halted as :valid_user rendered or redirected
+Completed 200 OK in 603ms (Views: 170.7ms | ActiveRecord: 64.3ms)
+
+
+Started POST "/login" for 127.0.0.1 at 2015-08-19 10:28:21 -0400
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"T6BUhkRgB8UiGNlMmOFa8C4B5mH3Q4JoNh6Egc83eT5/yl8AvD/ov+auR7Fj/XjcVpp2NQVI30xp8sB0aKgvJw==", "session"=>{"email"=>"danbuescher@gmail.com", "password"=>"[FILTERED]"}, "commit"=>"Log in"}
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT 1[0m  [["email", "danbuescher@gmail.com"]]
+Redirected to http://localhost:3000/
+Filter chain halted as :activated_user rendered or redirected
+Completed 302 Found in 304ms (ActiveRecord: 0.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-19 10:28:21 -0400
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (4.4ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  Rendered layouts/_header.html.erb (2.9ms)
+  Rendered layouts/_flash_handler.html.erb (0.2ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 130ms (Views: 128.6ms | ActiveRecord: 0.0ms)

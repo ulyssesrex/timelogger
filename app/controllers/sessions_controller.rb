@@ -33,7 +33,8 @@ class SessionsController < ApplicationController
     def activated_user
       unless @user.activated?
         message =  "Your account is not activated yet."
-        message += " Check your email for a Timelogger activation email."
+        message += " If you've already registered,"
+        message += " check your email for a Timelogger activation email."
         # TODO: Perhaps add a link here to generate another activation email instead.
         # This would most likely be a POST :create, :controller => :users action.
         flash[:warning] = message

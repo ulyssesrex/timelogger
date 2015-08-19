@@ -76,7 +76,7 @@ feature "Register user" do
   end
   
   feature "Admin activates account", logins: :available do
-    before(:each) { admin_login }
+    before(:each) { admin_signup }
     
     it "redirects to the help page" do
       expect(page.title).to have_content(/Help/)

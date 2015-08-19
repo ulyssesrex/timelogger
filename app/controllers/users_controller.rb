@@ -148,7 +148,7 @@ class UsersController < ApplicationController
                 :email, 
                 :password, 
                 :password_confirmation,
-                :organization_name,
+                :organization_id,
                 :organization_password,
                 grantholdings_attributes: [
                   :id, 

@@ -4,22 +4,29 @@ include SessionHelpers
 
 feature "New timesheet from button", :js => true do
 
+
 	feature "Timesheet button click" do
 
 		def timesheet_button_click
-			general_login
+			spec_login(user)
 			click_link("timelog-button-resting")
 		end
 
+		let(:user) do 
+			create(:user)
+		end
+
 		let(:activated_button) do
-			page.find_by_id('timesheet-button-running') 
+			page.find_by_id('timelog-button-running') 
 		end
 
 		let(:timer) do
-			page.find_by_id('timelog-time')
+			page.find_by_id('timelog-timer')
 		end
 
-		before(:each) { timesheet_button_click }
+		before(:each) do |spec|
+			timesheet_button_click
+		end
 
 		it "changes the timesheet button id" do
 			expect(activated_button).to be_present		
