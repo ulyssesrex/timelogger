@@ -1,5 +1,5 @@
 module SessionHelpers
-  def general_login
+  def general_signup
     create(:organization)
     visit root_path
     click_link 'Sign up'
@@ -16,7 +16,7 @@ module SessionHelpers
     current_email.click_link "Activate Timelogger account"
   end
   
-  def admin_login
+  def admin_signup
     visit root_path
     click_link 'Enroll organization'
     fill_in("organization_name", with: "TimeloggerTest")
@@ -32,5 +32,14 @@ module SessionHelpers
     click_button "Submit"
     open_email("example@test.com")
     current_email.click_link "Click here to activate your Timelogger account and log in."
+  end
+
+  def spec_login(registered_user)
+    create(:organization)
+    visit root_path
+    click_link 'Log in'
+    fill_in("session_email", with: "#{registered_user.email}")
+    fill_in("session_password", with: "password")
+    click_button "Log in"
   end
 end

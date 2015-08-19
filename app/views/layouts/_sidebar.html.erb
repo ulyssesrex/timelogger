@@ -1,11 +1,10 @@
 <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-	<aside>
-		
-		<span id="timelog-button">
-			<%= link_to "Start Timelog", '#', id: 'timelog-button-resting' %>
-		</span>		
-		<%= link_to "Cancel Timelog", '#', id: 'timelog-button-cancel' %>
-		<%= link_to "Timelog from Scratch", new_timesheet_path %>
-		<div id="js-timer"><span id="timelog-time"></span></div>
+	<aside>		
+		<div id="timelog-button">
+			<%= render partial: 'shared/start_timelog_button' %>
+		</div>
+		<%= link_to "Timelog from scratch", new_timesheet_path %>
+		<div id="timelog-timer"> </div>
+		<div id="current-time"> </div>
 	</aside>
 </div>

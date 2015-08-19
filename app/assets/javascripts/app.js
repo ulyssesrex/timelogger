@@ -41,7 +41,7 @@ function formatTime(time) {
 };
 
 function show() {
-	$time_text = document.getElementById('timelog-time');
+	$time_text = document.getElementById('timelog-timer');
 	update();
 };
 
@@ -52,43 +52,32 @@ function update() {
 function start() {
 	clocktimer = setInterval("update()", 100);
 	x.start();
-	$.ajax({
-		type: 'GET',
-		url: '/timesheets/new',
-		data: { timesheet_start: '$startAt' }
-	});
-	
+	$.post('/timesheets/start_from_button',
+		{ timesheet_start: $startAt }
+	);
 };
 
 function finish() {
 	x.finish();
 	clearInterval(clocktimer);
-	$.ajax({
-		type: 'GET',
-		url: '/timesheets/new',
-		data: { timesheet_finish: '$finishAt' }
-	});
+	$.post('/timesheets/finish_from_button',
+		{ timesheet_finish: $finishAt },
+	);
 };
 
 $(document).ready(function() {
 	
   $('#since-date').change(function() {
-    $.ajax({
-      type: 'POST',
-      url: 'users/grants_fulfillments_table',
-      data: {
-        since_date: $(this).val()
-      }
-    });
+    $.post('users/grants_fulfillments_table',
+      { since_date: $(this).val() }
+    );
   });
 	
   $('#timelog-button-resting').click(function() {
   	start();
-		$(this).id = 'timelog-button-running';
 	});
 	
 	$('#timelog-button-running').click(function() {
 		finish();
-		$(this).id = 'timelog-button-resting';
 	});
 });

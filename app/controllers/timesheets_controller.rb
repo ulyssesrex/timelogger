@@ -5,16 +5,23 @@ class TimesheetsController < ApplicationController
 
   def new   
     @timesheet = Timesheet.new
-    session[:timesheet_start]  ||= params[:timesheet_start]
-    session[:timesheet_finish] ||= params[:timesheet_finish]
-    @timesheet.start_time = session[:timesheet_start] 
-    @timesheet.end_time   = session[:timesheet_finish]
     if session[:timesheet_start] && session[:timesheet_finish]
-      session[:timesheet_start] = session[:timesheet_finish] = nil
+      @timesheet.start_time = session.delete(:timesheet_start)
+      @timesheet.end_time   = session.delete(:timesheet_finish)
     end
+  end
+
+  def start_from_button # TODO: create these routes.
+    session[:timesheet_start] = params[:timesheet_start]
     respond_to do |format|
-      format.html { render template: 'users/new' }
-      format.js   { render template: 'users/new' }
+      format.js
+    end
+  end
+
+  def finish_from_button
+    session[:timesheet_finish] = params[:timesheet_finish]
+    respond_to do |format|
+      format.js
     end
   end
   

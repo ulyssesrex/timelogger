@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   get    '/users/delete_other_user' => 'users#delete_other_user_index'
   delete '/users/delete_other_user/:id' => 'users#delete_other_user'
   post   'grants_fulfillments_table' => 'users#grants_fulfillments_table'
+  post   '/timesheets/start_from_button' => 'timesheets#start_from_button'
+  post   '/timesheets/finish_from_button' => 'timesheets#finish_from_button'
   get    'login'          => 'sessions#new'
   post   'login'          => 'sessions#create'
   post   'logout'         => 'sessions#destroy'
