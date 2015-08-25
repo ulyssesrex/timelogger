@@ -1,17 +1,17 @@
 class TimeAllocation < ActiveRecord::Base
   belongs_to :grantholding
-  belongs_to :timesheet, inverse_of: :time_allocations
+  belongs_to :timelog, inverse_of: :time_allocations
   
-  validate :within_timesheet_range  
+  validate :within_timelog_range  
   
-  # The allocated hours cannot fall outside its timesheet's hours.
+  # The allocated hours cannot fall outside its timelog's hours.
   # Adds errors to time allocation object if so.
-  def within_timesheet_range
+  def within_timelog_range
     msg  = "start and end times must fall within its"
-    msg += " associated timesheet's time range" 
+    msg += " associated timelog's time range" 
     if
-      start_time < timesheet.start_time ||
-      end_time   > timesheet.end_time #-->
+      start_time < timelog.start_time ||
+      end_time   > timelog.end_time #-->
       errors.add(:time_allocation, msg)
     end
   end

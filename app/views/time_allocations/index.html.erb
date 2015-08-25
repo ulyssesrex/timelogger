@@ -6,7 +6,7 @@
   <thead>
     <tr>
       <th>Grantholding</th>
-      <th>Timesheet</th>
+      <th>Timelog</th>
       <th>Hours</th>
       <th>Date</th>
       <th>Comments</th>
@@ -18,7 +18,7 @@
     <% @time_allocations.each do |time_allocation| %>
       <tr>
         <td><%= time_allocation.grantholding %></td>
-        <td><%= time_allocation.timesheet %></td>
+        <td><%= time_allocation.timelog %></td>
         <td><%= time_allocation.hours %></td>
         <td><%= time_allocation.date %></td>
         <td><%= time_allocation.comments %></td>

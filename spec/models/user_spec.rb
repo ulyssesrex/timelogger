@@ -54,11 +54,11 @@ describe User do
          .through(:non_initiated_supervisions)
          .class_name('User') 
        }
-    it { should have_many(:timesheets) }
+    it { should have_many(:timelogs) }
     
     let(:nested_user) do 
       create(:user, 
-             :with_timesheets, 
+             :with_timelogs, 
              :with_grantholdings)
     end   
   end
@@ -192,23 +192,23 @@ describe User do
       
       context '#total_hours_worked' do
         let(:now) { Time.zone.now }        
-        let(:user_with_timesheets) { create(:user, :with_timesheets) }
+        let(:user_with_timelogs) { create(:user, :with_timelogs) }
         
-        it 'totals all specified timesheets within date range' do
+        it 'totals all specified timelogs within date range' do
           expect( 
-            user_with_timesheets.total_hours_worked(Time.new(2014), now) 
+            user_with_timelogs.total_hours_worked(Time.new(2014), now) 
           ).to eq(8)
         end
         
-        it 'does not total timesheets outside date range' do
-          user_with_timesheets.timesheets <<
-            create(:timesheet, 
+        it 'does not total timelogs outside date range' do
+          user_with_timelogs.timelogs <<
+            create(:timelog, 
                    user_id: user.id, 
                    start_time: now - 6.hours, 
                    end_time: now - 5.hours
                    )
           expect(
-            user_with_timesheets
+            user_with_timelogs
             .total_hours_worked(Time.new(2014), Time.new(2015))
           ).to eq(8)
         end
@@ -223,22 +223,22 @@ describe User do
       end
       
       context '#feed' do
-        let(:current_user) { create(:user, :with_timesheets, :intermediate) }
+        let(:current_user) { create(:user, :with_timelogs, :intermediate) }
         
-        it 'returns the current users timesheets' do
-          expect(current_user.feed).to eq(current_user.timesheets)
+        it 'returns the current users timelogs' do
+          expect(current_user.feed).to eq(current_user.timelogs)
         end
         
         let(:supervisee) { current_user.supervisees.first }
-        it 'returns the current users supervisees timesheets' do          
-          supervisee.timesheets << create(:timesheet)
-          expect(current_user.feed).to include(supervisee.timesheets.first)
+        it 'returns the current users supervisees timelogs' do          
+          supervisee.timelogs << create(:timelog)
+          expect(current_user.feed).to include(supervisee.timelogs.first)
         end
         
         let(:supervisor) { current_user.supervisors.first }
-        it 'does not return other timesheets' do
-          supervisor.timesheets << create(:timesheet)
-          expect(current_user.feed).not_to include(supervisor.timesheets.first)
+        it 'does not return other timelogs' do
+          supervisor.timelogs << create(:timelog)
+          expect(current_user.feed).not_to include(supervisor.timelogs.first)
         end
       end
       

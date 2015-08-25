@@ -2,12 +2,12 @@ require 'rails_helper'
 require 'support/session_helpers'
 include SessionHelpers
 
-feature "New timesheet from button", :js => true do
+feature "New timelog from button", :js => true do
 
 
-	feature "Timesheet button click" do
+	feature "Timelog button click" do
 
-		def timesheet_button_click
+		def timelog_button_click
 			spec_login(user)
 			click_link("timelog-button-resting")
 		end
@@ -25,14 +25,14 @@ feature "New timesheet from button", :js => true do
 		end
 
 		before(:each) do |spec|
-			timesheet_button_click
+			timelog_button_click
 		end
 
-		it "changes the timesheet button id" do
+		it "changes the timelog button id" do
 			expect(activated_button).to be_present		
 		end
 
-		it "changes the timesheet button text" do
+		it "changes the timelog button text" do
 			expect(activated_button).to have_content("Finish Timelog")
 		end
 
@@ -44,18 +44,18 @@ feature "New timesheet from button", :js => true do
 		end
 	end
 
-	feature "Create timesheet from button" do
+	feature "Create timelog from button" do
 
-		def create_timesheet_from_button
-			timesheet_button_click
+		def create_timelog_from_button
+			timelog_button_click
 			sleep 1
 			click_link("timelog-button-running")
 		end
 		
-		before(:each) { create_timesheet_from_button }
+		before(:each) { create_timelog_from_button }
 
 		it "ends the timer"
-		it "redirects to the new timesheet page"
+		it "redirects to the new timelog page"
 		it "autofills the start and finish time fields"
 	end
 end

@@ -43,9 +43,9 @@ FactoryGirl.define do
       end
     end
     
-    trait :with_timesheets do
+    trait :with_timelogs do
       after(:create) do |user|
-        user.timesheets << create(:timesheet)
+        user.timelogs << create(:timelog)
       end
     end
     
