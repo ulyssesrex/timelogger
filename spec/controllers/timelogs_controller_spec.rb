@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe TimesheetsController do
+describe TimelogsController do
   
-  let(:timesheet)  { create(:timesheet) }
+  let(:timelog)  { create(:timelog) }
   let(:user)       { create(:user) }
   let(:other_user) { create(:user) }
   let(:admin)      { create(:user, admin: true) }  
@@ -10,85 +10,85 @@ describe TimesheetsController do
   describe 'actions' do    
     
     describe 'GET #new' do
-      def new_timesheet
+      def new_timelog
         log_in user
         get :new
       end
 
-      def new_timesheet_with_params
+      def new_timelog_with_params
         log_in user
-        get :new, timesheet_start: Time.zone.now, timesheet_finish: Time.zone.now
+        get :new, timelog_start: Time.zone.now, timelog_finish: Time.zone.now
       end
             
-      it "creates a new instance of @timesheet" do
-        new_timesheet
-        expect(assigns(:timesheet)).not_to be_nil
+      it "creates a new instance of @timelog" do
+        new_timelog
+        expect(assigns(:timelog)).not_to be_nil
       end
 
-      it "sets @timesheet.start_time from params" do
-        new_timesheet_with_params
-        expect(assigns(:timesheet).start_time).not_to be_nil
+      it "sets @timelog.start_time from params" do
+        new_timelog_with_params
+        expect(assigns(:timelog).start_time).not_to be_nil
       end
 
-      it "sets @timesheet.end_time from params" do
-        new_timesheet_with_params
-        expect(assigns(:timesheet).end_time).not_to be_nil
+      it "sets @timelog.end_time from params" do
+        new_timelog_with_params
+        expect(assigns(:timelog).end_time).not_to be_nil
       end
 
-      it "doesn't set @timesheet attributes when no params" do
-        new_timesheet
-        expect(assigns(:timesheet).start_time).to be_nil
+      it "doesn't set @timelog attributes when no params" do
+        new_timelog
+        expect(assigns(:timelog).start_time).to be_nil
       end
 
       it "renders the :new template" do
-        new_timesheet
+        new_timelog
         expect(response).to render_template(:new)
       end
     end
     
     describe 'POST #create' do
       
-      let(:timesheet) { build(:timesheet) }
+      let(:timelog) { build(:timelog) }
       
-      def create_timesheet_for(a_user)
+      def create_timelog_for(a_user)
         post :create, 
-          timesheet: { 
+          timelog: { 
             user_id: a_user.id, 
-            start_time: timesheet.start_time, 
-            end_time: timesheet.end_time, 
-            comments: timesheet.comments 
+            start_time: timelog.start_time, 
+            end_time: timelog.end_time, 
+            comments: timelog.comments 
           }
       end
       
       before(:each) { log_in user }
             
-      it "creates a new Timesheet instance" do
-        create_timesheet_for(user)
-        expect(assigns(:timesheet)).not_to be_nil
+      it "creates a new Timelog instance" do
+        create_timelog_for(user)
+        expect(assigns(:timelog)).not_to be_nil
       end
       
-      it "redirects if current user isn't the timesheet's user or an admin" do
+      it "redirects if current user isn't the timelog's user or an admin" do
         log_in other_user
-        create_timesheet_for(user)
+        create_timelog_for(user)
         expect(response).to redirect_to(user_path(other_user))        
       end
       
-      it "passes if current user is the timesheet's user or an admin" do
+      it "passes if current user is the timelog's user or an admin" do
         log_in admin
         expect { 
-          create_timesheet_for(user) 
-        }.to change { Timesheet.count }.by(1)
+          create_timelog_for(user) 
+        }.to change { Timelog.count }.by(1)
       end
       
       context "successful save" do        
                 
         it "saves a new record" do
           expect {
-           create_timesheet_for(user)
-          }.to change { Timesheet.count }.by(1)
+           create_timelog_for(user)
+          }.to change { Timelog.count }.by(1)
         end
         
-        before(:each) { create_timesheet_for user }
+        before(:each) { create_timelog_for user }
         
         it "displays a success flash" do
           expect(flash[:success]).to be_present
@@ -102,9 +102,9 @@ describe TimesheetsController do
       context "unsuccessful save" do
         
         it "renders the :new template" do
-          # Attempt to save timesheet where end is earlier than start.
+          # Attempt to save timelog where end is earlier than start.
           post :create, 
-            timesheet: { 
+            timelog: { 
               user_id:    user.id, 
               start_time: Time.zone.now, 
               end_time:   Time.zone.now - 2.hours 
@@ -116,116 +116,116 @@ describe TimesheetsController do
     
     describe 'GET #show' do
       
-      let(:supervisor) { create(:user).supervisees << timesheet.user }
+      let(:supervisor) { create(:user).supervisees << timelog.user }
       
-      def show_user_timesheet
-        get :show, id: timesheet.id
+      def show_user_timelog
+        get :show, id: timelog.id
       end
       
-      it "creates an instance of Timesheet" do
-        show_user_timesheet
-        expect(assigns(:timesheet)).to be_an_instance_of(Timesheet)
+      it "creates an instance of Timelog" do
+        show_user_timelog
+        expect(assigns(:timelog)).to be_an_instance_of(Timelog)
       end
       
       it "passes if current user is user" do
-        log_in(timesheet.user)
-        show_user_timesheet
-        expect(response).not_to redirect_to(user_path(timesheet.user))
+        log_in(timelog.user)
+        show_user_timelog
+        expect(response).not_to redirect_to(user_path(timelog.user))
       end      
 
       it "passes if current user is user's supervisor" do
         supervisor = create(:user)
         log_in(supervisor)
-        supervisor.supervisees << timesheet.user        
-        show_user_timesheet
+        supervisor.supervisees << timelog.user        
+        show_user_timelog
         expect(response).not_to redirect_to(user_path(supervisor))
       end
       
       it "passes if current user is admin" do
         log_in(admin)
-        show_user_timesheet
+        show_user_timelog
         expect(response).not_to redirect_to(user_path(admin))
       end
       
       it "redirects if current user is not user, 
         user's supervisor, or admin" do
         log_in(other_user)
-        show_user_timesheet
+        show_user_timelog
         expect(response).to redirect_to(user_path(other_user))
       end
       
       it "renders the :show template" do
-        log_in timesheet.user
-        show_user_timesheet
+        log_in timelog.user
+        show_user_timelog
         expect(response).to render_template(:show)
       end
     end
     
     describe 'GET #edit' do
       
-      def edit_timesheet
-        get :edit, id: timesheet.id
+      def edit_timelog
+        get :edit, id: timelog.id
       end
       
-      it "creates an instance of Timesheet" do
-        edit_timesheet
-        expect(assigns(:timesheet)).to be_an_instance_of(Timesheet)
+      it "creates an instance of Timelog" do
+        edit_timelog
+        expect(assigns(:timelog)).to be_an_instance_of(Timelog)
       end
       
       it "passes if current_user is user" do
-        log_in timesheet.user
-        edit_timesheet
-        expect(response).not_to redirect_to(user_path(timesheet.user))
+        log_in timelog.user
+        edit_timelog
+        expect(response).not_to redirect_to(user_path(timelog.user))
       end
       
       it "passes if current_user is admin" do
         log_in admin
-        edit_timesheet
+        edit_timelog
         expect(response).not_to redirect_to(user_path(admin))
       end
       
       it "redirects to user page if current_user is not user or admin" do
         log_in other_user
-        edit_timesheet
+        edit_timelog
         expect(response).to redirect_to(user_path(other_user))
       end
       
       it "renders the :edit template" do
-        log_in timesheet.user
-        edit_timesheet
+        log_in timelog.user
+        edit_timelog
         expect(response).to render_template(:edit)
       end
     end
     
     describe 'PUT #update' do
       
-      def update_timesheet
+      def update_timelog
         put :update, 
-          id: timesheet.id, 
-          timesheet: { 
+          id: timelog.id, 
+          timelog: { 
             start_time: Time.new(2014, 2, 4) 
           }
-        timesheet.reload
+        timelog.reload
       end
       
       it "passes if current_user is user" do
-        log_in timesheet.user
-        expect { update_timesheet }.to change(timesheet, :start_time)
+        log_in timelog.user
+        expect { update_timelog }.to change(timelog, :start_time)
       end
       
       it "passes if current_user is admin" do
         log_in admin
-        expect { update_timesheet }.to change(timesheet, :start_time)
+        expect { update_timelog }.to change(timelog, :start_time)
       end
       
       it "redirects if current_user is not user or admin" do
         log_in other_user
-        expect { update_timesheet }.not_to change(timesheet, :start_time)
+        expect { update_timelog }.not_to change(timelog, :start_time)
       end
       
-      it "creates an instance of Timesheet" do
-        update_timesheet
-        expect(assigns(:timesheet)).to be_an_instance_of(Timesheet)
+      it "creates an instance of Timelog" do
+        update_timelog
+        expect(assigns(:timelog)).to be_an_instance_of(Timelog)
       end
       
       context "successful update and save" do
@@ -235,8 +235,8 @@ describe TimesheetsController do
         end
         
         before(:each) do
-          log_in timesheet.user
-          update_timesheet
+          log_in timelog.user
+          update_timelog
         end
         
         it "displays a success flash" do
@@ -244,7 +244,7 @@ describe TimesheetsController do
         end
         
         it "redirects to user page" do
-          expect(response).to redirect_to(user_path(timesheet.user))
+          expect(response).to redirect_to(user_path(timelog.user))
         end        
       end
       
@@ -252,16 +252,16 @@ describe TimesheetsController do
         
         def invalid_update
           put :update, 
-            id: timesheet.id, 
-            timesheet: { 
+            id: timelog.id, 
+            timelog: { 
               start_time: Time.zone.now 
             }
         end
         
-        before(:each) { log_in timesheet.user }
+        before(:each) { log_in timelog.user }
         
         it "does not update the record" do
-          expect { invalid_update }.not_to change(timesheet, :start_time)
+          expect { invalid_update }.not_to change(timelog, :start_time)
         end
         
         it "renders the :edit template" do
@@ -273,49 +273,49 @@ describe TimesheetsController do
     
     describe 'DELETE #destroy' do
       
-      def destroy_timesheet
-        delete :destroy, id: timesheet.id
+      def destroy_timelog
+        delete :destroy, id: timelog.id
       end
       
-      before(:each) { log_in timesheet.user }
+      before(:each) { log_in timelog.user }
       
-      it "creates an instance of Timesheet" do
-        destroy_timesheet
-        expect(assigns(:timesheet)).to be_an_instance_of(Timesheet)
+      it "creates an instance of Timelog" do
+        destroy_timelog
+        expect(assigns(:timelog)).to be_an_instance_of(Timelog)
       end
       
-      it "finds timesheet by id in params" do
-        destroy_timesheet
-        expect(assigns(:timesheet).id).to eq(timesheet.id)
+      it "finds timelog by id in params" do
+        destroy_timelog
+        expect(assigns(:timelog).id).to eq(timelog.id)
       end
       
       it "passes if current user is user" do
-        expect { destroy_timesheet }.to change(Timesheet, :count).by(-1)
+        expect { destroy_timelog }.to change(Timelog, :count).by(-1)
       end
       
       it "passes if current user is admin" do
         log_in admin
-        expect { destroy_timesheet }.to change(Timesheet, :count).by(-1)
+        expect { destroy_timelog }.to change(Timelog, :count).by(-1)
       end
       
-      it "does not delete timesheet record if 
+      it "does not delete timelog record if 
         current user is not user or admin" do
         log_in other_user
-        expect { destroy_timesheet }.not_to change(Timesheet, :count)
+        expect { destroy_timelog }.not_to change(Timelog, :count)
       end
       
-      it "deletes the timesheet record in the database" do
+      it "deletes the timelog record in the database" do
         # Tested in 'passes if current user is user'
       end
       
       it "displays a success flash" do
-        destroy_timesheet
+        destroy_timelog
         expect(flash[:success]).to be_present
       end
       
       it "redirects to user page" do
-        user = timesheet.user
-        destroy_timesheet
+        user = timelog.user
+        destroy_timelog
         expect(response).to redirect_to(user_path(user))
       end
     end    

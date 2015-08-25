@@ -1,6 +1,6 @@
-class Timesheet < ActiveRecord::Base
+class Timelog < ActiveRecord::Base
   belongs_to :user
-  has_many   :time_allocations, inverse_of: :timesheet
+  has_many   :time_allocations, inverse_of: :timelog
   has_many   :grantholdings,
              through: :time_allocations
              
@@ -23,7 +23,7 @@ class Timesheet < ActiveRecord::Base
   def well_ordered_times
     unless [end_time, start_time].include?(nil)
       error_msg = "start time must not be later than its end time"
-      errors.add(:timesheet, error_msg) if end_time < start_time
+      errors.add(:timelog, error_msg) if end_time < start_time
     end
   end
 end

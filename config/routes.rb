@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :organizations,       except: [:index]
   resources :grantholdings,       except: [:show]
   resources :supervisions,        only:   [:create, :destroy]
-  resources :timesheets,          except: [:index]
+  resources :timelogs,          except: [:index]
   resources :account_activations, only:   [:edit]
   resources :password_resets,     only:   [:new, :create, :edit, :update]
   
@@ -21,8 +21,8 @@ Rails.application.routes.draw do
   get    '/users/delete_other_user' => 'users#delete_other_user_index'
   delete '/users/delete_other_user/:id' => 'users#delete_other_user'
   post   'grants_fulfillments_table' => 'users#grants_fulfillments_table'
-  post   '/timesheets/start_from_button' => 'timesheets#start_from_button'
-  post   '/timesheets/finish_from_button' => 'timesheets#finish_from_button'
+  post   '/timelogs/timer_start' => 'timelogs#timer_start'
+  post   '/timelogs/finish_from_button' => 'timelogs#finish_from_button'
   get    'login'          => 'sessions#new'
   post   'login'          => 'sessions#create'
   post   'logout'         => 'sessions#destroy'

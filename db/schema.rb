@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150707145012) do
+ActiveRecord::Schema.define(version: 20150819172315) do
 
   create_table "grantholdings", force: :cascade do |t|
     t.integer  "grant_id"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20150707145012) do
 
   create_table "time_allocations", force: :cascade do |t|
     t.integer  "grantholding_id"
-    t.integer  "timesheet_id"
+    t.integer  "timelog_id"
     t.datetime "start_time"
     t.text     "comments"
     t.datetime "created_at",      null: false
@@ -63,9 +63,9 @@ ActiveRecord::Schema.define(version: 20150707145012) do
   end
 
   add_index "time_allocations", ["grantholding_id"], name: "index_time_allocations_on_grantholding_id"
-  add_index "time_allocations", ["timesheet_id"], name: "index_time_allocations_on_timesheet_id"
+  add_index "time_allocations", ["timelog_id"], name: "index_time_allocations_on_timelog_id"
 
-  create_table "timesheets", force: :cascade do |t|
+  create_table "timelogs", force: :cascade do |t|
     t.integer  "user_id"
     t.text     "comments"
     t.datetime "start_time"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20150707145012) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "timesheets", ["user_id"], name: "index_timesheets_on_user_id"
+  add_index "timelogs", ["user_id"], name: "index_timelogs_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name"

@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-describe Timesheet do  
-  let(:timesheet) { create(:timesheet) }
-  let(:ts_alloc)  { create(:timesheet, time_allocations_count: 1) }
+describe Timelog do  
+  let(:timelog) { create(:timelog) }
+  let(:ts_alloc)  { create(:timelog, time_allocations_count: 1) }
   
   describe 'factory' do
-    it { expect(build(:timesheet)).to be_valid }
-    it { expect(build(:timesheet_with_comments)).to be_valid }
-    it { expect(build(:timesheet, time_allocations_count: 2)).to be_valid }
+    it { expect(build(:timelog)).to be_valid }
+    it { expect(build(:timelog_with_comments)).to be_valid }
+    it { expect(build(:timelog, time_allocations_count: 2)).to be_valid }
   end
   
   describe 'associations' do
@@ -18,22 +18,22 @@ describe Timesheet do
   
   describe 'validations' do    
     it 'rejects without user_id' do
-      expect(build(:timesheet, user_id: nil)).not_to be_valid
+      expect(build(:timelog, user_id: nil)).not_to be_valid
     end
 
     it 'rejects without start_time' do
-      expect(build(:timesheet, start_time: nil, 
+      expect(build(:timelog, start_time: nil, 
                                end_time:   Time.zone.now
                                ))
       .not_to be_valid
     end
 
     it 'rejects without end_time' do
-      expect(build(:timesheet, end_time: nil)).not_to be_valid
+      expect(build(:timelog, end_time: nil)).not_to be_valid
     end
     
     it 'rejects when start_time > end_time' do
-      expect(build(:timesheet, end_time:   Time.zone.now, 
+      expect(build(:timelog, end_time:   Time.zone.now, 
                                start_time: Time.zone.now
                                ))
       .not_to be_valid
@@ -47,18 +47,18 @@ describe Timesheet do
     let(:b_end)   { b_start.advance(hours: 8) }
      
     before(:example) do
-      @b_created_first = create(:timesheet, 
+      @b_created_first = create(:timelog, 
                            start_time: b_start, 
                            end_time: b_end
                          )
-      @a_created_second = create(:timesheet, 
+      @a_created_second = create(:timelog, 
                             start_time: a_start, 
                             end_time: a_end
                           )
     end
     
-    it "orders timesheet records from most recent to earliest" do
-      expect(Timesheet.all.first.end_time).to eq(@a_created_second.end_time)
+    it "orders timelog records from most recent to earliest" do
+      expect(Timelog.all.first.end_time).to eq(@a_created_second.end_time)
     end
   end  
 end

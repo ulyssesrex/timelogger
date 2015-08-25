@@ -178,6 +178,10 @@ aside {
   }
 }
 
+.timelog-button-running {
+  display: none;
+}
+
 .gravatar {
   float: left;
   margin-right: 10px;
@@ -290,9 +294,9 @@ input {
 	}
 }
 
-/* Timesheets */
+/* Timelogs */
 
-.timesheets {
+.timelogs {
 	list-style: none;
 	padding: 0;
 	li {

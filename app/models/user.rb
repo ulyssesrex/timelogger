@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
   has_many   :grants,        
              through: :grantholdings
 
-  has_many   :timesheets  
+  has_many   :timelogs  
 
   has_many   :initiated_supervisions, 
              foreign_key: :supervisee_id, 
@@ -125,17 +125,17 @@ class User < ActiveRecord::Base
   def feed
     supervisee_ids = "SELECT supervisee_id FROM supervisions
                       WHERE supervisor_id = :user_id"
-    Timesheet.where("user_id IN (#{supervisee_ids})
+    Timelog.where("user_id IN (#{supervisee_ids})
                      OR user_id = :user_id", user_id: id)
   end
   
   def total_hours_worked(start, stop)
     total_seconds = 0
-    timesheets.where(start_time: start..stop,
+    timelogs.where(start_time: start..stop,
                      end_time:   start..stop
                )
-    .each do |timesheet|
-      total_seconds += (timesheet.end_time.to_i - timesheet.start_time.to_i)
+    .each do |timelog|
+      total_seconds += (timelog.end_time.to_i - timelog.start_time.to_i)
     end
     total_seconds / 3600.0 # Gives time in hours.
   end

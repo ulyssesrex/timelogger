@@ -3,9 +3,19 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception    
   include ApplicationHelper
   include SessionsHelper
+
+  # after_action :check_for_timer_activation
     
   ###-----Before actions-----###
-  
+
+  # # Persists activated timer from time of mouse click
+  # # through page refreshes.
+  # def check_for_timer_activation
+  #   if session[:timelog_start]
+  #     render file: "/app/views/timelogs/start_from_button.js"
+  #   end
+  # end
+
   # Through 'acts_as_tenant' gem,
   # limits all SQL queries to current_user's organization.
   def set_organization
