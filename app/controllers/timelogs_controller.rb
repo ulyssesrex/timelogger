@@ -4,9 +4,10 @@ class TimelogsController < ApplicationController
   before_action :current_user_or_admin, only: [:edit, :update, :destroy]
 
   def new
+    @user = current_user
     @timelog = Timelog.new
-    @timelog.start_time = params[:start_time]
-    @timelog.end_time   = params[:finish_time]
+    @timelog.start_time = parse_timestamp(params[:start_time])
+    @timelog.end_time   = parse_timestamp(params[:finish_time])
     #@timelog ||= Timelog.new
   end
 
@@ -19,13 +20,17 @@ class TimelogsController < ApplicationController
 
   def finish_from_button
     query_string = { 
-      start_time: params[:start_time], 
+      start_time:  params[:start_time], 
       finish_time: params[:finish_time] 
     }.to_query
     render js: %(window.location.href='#{new_timelog_path}?#{query_string}')
   end
   
   def create
+    a = params[:timelog][:start_time]
+    z = params[:timelog][:end_time]
+    params[:timelog][:start_time] = convert_to_datetime(a)
+    params[:timelog][:end_time]   = convert_to_datetime(z)
     @timelog = Timelog.new(timelog_params)
     @timelog.user_id = current_user.id 
     if !current_user?(@timelog.user) || 
@@ -89,5 +94,5 @@ class TimelogsController < ApplicationController
     
     def find_timelog_by_id
       @timelog = Timelog.find(params[:id])
-    end
+    end    
 end

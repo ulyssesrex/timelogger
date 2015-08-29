@@ -2,12 +2,13 @@
 	<aside>
 	<br><br>
 	<div id="timelog-button">		
-		<%= link_to "Start Timelog", '#', class: 'timelog-button-resting', id: 'start-timelog' %>
-		<%= link_to "Finish Timelog", new_timelog_path, class: 'timelog-button-running', id: 'finish-timelog' %><br>
-		<%= link_to "Cancel Timelog", user_path(current_user), class: 'timelog-button-running', id: 'cancel-timelog' %>
+		<%= link_to "Start Timelog", '#', class: 'timelog-button-resting', id: 'start-timelog', remote: true %>
+		<%= link_to "Finish Timelog", new_timelog_path, class: 'timelog-button-running hidden', id: 'finish-timelog', remote: true %><br>
+		<%= link_to "Cancel Timelog", user_path(current_user), class: 'timelog-button-running hidden', id: 'cancel-timelog', remote: true %>
 	</div>
 		<%= link_to "Timelog from scratch", new_timelog_path %>
-		<%= tag "div", class: 'timelog-button-running', id: "timelog-timer" %>
-		<%= tag "div", id: "current-time"  %>
+		<%= tag "div", class: 'timelog-button-running hidden', id: "timelog-timer" %>
+		<p>Current time:</p>
+		<%= tag "div", id: "current-time" %>
 	</aside>
 </div>
