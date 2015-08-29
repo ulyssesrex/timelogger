@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819172315) do
+ActiveRecord::Schema.define(version: 20150829141044) do
 
   create_table "grantholdings", force: :cascade do |t|
     t.integer  "grant_id"
@@ -55,11 +55,10 @@ ActiveRecord::Schema.define(version: 20150819172315) do
   create_table "time_allocations", force: :cascade do |t|
     t.integer  "grantholding_id"
     t.integer  "timelog_id"
-    t.datetime "start_time"
     t.text     "comments"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.datetime "end_time"
+    t.string   "hours"
   end
 
   add_index "time_allocations", ["grantholding_id"], name: "index_time_allocations_on_grantholding_id"

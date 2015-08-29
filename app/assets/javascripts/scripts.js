@@ -3,7 +3,7 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////
 // Timer
 
-	var $start_time, $finish_time, clocktimer;
+	var $start_time, $finish_time, clocktimer, currenttime;
 	var $timerText = $('#timelog-timer');
 	var $clockText = $('#current-time');		 
 
@@ -24,7 +24,7 @@ $(document).ready(function() {
 
 		// Start time was when user first clicked button. 
 		this.continueTimer = function() {
-			$start_time = Date.parse(getCookie('start_time'));
+			$start_time = parseInt(getCookie('start_time'), 10);
 		}
 		
 		// Finish time is now.
@@ -62,6 +62,23 @@ $(document).ready(function() {
 		return newTime;
 	}
 
+	function formatClock() {
+    var currentTime = new Date();
+    var currentTimeText = '';
+    var diem = "AM";
+    var h = currentTime.getHours();
+    var m = currentTime.getMinutes();
+    var s = currentTime.getSeconds();
+    if (h == 0) {
+        h = 12
+    } else if (h > 12) {
+        h = h - 12;
+        diem = "PM";
+    }
+    currentTimeText = pad(h, 3) + ':' + pad(m, 2) + ':' + pad(s, 2) + " " + diem;
+    return currentTimeText;
+	}
+
 	// Updates timer text to time elapsed, formatted nicely.
 	function update() {
 		$timerText.html(function() {
@@ -70,8 +87,15 @@ $(document).ready(function() {
 	}
 
 	// Updates clock test to current time, formatted nicely.
-	function update_regular_clock() {
-		// add
+	function updateRegularClock() {
+		$clockText.html(function() {
+			return formatClock;
+		})
+	}
+
+	// Sets clock running, updated every second.
+	function runClock() {
+		currenttime = setInterval(updateRegularClock, 1000);
 	}
 
 	// Sets timer running, updated every second.
@@ -93,10 +117,18 @@ $(document).ready(function() {
 		clearInterval(clocktimer);
 	}
 
+	var runningClass = $('.timelog-button-running').className;
+	var restingClass = $('.timelog-button-resting').className;
+
 	// Shows or hides the appropriate set of timelog button options.
-	function toggleTimerDisplay() {;
-		$('.timelog-button-resting').toggle();
-		$('.timelog-button-running').toggle();
+	function timerRunningDisplay() {;
+		runningClass.replace( /(?:^|\s)hidden(?!\S)/g , '' );
+		restingClass += " hidden";
+	}
+
+	function timerRestingDisplay() {
+		restingClass.replace( /(?:^|\s)hidden(?!\S)/g , '' );
+    runningClass += " hidden";
 	}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -142,29 +174,30 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////
 // Listeners
 
+	// Run current time clock on page load.
+	runClock();
+
+	// On page load, check if user has previously
+	// clicked the timelog start button but not the 
+	// timelog finish button.
+	// If so, start the timer from when the user first
+	// clicked the button.
+	if(isCookie('start_time') || $start_time) {
+		timerRunningDisplay();
+		activateTimer();			
+	}
+
 	$('#since-date').change(function() {
     $.post('users/grants_fulfillments_table',
       { since_date: $(this).val() }
     );
   });
 
-	// Every page change, check if user has previously
-	// clicked the timelog start button but not the 
-	// timelog finish button.
-	// If so, start the timer from when the user first
-	// clicked the button.
-	$(document).on("page:load",function(){
-		if(isCookie('start_time')) {
-			toggleTimerDisplay();
-			activateTimer();			
-		}
-	});
-
 	// When user clicks timelog start button,
 	// start timer and save the click time in cookies.
   $(document).on("click", '#start-timelog', function(e) {
   	e.preventDefault();
-  	toggleTimerDisplay();
+  	timerRunningDisplay();
   	activateTimer();
   	setCookie('start_time', $start_time, 7);
 	});
@@ -175,10 +208,10 @@ $(document).ready(function() {
 	$(document).on("click", '#finish-timelog', function(e) {
 		e.preventDefault();
 		finish();
-		toggleTimerDisplay();		
+		timerRestingDisplay();		
 		if (!$start_time) {
 			$start_time = getCookie('start_time');
-		}				
+		}
 		$.ajax({
 			type: "POST",
 			url: "http://localhost:3000/timelogs/finish_from_button",
@@ -194,14 +227,12 @@ $(document).ready(function() {
 
 	});
 
-// NOW, MAKE THE 'FINISH TIMELOG' STUFF APPEAR, NOT TOGGLE, WHEN THE START COOKIE IS FOUND.
-
 	// When user clicks cancel timelog button, delete the start time
 	// cookie if it exists and toggle the start button options.
 	$(document).on("click", '#cancel-timelog', function(e) {
 		e.preventDefault();
 		deleteCookie('start_time', $start_time);
-		toggleTimerDisplay();
+		timerRestingDisplay();
 		$('#cancel-timelog').trigger("defaultClick");
 	});
 });
