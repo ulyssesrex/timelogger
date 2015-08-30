@@ -6,9 +6,11 @@ class TimelogsController < ApplicationController
   def new
     @user = current_user
     @timelog = Timelog.new
-    @timelog.start_time = parse_timestamp(params[:start_time])
-    @timelog.end_time   = parse_timestamp(params[:finish_time])
-    #@timelog ||= Timelog.new
+    if params[:start_time] && params[:finish_time]
+      @start = parse_timestamp(params[:start_time])
+      @end   = parse_timestamp(params[:finish_time])
+    end
+    @timelog.time_allocations.new
   end
 
   # def timer_start
@@ -31,8 +33,12 @@ class TimelogsController < ApplicationController
     et = params[:timelog][:end_time]
     params[:timelog][:start_time] = convert_to_datetime(st)
     params[:timelog][:end_time]   = convert_to_datetime(et)
-    @timelog = Timelog.new(timelog_params)
-    @timelog.user_id = current_user.id 
+    if params[:timelog][:time_allocations_attributes]
+      h = params[:timelog][:time_allocations_attributes][:hours]
+      params[:timelog][:time_allocations_attributes][:hours] = convert_to_duration(h)
+    end
+    @timelog = current_user.timelog.new(timelog_params)
+    @timelog.time_allocations.map! { |t| t.user_id = current_user.id }
     if !current_user?(@timelog.user) || 
        !current_user.admin? ||
        params[:commit] == "Cancel" # then
@@ -82,7 +88,7 @@ class TimelogsController < ApplicationController
           :start_time, 
           :end_time,
           time_allocations_attributes: 
-            [:start_time, :end_time, :comments]
+            [:id, :hours, :comments, :_destroy]
         )
     end
     

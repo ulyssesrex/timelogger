@@ -14,7 +14,7 @@ $(document).ready(function() {
 
 		// Now.
 		var now = function() {
-			return Date.now();
+			return Math.floor(Date.now() / 1000);
 		}
 		
 		// Start time is now.
@@ -53,11 +53,11 @@ $(document).ready(function() {
 		var h, m, s, newTime;
 		h = m = s = 0;
 		newTime = '';
-		h = Math.floor(time / (60 * 60 * 1000));
-		time = time % (60 * 60 * 1000);
-		m = Math.floor(time / (60 * 1000));
-		time = time % (60 * 1000);
-		s = Math.floor(time / 1000);
+		h = Math.floor(time / (60 * 60));
+		time = time % (60 * 60);
+		m = Math.floor(time / 60);
+		time = time % 60;
+		s = Math.floor(time);
 		newTime = pad(h, 3) + ':' + pad(m, 2) + ':' + pad(s, 2);
 		return newTime;
 	}
@@ -117,18 +117,18 @@ $(document).ready(function() {
 		clearInterval(clocktimer);
 	}
 
-	var runningClass = $('.timelog-button-running').className;
-	var restingClass = $('.timelog-button-resting').className;
+	var runningButtons = $('.timelog-button-running');
+	var restingButtons = $('.timelog-button-resting');
 
 	// Shows or hides the appropriate set of timelog button options.
 	function timerRunningDisplay() {;
-		runningClass.replace( /(?:^|\s)hidden(?!\S)/g , '' );
-		restingClass += " hidden";
+		runningButtons.removeClass('hidden');
+		restingButtons.addClass('hidden');
 	}
 
 	function timerRestingDisplay() {
-		restingClass.replace( /(?:^|\s)hidden(?!\S)/g , '' );
-    runningClass += " hidden";
+		restingButtons.removeClass('hidden');
+    runningButtons.addClass('hidden');
 	}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -223,9 +223,7 @@ $(document).ready(function() {
 		deleteCookie('start_time', $start_time);
 	});		
 
-	$(document).on("defaultClick", '#cancel-timelog', function() {
-
-	});
+	$(document).on("defaultClick", '#cancel-timelog', function(){});
 
 	// When user clicks cancel timelog button, delete the start time
 	// cookie if it exists and toggle the start button options.
