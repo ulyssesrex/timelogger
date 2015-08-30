@@ -10,6 +10,7 @@ class Timelog < ActiveRecord::Base
   validates  :start_time, presence: true
   validates  :end_time,   presence: true
   validate   :well_ordered_times
+  validate   :allocate_no_more_than_timelog
   
   # TODO: scope or default_scope?
   default_scope { order(end_time: :asc) }
@@ -24,6 +25,19 @@ class Timelog < ActiveRecord::Base
     unless [end_time, start_time].include?(nil)
       error_msg = "start time must not be later than its end time"
       errors.add(:timelog, error_msg) if end_time < start_time
+    end
+  end
+
+  def allocate_no_more_than_timelog
+    sum = 0
+    time_allocations.each do |t|
+      sum += t.hours
+    end
+    unless sum <= total_time
+      error_msg = "you can't allocate more hours than" 
+      error_msg += " are on a timelog -- you listed #{sum}"
+      error_msg += " but this timelog only has #{total_time}"
+      errors.add(:timelog, error_msg)
     end
   end
 end

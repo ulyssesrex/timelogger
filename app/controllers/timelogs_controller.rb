@@ -27,10 +27,10 @@ class TimelogsController < ApplicationController
   end
   
   def create
-    a = params[:timelog][:start_time]
-    z = params[:timelog][:end_time]
-    params[:timelog][:start_time] = convert_to_datetime(a)
-    params[:timelog][:end_time]   = convert_to_datetime(z)
+    st = params[:timelog][:start_time]
+    et = params[:timelog][:end_time]
+    params[:timelog][:start_time] = convert_to_datetime(st)
+    params[:timelog][:end_time]   = convert_to_datetime(et)
     @timelog = Timelog.new(timelog_params)
     @timelog.user_id = current_user.id 
     if !current_user?(@timelog.user) || 

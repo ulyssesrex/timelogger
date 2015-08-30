@@ -29290,3 +29290,195 @@ Migrating to ConsolidateStartAndEndTimesInTimeAllocationsToHours (20150829141044
   [1m[35mTimeAllocation Load (0.3ms)[0m  SELECT  "time_allocations".* FROM "time_allocations"  ORDER BY "time_allocations"."id" ASC LIMIT 1
   [1m[36mGrantholding Load (0.3ms)[0m  [1mSELECT  "grantholdings".* FROM "grantholdings" WHERE "grantholdings"."id" = ? LIMIT 1[0m  [["id", 1]]
   [1m[35mTimelog Load (0.3ms)[0m  SELECT  "timelogs".* FROM "timelogs" WHERE "timelogs"."id" = ?  ORDER BY "timelogs"."end_time" ASC LIMIT 1  [["id", 1]]
+
+
+Started GET "/" for 127.0.0.1 at 2015-08-29 20:51:55 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (2.5ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by StaticPagesController#home as HTML
+  Rendered static_pages/home.html.erb within layouts/application (520.2ms)
+  Rendered layouts/_shim.html.erb (0.6ms)
+  Rendered layouts/_header.html.erb (48.3ms)
+  Rendered layouts/_flash_handler.html.erb (1.6ms)
+  Rendered layouts/_footer.html.erb (0.8ms)
+Completed 200 OK in 8832ms (Views: 8779.0ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/jquery.cookie.self-2efa782489c4685967c338dd45c878a9932d27121d47fb36eff3d683e6bc0bcb.js?body=1" for 127.0.0.1 at 2015-08-29 20:52:04 -0400
+
+
+Started GET "/assets/jstz.self-c0baa2f7b8e039b9cc9f2f7b1b501d5eacdb26887657227d2400a923d0bf498f.js?body=1" for 127.0.0.1 at 2015-08-29 20:52:04 -0400
+
+
+Started GET "/assets/browser_timezone_rails/set_time_zone.self-bca3b27aadc35f71f1c4b4c153ab6216dee2ead20334fbae9b6c1990276cf106.js?body=1" for 127.0.0.1 at 2015-08-29 20:52:04 -0400
+
+
+Started GET "/assets/application.self-13305aac38215578429791b624392d011189a7a32560d69a9c370693519ae8d8.js?body=1" for 127.0.0.1 at 2015-08-29 20:52:04 -0400
+
+
+Started GET "/login" for 127.0.0.1 at 2015-08-29 20:52:06 -0400
+Processing by SessionsController#new as HTML
+  Rendered sessions/new.html.erb within layouts/application (683.5ms)
+  Rendered layouts/_shim.html.erb (0.7ms)
+  Rendered layouts/_header.html.erb (5.0ms)
+  Rendered layouts/_flash_handler.html.erb (1.3ms)
+  Rendered layouts/_footer.html.erb (0.9ms)
+Completed 200 OK in 891ms (Views: 875.7ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/login" for 127.0.0.1 at 2015-08-29 20:52:14 -0400
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"ndHBT+TDWlNusbkOBg2rcNXFRvMGRs+6h9IMYdoWkjbUydylmkKGd8fwrldLfHZJjXKGjczDN55RT297PalyEA==", "session"=>{"email"=>"danbuescher@gmail.com", "password"=>"[FILTERED]"}, "commit"=>"Log in"}
+  [1m[35mUser Load (15.9ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = ? LIMIT 1  [["email", "danbuescher@gmail.com"]]
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  commit transaction
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 444ms (ActiveRecord: 16.9ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2015-08-29 20:52:14 -0400
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mOrganization Load (0.7ms)[0m  SELECT  "organizations".* FROM "organizations" WHERE "organizations"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."organization_id" = ? AND "users"."id" = ? LIMIT 1[0m  [["organization_id", 1], ["id", 1]]
+  [1m[35mUser Exists (0.8ms)[0m  SELECT "users".* FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? AND "users"."id" = ?  [["organization_id", 1], ["supervisor_id", 1], ["id", 1]]
+  Rendered users/_user_info.html.erb (2.8ms)
+  [1m[36mGrantholding Load (1.1ms)[0m  [1mSELECT "grantholdings".* FROM "grantholdings" WHERE "grantholdings"."user_id" = ?[0m  [["user_id", 1]]
+  Rendered users/show.html.erb within layouts/application (91.8ms)
+Completed 500 Internal Server Error in 227ms
+
+ActionView::Template::Error (undefined local variable or method `since_date' for #<#<Class:0xbaa19630>:0xbaa0f810>):
+    28: 				<% @user.grantholdings.each do |g| %>
+    29: 					<%= 
+    30: 						render partial: 'grantholding', 
+    31: 						locals: { g: g, since_date: since_date } 
+    32: 					%>
+    33: 				<% end %>
+    34: 				</ul>
+  app/views/users/show.html.erb:31:in `block in _app_views_users_show_html_erb__10483909__581929108'
+  app/views/users/show.html.erb:28:in `_app_views_users_show_html_erb__10483909__581929108'
+
+
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/actionpack-4.2.0/lib/action_dispatch/middleware/templates/rescues/_source.erb (13.7ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/actionpack-4.2.0/lib/action_dispatch/middleware/templates/rescues/_trace.html.erb (10.2ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/actionpack-4.2.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.html.erb (1.7ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/actionpack-4.2.0/lib/action_dispatch/middleware/templates/rescues/template_error.html.erb within rescues/layout (72.2ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/web-console-2.1.2/lib/web_console/templates/_markup.html.erb (0.6ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/web-console-2.1.2/lib/web_console/templates/style.css.erb within layouts/inlined_string (0.6ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/web-console-2.1.2/lib/web_console/templates/_inner_console_markup.html.erb within layouts/inlined_string (0.5ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/web-console-2.1.2/lib/web_console/templates/_prompt_box_markup.html.erb within layouts/inlined_string (0.5ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/web-console-2.1.2/lib/web_console/templates/console.js.erb within layouts/javascript (57.7ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/web-console-2.1.2/lib/web_console/templates/main.js.erb within layouts/javascript (0.6ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/web-console-2.1.2/lib/web_console/templates/error_page.js.erb within layouts/javascript (0.9ms)
+  Rendered /home/dan/.gem/ruby/2.2.0/gems/web-console-2.1.2/lib/web_console/templates/index.html.erb (122.9ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2015-08-29 20:58:31 -0400
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (0.2ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mOrganization Load (0.2ms)[0m  [1mSELECT  "organizations".* FROM "organizations" WHERE "organizations"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mUser Load (0.2ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."organization_id" = ? AND "users"."id" = ? LIMIT 1  [["organization_id", 1], ["id", 1]]
+  [1m[36mUser Exists (0.2ms)[0m  [1mSELECT "users".* FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? AND "users"."id" = ?[0m  [["organization_id", 1], ["supervisor_id", 1], ["id", 1]]
+  Rendered users/_user_info.html.erb (1.1ms)
+  [1m[35mGrantholding Load (2.7ms)[0m  SELECT "grantholdings".* FROM "grantholdings" WHERE "grantholdings"."user_id" = ?  [["user_id", 1]]
+  [1m[36mGrant Load (0.3ms)[0m  [1mSELECT  "grants".* FROM "grants" WHERE "grants"."organization_id" = ? AND "grants"."id" = ? LIMIT 1[0m  [["organization_id", 1], ["id", 1]]
+  Rendered users/_grantholding.html.erb (35.6ms)
+  [1m[35mUser Exists (0.3ms)[0m  SELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1  [["organization_id", 1], ["supervisor_id", 1]]
+  Rendered users/_timelog_feed_selectors.html.erb (7.7ms)
+  Rendered users/_timelog_feed.html.erb (2.7ms)
+  Rendered users/show.html.erb within layouts/application (67.9ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1[0m  [["organization_id", 1], ["supervisor_id", 1]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1  [["organization_id", 1], ["supervisor_id", 1]]
+  Rendered layouts/_header.html.erb (7.7ms)
+  Rendered layouts/_flash_handler.html.erb (5.0ms)
+  Rendered layouts/_sidebar.html.erb (2.6ms)
+  Rendered layouts/_footer.html.erb (0.3ms)
+Completed 200 OK in 256ms (Views: 232.9ms | ActiveRecord: 4.5ms)
+
+
+Started GET "/assets/custom.self-9b1bc7af8637470da3b26ac524e0ff4fae03113978c6cae005988aa4a5a2a148.css?body=1" for 127.0.0.1 at 2015-08-29 20:58:31 -0400
+
+
+Started GET "/assets/jquery.self-d03a5518f45df77341bdbe6201ba3bfa547ebba8ed64f0ea56bfa5f96ea7c074.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:31 -0400
+
+
+Started GET "/assets/application.self-e80e8f2318043e8af94dddc2adad5a4f09739a8ebb323b3ab31cd71d45fd9113.css?body=1" for 127.0.0.1 at 2015-08-29 20:58:31 -0400
+
+
+Started GET "/assets/jstz.self-c0baa2f7b8e039b9cc9f2f7b1b501d5eacdb26887657227d2400a923d0bf498f.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:31 -0400
+
+
+Started GET "/assets/jquery_ujs.self-8e98a7a072a6cee1372d19fff9ff3e6aa1e39a37d89d6f06861637d061113ee7.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:31 -0400
+
+
+Started GET "/assets/jquery.cookie.self-2efa782489c4685967c338dd45c878a9932d27121d47fb36eff3d683e6bc0bcb.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:31 -0400
+
+
+Started GET "/assets/jquery.turbolinks.self-176b9819f30444d441e820bbccd3264fe57753aeafd54dec732b0dbc77129a2a.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:32 -0400
+
+
+Started GET "/assets/turbolinks.self-c37727e9bd6b2735da5c311aa83fead54ed0be6cc8bd9a65309e9c5abe2cbfff.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:32 -0400
+
+
+Started GET "/assets/browser_timezone_rails/set_time_zone.self-bca3b27aadc35f71f1c4b4c153ab6216dee2ead20334fbae9b6c1990276cf106.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:32 -0400
+
+
+Started GET "/assets/scripts.self-e315906d5204c8e4f8357cfc8995868554aaff5a69336f5d26a4387f6f13e70a.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:32 -0400
+
+
+Started GET "/assets/application.self-13305aac38215578429791b624392d011189a7a32560d69a9c370693519ae8d8.js?body=1" for 127.0.0.1 at 2015-08-29 20:58:32 -0400
+
+
+Started GET "/assets/navbar-logo-4c17637993575320716b495fb4b8f05a03e8fa4b847627d31e07440e643df1e8.png" for 127.0.0.1 at 2015-08-29 20:58:32 -0400
+
+
+Started GET "/users/1" for 127.0.0.1 at 2015-08-29 20:58:36 -0400
+Processing by UsersController#show as JS
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mOrganization Load (0.2ms)[0m  SELECT  "organizations".* FROM "organizations" WHERE "organizations"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."organization_id" = ? AND "users"."id" = ? LIMIT 1[0m  [["organization_id", 1], ["id", 1]]
+  [1m[35mUser Exists (0.1ms)[0m  SELECT "users".* FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? AND "users"."id" = ?  [["organization_id", 1], ["supervisor_id", 1], ["id", 1]]
+  Rendered users/_user_info.html.erb (2.1ms)
+  [1m[36mGrantholding Load (0.2ms)[0m  [1mSELECT "grantholdings".* FROM "grantholdings" WHERE "grantholdings"."user_id" = ?[0m  [["user_id", 1]]
+  [1m[35mGrant Load (0.2ms)[0m  SELECT  "grants".* FROM "grants" WHERE "grants"."organization_id" = ? AND "grants"."id" = ? LIMIT 1  [["organization_id", 1], ["id", 1]]
+  Rendered users/_grantholding.html.erb (6.9ms)
+  [1m[36mUser Exists (0.2ms)[0m  [1mSELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1[0m  [["organization_id", 1], ["supervisor_id", 1]]
+  Rendered users/_timelog_feed_selectors.html.erb (11.6ms)
+  Rendered users/_timelog_feed.html.erb (0.5ms)
+  Rendered users/show.html.erb within layouts/application (59.3ms)
+  Rendered layouts/_shim.html.erb (0.5ms)
+  [1m[35mCACHE (0.0ms)[0m  SELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1  [["organization_id", 1], ["supervisor_id", 1]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1[0m  [["organization_id", 1], ["supervisor_id", 1]]
+  Rendered layouts/_header.html.erb (12.9ms)
+  Rendered layouts/_flash_handler.html.erb (0.8ms)
+  Rendered layouts/_sidebar.html.erb (1.9ms)
+  Rendered layouts/_footer.html.erb (7.3ms)
+Completed 200 OK in 396ms (Views: 383.6ms | ActiveRecord: 1.3ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2015-08-29 20:59:25 -0400
+Processing by UsersController#show as JS
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (0.2ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 1]]
+  [1m[36mOrganization Load (0.2ms)[0m  [1mSELECT  "organizations".* FROM "organizations" WHERE "organizations"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35mUser Load (0.2ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."organization_id" = ? AND "users"."id" = ? LIMIT 1  [["organization_id", 1], ["id", 1]]
+  [1m[36mUser Exists (0.4ms)[0m  [1mSELECT "users".* FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? AND "users"."id" = ?[0m  [["organization_id", 1], ["supervisor_id", 1], ["id", 1]]
+  Rendered users/_user_info.html.erb (1.1ms)
+  [1m[35mGrantholding Load (0.2ms)[0m  SELECT "grantholdings".* FROM "grantholdings" WHERE "grantholdings"."user_id" = ?  [["user_id", 1]]
+  [1m[36mGrant Load (0.2ms)[0m  [1mSELECT  "grants".* FROM "grants" WHERE "grants"."organization_id" = ? AND "grants"."id" = ? LIMIT 1[0m  [["organization_id", 1], ["id", 1]]
+  Rendered users/_grantholding.html.erb (8.9ms)
+  [1m[35mUser Exists (0.1ms)[0m  SELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1  [["organization_id", 1], ["supervisor_id", 1]]
+  Rendered users/_timelog_feed_selectors.html.erb (7.7ms)
+  Rendered users/_timelog_feed.html.erb (0.1ms)
+  Rendered users/show.html.erb within layouts/application (72.3ms)
+  Rendered layouts/_shim.html.erb (0.1ms)
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1[0m  [["organization_id", 1], ["supervisor_id", 1]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  1 AS one FROM "users" INNER JOIN "supervisions" ON "users"."id" = "supervisions"."supervisee_id" WHERE "users"."organization_id" = ? AND "supervisions"."supervisor_id" = ? LIMIT 1  [["organization_id", 1], ["supervisor_id", 1]]
+  Rendered layouts/_header.html.erb (24.5ms)
+  Rendered layouts/_flash_handler.html.erb (0.2ms)
+  Rendered layouts/_sidebar.html.erb (0.8ms)
+  Rendered layouts/_footer.html.erb (0.4ms)
+Completed 200 OK in 604ms (Views: 587.8ms | ActiveRecord: 1.4ms)

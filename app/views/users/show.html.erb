@@ -28,7 +28,7 @@
 				<% @user.grantholdings.each do |g| %>
 					<%= 
 						render partial: 'grantholding', 
-						locals: { g: g, since_date: since_date } 
+						locals: { g: g } 
 					%>
 				<% end %>
 				</ul>
