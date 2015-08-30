@@ -8,16 +8,27 @@
 	
   <div class="field">
     <%= f.label :start_time  %> (example: 8:54 AM, 8-24-2015) <br>
-    <%= f.text_field :start_time %>
+    <%= f.text_field :start_time, value: @start %>
   </div>
   <div class="field">
-    <%= f.label :end_time %> (example: 5:15 PM, 8-24-2015) ><br>
-    <%= f.text_field :end_time %>
+    <%= f.label :end_time %> (example: 5:15 PM, 8-24-2015) <br>
+    <%= f.text_field :end_time, value: @end %>
   </div>
 
   <h2>Hours worked under grants:</h2>
-  <% f.fields_for @timelog.time_allocations do |time_allocation| %>
-    <%= render 'time_allocation_field', t: time_allocation %>
+
+  <% f.fields_for :time_allocations do |t| %>
+    <div class="form-group">
+      <div class="field">
+       (for example: 0:07 hours means 7 minutes) <br>
+        <%= t.text_field :hours, placeholder: "hh:mm:ss", class: 'form-control' %> hours
+      </div>
+
+      <div class="field">
+        <%= t.label :comments %>
+        <%= t.text_area :comments, placeholder: "Describe your grant-related work during this time.", class: 'form-control' %>
+      </div>
+    </div>
   <% end %>
 
   <div class="field">

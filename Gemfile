@@ -20,6 +20,7 @@ gem 'acts_as_tenant'
 gem 'nested_form'
 gem 'jquery-turbolinks'
 gem 'browser-timezone-rails'
+gem 'cocoon'
 
 group :development, :test do
   gem 'sqlite3'

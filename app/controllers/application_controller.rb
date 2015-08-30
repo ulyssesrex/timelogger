@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
 
   # Converts a UNIX timestamp string to H:MM:SS AM/PM, M-D-YYYY
   def parse_timestamp(unix_timestamp)
-    d = Time.at(unix_timestamp)
+    d = Time.at(unix_timestamp.to_i)
     d.strftime("%l:%M:%S %p, %-m-%e-%Y")
   end
 
@@ -70,6 +70,29 @@ class ApplicationController < ActionController::Base
     Time.new(year, month, day, hrs, min, sec)
   end
 
+  # Returns float value of duration in hours.
+  def convert_to_duration(hours_param)
+    times_array = hours_param.split(":")
+    hrs = times_array[0].to_f
+    min = times_array[1].to_f
+    sec = times_array[2].to_f
+    min = min / 60
+    sec = sec / (60 * 60)
+    hrs += (min + sec)
+  end
+
+  # Returns string formatted version of float hours duration.
+  def duration_to_hours_display(duration)
+    duration = (duration * (60 * 60)).to_i
+    h = m = s = 0
+    h = (duration / (60 * 60)).to_s
+    duration = duration % (60 * 60)
+    m = (duration / 60).to_s
+    duration = duration % 60
+    s = duration.to_s
+    "#{pad(h,3)}:#{pad(m,2)}:#{pad(s,2)}"
+  end
+
   private
   
     # Times are all numbers separated by ':'s
@@ -85,5 +108,17 @@ class ApplicationController < ActionController::Base
     # Matches 'AM', 'PM', or variants thereof.
     def meridian(user_string)
       user_string[/a\.*m\.*|p\.*m\.*/i].tr('.', '').upcase
+    end
+
+    # Pads a string with zeros up to total length 'amount'
+    def pad(n_str, amount)
+      l = n_str.length
+      pad_length = amount - l
+      if pad_length >= 0
+        zeros = "0" * pad_length
+        "#{zeros}#{n_str}"
+      else
+        "#{n_str}"
+      end
     end
 end
