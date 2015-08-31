@@ -177,6 +177,8 @@ $(document).ready(function() {
 	// Run current time clock on page load.
 	runClock();
 
+	$(".dropdown-toggle").dropdown();
+
 	// On page load, check if user has previously
 	// clicked the timelog start button but not the 
 	// timelog finish button.

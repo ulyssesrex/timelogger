@@ -2,6 +2,58 @@
 
 <h1>New Timelog</h1>
 
+<%= form_for @timelog, html: { class: "form-horizontal" } do |f| %>
+  <fieldset id="timelog-meta">
+    <ul>
+      <li class="control-group">
+        <%= f.label :start_time, "Start time", class: "control-label" %>
+        <div class="field controls">
+          <%= 
+            f.text_field :start_time, 
+              value: @start, 
+              placeholder: "example: 8:45 AM, 7-21-2015" 
+          %>
+        </div>
+      </li>
+      <li class="control-group">
+        <%= f.label :end_time, "End time", class: "control-label" %>
+        <div class="field controls">
+          <%= 
+            f.text_field :end_time, 
+              value: @end, 
+              placeholder: "example: 4:59 PM, 7-21-2015" 
+          %>
+        </div>
+      </li>
+      <li class="control-group">
+        <%= f.label :comments, "Timelog comments", class: "control-label" %>
+        <div class="field controls">
+          <%= 
+            f.text_area :comments, 
+              rows: 5, 
+              placeholder: "Add any notes here" 
+          %>
+        </div>
+      </li>
+    </ul>
+  </fieldset>
+
+  <fieldset id="timelog-time_allocations">
+    <ul>
+      <%= f.fields_for :time_allocations do |time_allocation| %>
+        <%= render partial: 'time_allocation_field', locals: { t: time_allocation } %>
+      <% end %>
+    </ul>
+  </fieldset>
+
+  <div class="actions">
+    <%= f.submit "Cancel" %>
+    <%= f.submit "Submit" %>
+  </div>
+<% end %>
+<!-- 
+
+
 <%= form_for(@timelog) do |f| %>
 	
 	<%= render partial: 'form_errors', locals: { timelog: @timelog } %>
@@ -40,4 +92,4 @@
 		<%= f.submit "Submit" %>
   </div>
 	
-<% end %>
+<% end %> -->

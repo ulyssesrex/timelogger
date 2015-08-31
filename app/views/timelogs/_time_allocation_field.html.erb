@@ -1,11 +1,10 @@
-<div class="form-group">
-	<div class="field">
-		 (for example: 0:07 hours means 7 minutes) <br>
-		<%= t.text_field :hours, placeholder: "hh:mm:ss", class: 'form-control' %> hours
-	</div>
+<li class="control-group nested-fields">
+	<h2>Time allocated to grants:</h2>
+  <div class="controls">
+    <%= t.label :hours, "#{t.object.grantholding.grant.name} hours" %>
+    <%= t.text_field :hours, placeholder: "hhh:mm:ss" %>
 
-	<div class="field">
-		<%= t.label :comments %>
-		<%= t.text_area :comments, placeholder: "Describe your grant-related work during this time.", class: 'form-control' %>
-	</div>
-</div>
+    <%= t.label :comments %>
+    <%= t.text_area :comments, rows: 5, placeholder: "Describe today's grant-related work" %>
+  </div>
+</li>

@@ -21,10 +21,10 @@ body {
   padding-top: 40px;
 	font-family: 'Vollkorn', serif;
 }
-
+/*
 .nav li a:visited { 
 	color: white !important;
-}
+}*/
 
 p a:visited {
 	color: #8B5A2B !important;	
@@ -36,6 +36,16 @@ section {
 
 textarea {
   resize: vertical;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  .underline {
+    text-decoration: underline;
+  }
 }
 
 .center {
@@ -106,10 +116,9 @@ p {
 /* navbar */
 
 .navbar {
-	min-height: 40px !important;
 	background-color: #2F4A00;
 	border-color: #2F4A00;
-	.container {
+	.container-fluid {
 		border-bottom: 5px;
 		border-top: 5px;
 		ul > li {
@@ -119,9 +128,11 @@ p {
 	}
 }
 
-#logo {
-	float: left;
-	margin-top: 5px;
+#logo-text {
+  display: inline-block;  
+  color: white !important;
+  font-size: 20px;
+  vertical-align: center;
 }
 
 /* footer */

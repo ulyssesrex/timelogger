@@ -6,11 +6,14 @@ class TimelogsController < ApplicationController
   def new
     @user = current_user
     @timelog = Timelog.new
+    @user.grantholdings.each do |gh|
+      @timelog.time_allocations.build(grantholding_id: gh.id)
+    end
     if params[:start_time] && params[:finish_time]
       @start = parse_timestamp(params[:start_time])
       @end   = parse_timestamp(params[:finish_time])
     end
-    @timelog.time_allocations.new
+
   end
 
   # def timer_start
@@ -38,7 +41,6 @@ class TimelogsController < ApplicationController
       params[:timelog][:time_allocations_attributes][:hours] = convert_to_duration(h)
     end
     @timelog = current_user.timelog.new(timelog_params)
-    @timelog.time_allocations.map! { |t| t.user_id = current_user.id }
     if !current_user?(@timelog.user) || 
        !current_user.admin? ||
        params[:commit] == "Cancel" # then
