@@ -15,8 +15,9 @@
 		<% end %>
 		
 		<p>
-			New user? <%= link_to "Sign yourself up", signup_path %> now, or
-			<%= link_to "create an organization profile", new_organization_path %>!
+			New user? Create a profile
+			<%= link_to "for yourself", signup_path, class: 'underline' %> or for
+			<%= link_to "your organization", new_organization_path, class: 'underline' %>.
 		</p>
 	</div>
 </div>

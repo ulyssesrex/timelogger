@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   post   '/timelogs/finish_from_button' => 'timelogs#finish_from_button'
   get    'login'          => 'sessions#new'
   post   'login'          => 'sessions#create'
-  post   'logout'         => 'sessions#destroy'
+  delete 'logout'         => 'sessions#destroy'
   get    'all_coworkers'  => 'supervisions#all_coworkers'
   get    'supervisees'    => 'supervisions#supervisees'
   root   'static_pages#home'
