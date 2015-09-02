@@ -68,15 +68,14 @@ class UsersController < ApplicationController
   end
   
   def show
+    @grantholdings = @user.grantholdings
     redirect_to users_path unless @user.activated?
   end
   
   def grants_fulfillments_table
+    @since_date = params[:since_date]
     respond_to do |format| 
-      format.js { 
-        render 'grants_fulfillments', 
-        locals: { since_date: params[:since_date] }
-      }
+      format.js { render 'grants_fulfillments_table.js.erb'}
     end
   end
   

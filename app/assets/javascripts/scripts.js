@@ -177,7 +177,13 @@ $(document).ready(function() {
 	// Run current time clock on page load.
 	runClock();
 
-	$(".dropdown-toggle").dropdown();
+	$('#since_date').change(function() {
+    $.ajax({
+			type: "POST",
+			url: "http://localhost:3000/users/grants_fulfillments_table",
+			data: { since_date: $('#since_date option:selected').val() }
+		});
+  });
 
 	// On page load, check if user has previously
 	// clicked the timelog start button but not the 
@@ -188,12 +194,6 @@ $(document).ready(function() {
 		timerRunningDisplay();
 		activateTimer();			
 	}
-
-	$('#since-date').change(function() {
-    $.post('users/grants_fulfillments_table',
-      { since_date: $(this).val() }
-    );
-  });
 
 	// When user clicks timelog start button,
 	// start timer and save the click time in cookies.

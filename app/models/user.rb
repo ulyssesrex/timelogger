@@ -79,6 +79,10 @@ class User < ActiveRecord::Base
     BCrypt::Password.new(digest).is_password?(token)
   end
   
+  def grants
+    grantholdings.grants
+  end
+
   def supervises?(user)
     self.supervisees.include?(user)
   end
@@ -139,6 +143,22 @@ class User < ActiveRecord::Base
     end
     total_seconds / 3600.0 # Gives time in hours.
   end
+
+  # Returns '0:00' format of total hours user has worked on grant since date.
+  def hours_worked_on_grant(since_date, grant_name)
+    timelogs_in_range = self.timelogs
+                            .where('start_time > ?', since_date)
+                            .joins(:time_allocations)
+                            .merge(TimeAllocation.joins(:grantholding))
+                            .merge(Grantholding.joins(:grant))
+                            .merge(Grant.where(name: grant_name))
+    total = 0
+    timelogs_in_range.each do |timelog|
+      grant_time = timelog.hours_allocated_to(grant_name)
+      total += grant_time
+    end
+    total
+  end
   
   def create_activation_digest
     self.activation_token  = User.new_token
@@ -146,6 +166,18 @@ class User < ActiveRecord::Base
   end
   
 ###---Class Methods---###  
+
+  # Returns string formatted version of float hours duration.
+  def User.duration_to_hours_display(duration)
+    duration = (duration * (60 * 60)).to_i
+    h = m = s = 0
+    h = (duration / (60 * 60)).to_s
+    duration = duration % (60 * 60)
+    m = (duration / 60).to_s
+    duration = duration % 60
+    s = duration.to_s
+    "#{pad(h,3)}:#{pad(m,2)}:#{pad(s,2)}"
+  end
 
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ?
@@ -164,6 +196,18 @@ class User < ActiveRecord::Base
     
     def downcase_email
       self.email = email.downcase
+    end
+
+    # Pads a string with zeros up to total length 'amount'
+    def pad(n_str, amount)
+      l = n_str.length
+      pad_length = amount - l
+      if pad_length >= 0
+        zeros = "0" * pad_length
+        "#{zeros}#{n_str}"
+      else
+        "#{n_str}"
+      end
     end
 
 end

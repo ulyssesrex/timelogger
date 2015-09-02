@@ -11,31 +11,6 @@
 		</section>
 		
 		<section>
-			<h2><%= "#{@user.first_name}'s grants:" %></h2>
-			<%= form_tag(grants_fulfillments_table_path, remote: true) do %>
-				<%= select_tag(:since_date, 
-							options_for_select([
-								['Last Monday', date_of_last("Monday", previous: false) ],
-								['Monday before last', date_of_last("Monday", previous: true)],
-								['The first of this month', first_of_month]
-							],
-						)
-					)
-				%>
-			<% end %>
-			<div id="grants-fulfillments">
-				<ul>
-				<% @user.grantholdings.each do |g| %>
-					<%= 
-						render partial: 'grantholding', 
-						locals: { g: g } 
-					%>
-				<% end %>
-				</ul>
-			</div>
-		</section>
-		
-		<section>
 			<%= 
 				render partial: 'timelog_feed_selectors', 
 				locals: { user: @user } 
@@ -43,7 +18,28 @@
 			<%= 
 				render partial: 'timelog_feed', 
 				locals: { user: @user } 
-			%>
+			%>			
+		</section>
+		
+		<section>
+			<h3>View grant fulfillments since:</h3>
+			<%= form_tag(users_grants_fulfillments_table_path) do %>
+				<%= select_tag(:since_date, 
+							options_for_select(
+							[
+								['Last Monday', date_of_last("Monday", previous: false) ],
+								['Monday before last', date_of_last("Monday", previous: true)],
+								['The first of this month', first_of_month]
+							]
+						)
+					)
+				%>
+			<% end %><br>
+
+			<ul>
+			<%= render partial: 'users/grantholding', collection: @grantholdings %>
+			</ul>
+
 		</section>
 		
 	</div>
