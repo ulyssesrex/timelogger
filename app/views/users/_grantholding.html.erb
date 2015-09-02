@@ -1,4 +1,18 @@
-<li>
-	<%= g.grant.name %>
-	<span class="grants-time-left"></span>
-</li>
+<p>
+	<%= grantholding.grant.name %>
+	<div class="grant-time-left">
+		<% hours_worked = @user.hours_worked_on_grant(@since_date, grantholding.grant.name) %>
+		<%= ": " + format_time(hours_worked, amount: true) %>
+		<% required_hours = grantholding.required_hours.to_f %>
+		<% hours_to_go = required_hours - hours_worked %>
+		<% if hours_worked < required_hours %>
+			<div class="text-error">
+				<%= "(- #{format_time(hours_to_go, amount: true)})" %>
+			</div>
+		<% else %>
+			<div class="text-success">
+				<%= "(Met requirements within given timeframe)" %>
+			</div>
+		<% end %>
+	</div>
+</p>

@@ -1,13 +1,15 @@
-<div class="btn-group" data-toggle="buttons">
-	<label class="btn btn-primary my-btn active">
-		<input type="checkbox" autocomplete="off" checked>My timelogs
-	</label>
+<div class="btn-group" data-toggle="buttons">	
 	<% if user.has_supervisees? %>
+		<label class="btn btn-primary my-btn active">
+			<input type="checkbox" autocomplete="off" checked>My timelogs
+		</label>
 		<label class="btn btn-primary my-btn">
 			<input type="checkbox" autocomplete="off">Supervisees' timelogs
 		</label>
-	<% end %>
-	Filter by:
+	<% end %><br><br>
+
+	<h3>Timelogs</h3>
+	<p>Filter by:</p>
 	<div class="btn-group" data-toggle="buttons">
 		<label class="btn btn-primary my-btn active">
 			<input type="checkbox" autocomplete="off" checked>Newest

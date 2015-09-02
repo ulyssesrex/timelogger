@@ -16,6 +16,7 @@ class Timelog < ActiveRecord::Base
   # TODO: scope or default_scope?
   default_scope { order(end_time: :asc) }
   
+  # In seconds.
   def total_time
     end_time - start_time
   end
