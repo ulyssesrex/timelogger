@@ -24,24 +24,31 @@ module ApplicationHelper
   
   # regular: 1:20:00 PM 
   # army_time: 13:20:00
-  # amount: 02:05:01
-  def format_time(time, options={})
-    if options[:army_time]
-      time.strftime('%r %p')
-    elsif options[:regular] 
-      time.strftime('%T')
-    else options[:amount]
-      secs  = time.to_i
-      mins  = secs / 60
-      hours = mins / 60
-      # Proc pads numbers with zeros, if needed.
-      # adj = Proc.new { |t| t.to_s.rjust(2, '0') }      
-      if hours == 0 && mins == 0
-        "#{secs}"
-      else
-        "#{hours} hrs, #{mins} min"
-      end
+  def format_time(time, army_time=false)
+    army_time ? time.strftime('%T') : time.strftime('%r')
+  end
+
+  def format_duration(float_hours)
+    duration = (float_hours * 3600).round
+    h = (duration / 3600).floor
+    duration -= h * 3600
+    m = (duration / 60).floor
+    duration -= m * 60
+    s = duration
+    if float_hours.floor.zero?
+      display = "no time allocated since date"
+    elsif h.zero? && m.zero?
+      display = "< 1 min"
+    else
+      display = "#{h} hrs, #{m} min"
     end
+    display
+  end
+
+  def hours_to_seconds(float_hours)
+    whole_hours_in_seconds = (float_hours.floor) * 3600
+    remainder_in_seconds = ((float_hours - whole_hours) * 3600).round
+    whole_hours_in_seconds + remainder_in_seconds
   end
   
   # regular: 2015-07-11 

@@ -146,18 +146,20 @@ class User < ActiveRecord::Base
 
   # Returns '0:00' format of total hours user has worked on grant since date.
   def hours_worked_on_grant(since_date, grant_name)
-    timelogs_in_range = self.timelogs
-                            .where('start_time > ?', since_date)
-                            .joins(:time_allocations)
-                            .merge(TimeAllocation.joins(:grantholding))
-                            .merge(Grantholding.joins(:grant))
-                            .merge(Grant.where(name: grant_name))
-    total = 0
+    timelogs_in_range = self.timelogs.where('start_time >= ?', since_date)
+    # timelogs_in_range = self.timelogs
+    #                         .where('start_time > ?', since_date)
+    #                         .joins(:time_allocations)
+    #                         .merge(TimeAllocation.joins(:grantholding))
+    #                         .merge(Grantholding.joins(:grant))
+    #                         .merge(Grant.where(name: grant_name))
+    hours_worked = 0
     timelogs_in_range.each do |timelog|
-      grant_time = timelog.hours_allocated_to(grant_name)
-      total += grant_time
+      timelog.time_allocations.each do |ta|
+        hours_worked += ta.hours if ta.to_grant?(grant_name)
+      end
     end
-    total
+    hours_worked
   end
   
   def create_activation_digest
