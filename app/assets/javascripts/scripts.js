@@ -177,13 +177,16 @@ $(document).ready(function() {
 	// Run current time clock on page load.
 	runClock();
 
-	$('#since_date').change(function() {
-    $.ajax({
+	$(document).on("change", "#since_date", function(e) {
+		e.preventDefault();
+		$.ajax({
 			type: "POST",
 			url: "http://localhost:3000/users/grants_fulfillments_table",
-			data: { since_date: $('#since_date option:selected').val() }
+			data: { 
+				since_date: $('#since_date option:selected').val() 
+			}
 		});
-  });
+	})
 
 	// On page load, check if user has previously
 	// clicked the timelog start button but not the 

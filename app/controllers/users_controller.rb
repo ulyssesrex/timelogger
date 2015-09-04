@@ -73,9 +73,11 @@ class UsersController < ApplicationController
   end
   
   def grants_fulfillments_table
+    @user = User.find(session[:user_id])
+    @grantholdings = @user.grantholdings
     @since_date = params[:since_date]
     respond_to do |format| 
-      format.js { render 'grants_fulfillments_table.js.erb'}
+      format.js
     end
   end
   

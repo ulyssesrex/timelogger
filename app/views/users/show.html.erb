@@ -23,24 +23,22 @@
 		
 		<section>
 			<h3>View grant fulfillments since:</h3>
-			<%= form_tag(users_grants_fulfillments_table_path) do %>
+			<%= form_tag('#') do %>
 				<%= select_tag(:since_date, 
 							options_for_select(
 							[
 								['Last Monday', date_of_last("Monday", previous: false) ],
 								['Monday before last', date_of_last("Monday", previous: true)],
-								['The first of this month', first_of_month]
+								['The first of this month', first_of_month.to_time]
 							]
 						)
 					)
 				%>
 			<% end %><br>
 
-			<ul>
-			<%= render partial: 'users/grantholding', collection: @grantholdings %>
+			<ul class="grants-allocations">
+				<%= render partial: 'grantholding', collection: @grantholdings %>
 			</ul>
-
-		</section>
-		
+		</section>		
 	</div>
 </div>
