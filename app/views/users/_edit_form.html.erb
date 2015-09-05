@@ -4,7 +4,7 @@
     <%= render partial: 'errors', user: @user %>
   <% end %>
 
-  <%= render partial: 'user_fields' %>
+  <%= render partial: 'user_fields', locals: { f: f } %>
 	
 	<h1>Grants</h1>
 	<%= render partial: 'user_grants_fields', locals: { f: f, user: @user } %>

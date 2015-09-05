@@ -29,8 +29,8 @@
 						    <li><%= link_to "All Co-Workers", all_coworkers_path %></li>
 		            <% if current_user.admin? %>
 		            	<li role="separator" class="divider"></li>
-		            	<li><%= link_to "Confer admin status", users_make_admin_path %></li>
-						      <li><%= link_to "Delete user", users_delete_other_user_path %></li>
+		            	<li><%= link_to "Confer admin status", make_admin_path %></li>
+						      <li><%= link_to "Delete user", delete_other_user_path %></li>
 						    <% end %>
 		          </ul>
 		        </li>
