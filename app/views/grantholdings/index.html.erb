@@ -1,29 +1,33 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Grantholdings</h1>
+<h1>My Grants</h1>
 
 <table>
-  <thead>
+  <colgroup>
+    <col span="1", style="width: 25%;">
+    <col span="1", style="width: 25%;">
+  </colgroup>
+  <tr>
+    <th>Grant</th>
+    <th>Required hours</th>
+    <th> </th>
+    <th> </th>
+    <th> </th>
+  </tr>
+  <% @grantholdings.each do |grantholding| %>
     <tr>
-      <th>Grant</th>
-      <th>User</th>
-      <th colspan="3"></th>
+      <td><%= grantholding.grant.name %></td>
+      <td><%= format_duration grantholding.required_hours %></td>
+      <td><%= link_to 'View', grantholding.grant %></td>
+      <td><%= link_to 'Edit', edit_grantholding_path(grantholding) %></td>
+      <td>
+          <%= 
+              link_to 'Remove', grantholding, 
+              method: :delete, data: { confirm: 'Are you sure?' } 
+          %>
+      </td>
     </tr>
-  </thead>
-
-  <tbody>
-    <% @grantholdings.each do |grantholding| %>
-      <tr>
-        <td><%= grantholding.grant %></td>
-        <td><%= grantholding.user %></td>
-        <td><%= link_to 'Show', grantholding %></td>
-        <td><%= link_to 'Edit', edit_grantholding_path(grantholding) %></td>
-        <td><%= link_to 'Destroy', grantholding, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
+  <% end %>
 </table>
-
-<br>
-
-<%= link_to 'New Grantholding', new_grantholding_path %>
+<br><br>
+<%= link_to 'Add Grant', new_grantholding_path %>

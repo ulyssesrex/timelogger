@@ -3,21 +3,25 @@ class GrantholdingsController < ApplicationController
   
   def new
     @grantholding = Grantholding.new
+    @grants = Grant.all
   end
   
   def create
     @grantholding = Grantholding.new(grantholding_params)
+    @grantholding.user_id = current_user.id
     if @grantholding.save
       msg  = "#{@grantholding.grant.name} "
       msg += "has been added to your grants." 
       flash[:success] = msg
       redirect_to user_path(current_user) and return
     else
+      @grants = Grant.all
       render 'new'
     end
   end
   
   def index
+    @user = current_user
     @grantholdings = Grantholding.where(user_id: current_user.id)
   end
   

@@ -6,7 +6,7 @@
 		<%= link_to "Finish Timelog", new_timelog_path, class: 'timelog-button-running hidden', id: 'finish-timelog' %><br>
 		<%= link_to "Cancel Timelog", user_path(current_user), class: 'timelog-button-running hidden', id: 'cancel-timelog' %>
 	</div>
-		<%= link_to "Timelog from scratch", new_timelog_path %>
+		<%= link_to "Create New Timelog", new_timelog_path %>
 		<div class='timelog-button-running hidden', id="timelog-timer"></div>
 		<p>Current time:</p>
 		<div id="current-time"></div>

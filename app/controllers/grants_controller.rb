@@ -19,6 +19,7 @@ class GrantsController < ApplicationController
   end
   
   def show
+    @grantholding = @grant.grantholdings.where(user: current_user)
   end
   
   def index

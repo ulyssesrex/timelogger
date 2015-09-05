@@ -75,7 +75,7 @@ $(document).ready(function() {
         h = h - 12;
         diem = "PM";
     }
-    currentTimeText = pad(h, 3) + ':' + pad(m, 2) + ':' + pad(s, 2) + " " + diem;
+    currentTimeText = h.toString() + ':' + pad(m, 2) + ':' + pad(s, 2) + " " + diem;
     return currentTimeText;
 	}
 
