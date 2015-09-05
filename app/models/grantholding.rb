@@ -8,6 +8,9 @@ class Grantholding < ActiveRecord::Base
     
   validates :grant, presence: true
   validates :user,  presence: true
+
+  # A grant can't be associated with a user more than once.
+  validates :grant_id, uniqueness: { scope: :user_id }
   
   # def time_allocated_since(datetime) # EDIT TO REFLECT 'HOURS' COLUMN INSTEAD OF END TIME
   #   time_allocated = 0
