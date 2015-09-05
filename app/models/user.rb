@@ -146,13 +146,8 @@ class User < ActiveRecord::Base
 
   # Returns '0:00' format of total hours user has worked on grant since date.
   def hours_worked_on_grant(since_date, grant_name)
+    
     timelogs_in_range = self.timelogs.where('start_time >= ?', since_date)
-    # timelogs_in_range = self.timelogs
-    #                         .where('start_time > ?', since_date)
-    #                         .joins(:time_allocations)
-    #                         .merge(TimeAllocation.joins(:grantholding))
-    #                         .merge(Grantholding.joins(:grant))
-    #                         .merge(Grant.where(name: grant_name))
     hours_worked = 0
     timelogs_in_range.each do |timelog|
       timelog.time_allocations.each do |ta|
@@ -179,6 +174,33 @@ class User < ActiveRecord::Base
     duration = duration % 60
     s = duration.to_s
     "#{pad(h,3)}:#{pad(m,2)}:#{pad(s,2)}"
+  end
+
+  def User.convert_to_datetime(user_string, time=true)    
+    dates = date_array(user_string)
+    # Matches a four digit number in user string,
+    # assigns it to year.
+    fdigit_year = dates.find { |n| /\d{4}/ =~ n }
+    year = fdigit_year || ("20" + dates.last.to_s).to_i
+    hrs = min = sec = 0
+    if time
+      times = time_array(user_string)
+      hrs, min, sec = times[0], times[1], times[2]
+      # Convert hours to military time if needed.
+      m = meridian(user_string)
+      if hrs == 12 && m == "AM"
+        hrs = 0 
+      elsif hrs < 12 && m == "PM"
+        hrs += 12
+      end
+    end
+    # Determines order of year, month, and day from user string.
+    if fdigit_year != dates[0]
+      month, day = dates[0], dates[1]
+    else
+      month, day = dates[1], dates[2]
+    end
+    Time.new(year, month, day, hrs, min, sec)
   end
 
   def User.digest(string)
@@ -212,4 +234,18 @@ class User < ActiveRecord::Base
       end
     end
 
+    # Returns all numbers separated by ':'s
+    def time_array(user_string)
+      user_string.scan(/\d+(?=:)|(?<=:)\d+/).flatten.compact.map!(&:to_i)
+    end
+
+    # Matches all numbers separated by '-'s or '/'s
+    def date_array(user_string)
+      user_string.scan(/\d+(?=-)|(?<=-)\d+|\d+(?=\/)|(?<=\/)\d+/)
+    end
+
+    # Matches 'AM', 'PM', or variants thereof.
+    def meridian(user_string)
+      user_string[/a\.*m\.*|p\.*m\.*/i].tr('.', '').upcase
+    end
 end

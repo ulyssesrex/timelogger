@@ -29,11 +29,14 @@
 							[
 								['Last Monday', date_of_last("Monday", previous: false) ],
 								['Monday before last', date_of_last("Monday", previous: true)],
-								['The first of this month', first_of_month.to_time]
+								['The first of this month', first_of_month.to_time],
+								['Other date', 'other']
 							]
 						)
 					)
 				%>
+				<%= text_field_tag(:other_date, 'mm/dd/yyyy', class: 'date-input hidden', id: 'date-input-entry') %>
+				<%= submit_tag('View', class: 'date-input hidden', id: 'date-input-submit') %>
 			<% end %><br>
 
 			<ul class="grants-allocations">

@@ -179,14 +179,32 @@ $(document).ready(function() {
 
 	$(document).on("change", "#since_date", function(e) {
 		e.preventDefault();
+		var select_val  = $('#since_date option:selected').val();
+		var date_inputs = $('.date-input');
+		if(select_val === "other") {
+			date_inputs.removeClass('hidden');
+		}
+		else {
+			if(!(date_inputs.hasClass('hidden'))) {
+				date_inputs.addClass('hidden');
+			}
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:3000/users/grants_fulfillments_table",
+				data: { since_date: select_val }
+			});
+		}
+	});
+
+	$(document).on("click", "#date-input-submit", function(e) {
+		e.preventDefault;
+		var select_val = $('#date-input-entry').val();
 		$.ajax({
 			type: "POST",
 			url: "http://localhost:3000/users/grants_fulfillments_table",
-			data: { 
-				since_date: $('#since_date option:selected').val() 
-			}
-		});
-	})
+			data: { since_date: select_val }
+		})
+	});
 
 	// On page load, check if user has previously
 	// clicked the timelog start button but not the 

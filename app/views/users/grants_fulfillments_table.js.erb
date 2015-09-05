@@ -1,1 +1,8 @@
-$('.grants-allocations').fadeToggle('fast').html("<%= j( render partial: 'users/grantholding', collection: @grantholdings, locals: { since_date: @since_date }) %>").fadeToggle('fast');
+$('.grants-allocations')
+	.fadeToggle('fast')
+	.html("<%= j( 
+		render partial: 'users/grantholding', 
+		collection: @grantholdings, 
+		locals: { since_date: @since_date }) 
+	%>")
+	.fadeToggle('fast');
