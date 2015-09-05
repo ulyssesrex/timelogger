@@ -75,7 +75,7 @@ class UsersController < ApplicationController
   def grants_fulfillments_table
     @user = User.find(session[:user_id])
     @grantholdings = @user.grantholdings
-    @since_date = params[:since_date]
+    @since_date = User.convert_to_datetime(params[:since_date], time=false)
     respond_to do |format| 
       format.js
     end
