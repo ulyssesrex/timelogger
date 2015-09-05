@@ -87,10 +87,11 @@ class UsersController < ApplicationController
   end
   
   def update
-    # Cancel -->
+    # If Cancel
     if params[:commit] == "Cancel"
       redirect_to user_path(current_user) and return
-    # Submit -->
+
+    # If Submit -->
     else
       if @user.update(user_params)
         flash[:success] = "Profile updated."
