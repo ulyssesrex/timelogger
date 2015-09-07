@@ -1,12 +1,13 @@
 * REQUEST SPECS
 * create views
 
-* create helpers
-* create helper specs
-
 * rewrite mailers
 * set up actual timelogger.com email
-* application helper time display methods should be called from ApplicationHelper::Base instead
+
+* types of leave: sick, holiday, vacation, exempt, incl weather
+* excel spreadsheet
+* percentages
+* how to see each pay period's timelogs?
 
 * css
 * items on other todo list, if applicable

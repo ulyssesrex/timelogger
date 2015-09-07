@@ -9,12 +9,11 @@ class SupervisionsController < ApplicationController
     redirect_to users_path
   end
   
-  def all_coworkers
-    @users = User.where(activated: true)
-  end
-  
   def supervisees
-    @supervisees = current_user.supervisees
+    @index = true
+    @user  = current_user
+    @supervisees  = @user.supervisees
+    @supervisions = Supervision.where(supervisor: @user)
   end
   
   def destroy
@@ -28,7 +27,7 @@ class SupervisionsController < ApplicationController
       @supervision = @user.initiated_supervisions
                        .find_by(supervisor_id: current_user.id)
     else
-      flash[:danger] = "User relationship cannot be destroyed."
+      flash[:danger] = "Supervision can't be ended."
       redirect_to users_path and return
     end
     @supervision.destroy

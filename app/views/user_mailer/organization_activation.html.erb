@@ -9,7 +9,7 @@
 		As other users sign up for Timelogger, they will be prompted to enter the <%= @organization.name %> keyword you selected. You will need to distribute this keyword internally to everyone who will be registering. Note: any person with this keyword can sign up for your organization, so make sure your employees are mindful of security as you distribute it.
 	</li>
 	<li>
-		As <%= @organization.name %>'s first user, you have been granted admin status. When you log in you'll be taken to a help screen that will tell you exactly what that means (basically, you have Timelogger superpowers). If you need help at any other time, just click 'Help' on the navigation bar on the upper right.
+		As <%= @organization.name %>'s first user, you have been granted admin status. When you log in you'll be taken to a help screen that will tell you exactly what that means (in a nutshell, you have Timelogger superpowers). If you need help at any other time, just click 'Help' on the navigation bar on the upper right.
 	</li>	
 	<li>
 		<%= link_to "Click here to activate your Timelogger account and log in.", edit_account_activation_url(@admin.activation_token, email: @admin.email) %>

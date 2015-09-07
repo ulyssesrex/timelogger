@@ -1,1 +1,18 @@
-I'm users#make_admin_index.
+<% provide(:title, "Give admin status") %>
+
+<h1>Give admin status</h1>
+
+<%= form_tag make_admin_path, method: :put do %>
+	<ul>
+		<% for na in @non_admins %>
+			<li>
+				<%= check_box_tag "user_ids[]", na.id %>
+				<%= 
+					render partial: "shared/user_blurb", 
+					locals: { user: na, index: true } 
+				%>			
+			</li>
+		<% end %>
+	</ul>
+	<%= submit_tag "Adminify" %>
+<% end %>	

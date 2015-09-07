@@ -173,21 +173,21 @@ class User < ActiveRecord::Base
     m = (duration / 60).to_s
     duration = duration % 60
     s = duration.to_s
-    "#{pad(h,3)}:#{pad(m,2)}:#{pad(s,2)}"
+    "#{User.pad(h,3)}:#{User.pad(m,2)}:#{User.pad(s,2)}"
   end
 
   def User.convert_to_datetime(user_string, time=true)    
-    dates = date_array(user_string)
+    dates = User.date_array(user_string)
     # Matches a four digit number in user string,
     # assigns it to year.
     fdigit_year = dates.find { |n| /\d{4}/ =~ n }
     year = fdigit_year || ("20" + dates.last.to_s).to_i
     hrs = min = sec = 0
     if time
-      times = time_array(user_string)
+      times = User.time_array(user_string)
       hrs, min, sec = times[0], times[1], times[2]
       # Convert hours to military time if needed.
-      m = meridian(user_string)
+      m = User.meridian(user_string)
       if hrs == 12 && m == "AM"
         hrs = 0 
       elsif hrs < 12 && m == "PM"
@@ -201,6 +201,33 @@ class User < ActiveRecord::Base
       month, day = dates[1], dates[2]
     end
     Time.new(year, month, day, hrs, min, sec)
+  end
+
+  # Pads a string with zeros up to total length 'amount'
+  def User.pad(n_str, amount)
+    l = n_str.length
+    pad_length = amount - l
+    if pad_length >= 0
+      zeros = "0" * pad_length
+      "#{zeros}#{n_str}"
+    else
+      "#{n_str}"
+    end
+  end
+
+  # Returns all numbers separated by ':'s
+  def User.time_array(user_string)
+    user_string.scan(/\d+(?=:)|(?<=:)\d+/).flatten.compact.map!(&:to_i)
+  end
+
+  # Matches all numbers separated by '-'s or '/'s
+  def User.date_array(user_string)
+    user_string.scan(/\d+(?=-)|(?<=-)\d+|\d+(?=\/)|(?<=\/)\d+/)
+  end
+
+  # Matches 'AM', 'PM', or variants thereof.
+  def User.meridian(user_string)
+    user_string[/a\.*m\.*|p\.*m\.*/i].tr('.', '').upcase
   end
 
   def User.digest(string)
@@ -222,30 +249,4 @@ class User < ActiveRecord::Base
       self.email = email.downcase
     end
 
-    # Pads a string with zeros up to total length 'amount'
-    def pad(n_str, amount)
-      l = n_str.length
-      pad_length = amount - l
-      if pad_length >= 0
-        zeros = "0" * pad_length
-        "#{zeros}#{n_str}"
-      else
-        "#{n_str}"
-      end
-    end
-
-    # Returns all numbers separated by ':'s
-    def time_array(user_string)
-      user_string.scan(/\d+(?=:)|(?<=:)\d+/).flatten.compact.map!(&:to_i)
-    end
-
-    # Matches all numbers separated by '-'s or '/'s
-    def date_array(user_string)
-      user_string.scan(/\d+(?=-)|(?<=-)\d+|\d+(?=\/)|(?<=\/)\d+/)
-    end
-
-    # Matches 'AM', 'PM', or variants thereof.
-    def meridian(user_string)
-      user_string[/a\.*m\.*|p\.*m\.*/i].tr('.', '').upcase
-    end
 end

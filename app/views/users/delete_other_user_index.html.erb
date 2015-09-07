@@ -1,1 +1,19 @@
-I'm users#delete_other_user_index.
+<% provide(:title, "Delete User") %>
+
+<h1>Delete User</h1>
+
+<%= form_tag delete_user_path, method: :delete do %>
+	<ul>
+		<% for user in @users %>
+			<li>
+				<%= check_box_tag "user_ids[]", user.id %>
+				<%= 
+					render partial: "shared/user_blurb", 
+					locals: { user: user, index: true } 
+				%>			
+			</li>
+		<% end %>
+	</ul>
+	<% msg = "Are you sure? Users' data will be deleted permanently." %>
+	<%= submit_tag "Delete", confirm: msg %>
+<% end %>

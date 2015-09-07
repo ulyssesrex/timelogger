@@ -190,7 +190,7 @@ $(document).ready(function() {
 			}
 			$.ajax({
 				type: "POST",
-				url: "http://localhost:3000/users/grants_fulfillments_table",
+				url: "http://localhost:3000/grants_fulfillments_table",
 				data: { since_date: select_val }
 			});
 		}
@@ -201,7 +201,7 @@ $(document).ready(function() {
 		var select_val = $('#date-input-entry').val();
 		$.ajax({
 			type: "POST",
-			url: "http://localhost:3000/users/grants_fulfillments_table",
+			url: "http://localhost:3000/grants_fulfillments_table",
 			data: { since_date: select_val }
 		})
 	});

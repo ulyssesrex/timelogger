@@ -5,8 +5,8 @@
 		
 		<section class="user_info">
 			<%= 
-				render partial: 'user_info', 
-				locals: { user: @user } 
+				render partial: "shared/user_blurb", 
+				locals: { user: @user, index: false } 
 			%>
 		</section>
 		
