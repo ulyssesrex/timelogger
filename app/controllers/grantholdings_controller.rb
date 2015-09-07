@@ -31,13 +31,19 @@ class GrantholdingsController < ApplicationController
   
   def update
     @grantholding = Grantholding.find(params[:id])
-    if @grantholding.update(grantholding_params)
-      msg = "Your info for #{@grantholding.grant.name} was updated."
-      flash[:success] = msg
-      redirect_to grantholdings_path and return
+    unless params[:commit] == "Cancel"
+      if @grantholding.update(grantholding_params)
+        msg = "Your info for #{@grantholding.grant.name} was updated."
+        flash[:success] = msg
+        redirect_to grantholdings_path and return
+      else
+        @grantholding = Grantholding.find(params[:id])
+        @grants = Grant.all
+        render 'edit' and return
+      end
     else
-      render 'edit'
-    end      
+      redirect_to grantholdings_path and return      
+    end
   end
   
   def destroy

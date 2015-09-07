@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   get    'home'          => 'static_pages#home'
   get    'about'         => 'static_pages#about'
   get    'help'          => 'static_pages#help'
+  get    'help/admin'    => 'static_pages#admin_help'
   get    'signup'        => 'users#new'
   post   'signup'        => 'users#create'
   get    'make_admin'    => 'users#make_admin_index'

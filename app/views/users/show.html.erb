@@ -39,9 +39,11 @@
 				<%= submit_tag('View', class: 'date-input hidden', id: 'date-input-submit') %>
 			<% end %><br>
 
-			<ul class="grants-allocations">
-				<%= render partial: 'grantholding', collection: @grantholdings %>
-			</ul>
+			<% if !@grantholdings.empty? %>
+				<ul class="grants-allocations">
+					<%= render partial: 'grantholding', collection: @grantholdings %>
+				</ul>
+			<% end %>
 		</section>		
 	</div>
 </div>
