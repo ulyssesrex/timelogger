@@ -117,25 +117,28 @@ class UsersController < ApplicationController
   end
 
   def delete_other_user_index
-    @users = User.all
+    @users = User.where.not(id: current_user.id)
   end
 
   def delete_other_user
-    # TODO: include 'are you sure?' prompt
-    if @user.destroy
+    @selected_users = User.where("id IN (?)", params[:user_ids])
+    if @selected_users.none?
+      flash[:danger] = "No users selected."
+      redirect_to delete_user_path and return
+    elsif @selected_users.each { |user| user.destroy }
       flash[:success] = "User successfully deleted."
-      redirect_to users_delete_other_user_path and return
+      redirect_to users_path and return
     end
   end
 
   def make_admin_index
-    @users = User.where(activated: true)
+    @non_admins = User.where(activated: true, admin: false)
   end
 
   def make_admin
-    # TODO: include 'are you sure?' prompt
-    @user.toggle!(:admin)
-    flash[:success] = "User was given admin status."
+    @selected_users = User.where("id IN (?)", params[:user_ids])
+    @selected_users.update_all admin: true
+    flash[:success] = "Admin status granted."
     redirect_to users_path
   end
   

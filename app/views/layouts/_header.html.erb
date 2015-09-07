@@ -30,7 +30,7 @@
 		            <% if current_user.admin? %>
 		            	<li role="separator" class="divider"></li>
 		            	<li><%= link_to "Confer admin status", make_admin_path %></li>
-						      <li><%= link_to "Delete user", delete_other_user_path %></li>
+						      <li><%= link_to "Delete user", delete_user_path %></li>
 						    <% end %>
 		          </ul>
 		        </li>

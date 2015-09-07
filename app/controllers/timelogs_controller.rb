@@ -2,6 +2,7 @@ class TimelogsController < ApplicationController
   before_action :find_timelog_by_id, only: [:show, :edit, :update, :destroy]  
   before_action :logged_in
   before_action :current_user_or_admin, only: [:edit, :update, :destroy]
+  before_action :current_user_or_supervisor_or_admin, only: [:index]
 
   def new
     @user = current_user
@@ -13,7 +14,6 @@ class TimelogsController < ApplicationController
       @start = parse_timestamp(params[:start_time])
       @end   = parse_timestamp(params[:finish_time])
     end
-
   end
 
   # def timer_start
@@ -60,6 +60,11 @@ class TimelogsController < ApplicationController
       current_user.admin? #-->
       redirect_to user_path(current_user) and return 
     end
+  end
+
+  def index
+    @user = User.find(params[:id])
+    @timelogs = Timelog.where(user: @user.id)
   end
   
   def edit

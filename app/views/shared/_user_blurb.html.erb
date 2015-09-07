@@ -1,0 +1,12 @@
+<br><br><br><br>
+<div class="user-blurb">
+	<ul>
+		<li><%= link_to gravatar_for(user), user_path(user) %></li>
+		<li><%= full_name user %></li>
+		<li>
+			<%= user.position %>
+			<%= "(&#x2606; Admin)" if user.admin? %>
+		</li>
+		<li><%= user.organization.name unless index %></li>
+	</ul>
+</div>
