@@ -1,4 +1,4 @@
-<%= form_for(@timelog) do |f| %>
+<%= form_for @timelog, url: { action: 'update', controller: 'timelogs' } do |f| %>
 	
 	<%= render partial: 'form_errors', locals: { timelog: @timelog } %>
 	

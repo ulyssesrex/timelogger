@@ -1,4 +1,4 @@
-<%= form_for(@grantholding) do |f| %>
+<%= form_for @grantholding, url: { action: 'create', controller: 'grantholdings' } do |f| %>
   <% if @grantholding.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@grantholding.errors.count, "error") %> prohibited this grantholding from being saved:</h2>

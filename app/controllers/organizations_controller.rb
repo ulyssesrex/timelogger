@@ -1,11 +1,14 @@
 class OrganizationsController < ApplicationController
-  before_action :logged_in,        only: [:show, :edit, :update, :destroy]
-  before_action :admin,            only: [:edit, :update, :destroy]
-  before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in,        
+    only: [:show, :edit, :update, :destroy]
+  before_action :admin,            
+    only: [:edit, :update, :destroy]
+  before_action :find_organization,
+    only: [:show, :edit, :update, :destroy, :reset_keyword, :reset_keyword_form]
     
   def new
     @organization = Organization.new
-    user = @organization.users.build
+    @user = @organization.users.build
   end
   
   def create
@@ -25,6 +28,8 @@ class OrganizationsController < ApplicationController
         flash[:success] = msg
         redirect_to root_url and return
       else
+        @organization = Organization.new
+        @user = @organization.users.build
         render 'new'
       end
     end
@@ -37,11 +42,15 @@ class OrganizationsController < ApplicationController
   end
   
   def update
-    if @organization.update(organization_params)
-      flash[:success] = "Your organization was successfully updated."
-      redirect_to @organization and return
+    unless params[:commit] == "Cancel"
+      if @organization.update(organization_params)
+        flash[:success] = "Your organization was successfully updated."
+        redirect_to @organization and return
+      else
+        render 'edit'
+      end
     else
-      render 'edit'
+      redirect_to organization_path(@organization)
     end
   end
   
@@ -50,10 +59,30 @@ class OrganizationsController < ApplicationController
     flash[:success] = "#{@organization.name} successfully deleted."
     redirect_to root_url   
   end
+
+  def reset_keyword_form
+  end
+
+  def reset_keyword
+    unless params[:commit] == "Cancel"
+      if params[:organization][:password].blank?
+        flash.now[:danger] = "Password can't be blank."
+        render 'reset_keyword_form' and return
+      elsif @organization.update_attributes(organization_params)
+        flash[:success] = "Keyword has been reset."
+        redirect_to organization_path(current_user.organization) and return
+      else
+        render 'reset_keyword_form' and return
+      end
+    else
+      redirect_to @organization
+    end
+  end
+
   
   private
   
-  def set_organization
+  def find_organization
     @organization = Organization.find(params[:id])
   end
   

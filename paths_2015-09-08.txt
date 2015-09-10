@@ -1,0 +1,9 @@
+
+
+spec/rails_helper.rb
+4:require File.expand_path('../../config/environment', __FILE__)
+36:  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
+
+rspec_examples.rb
+269:      visit contacts_path
+283:      visit contacts_path

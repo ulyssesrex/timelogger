@@ -17,44 +17,42 @@
       <ul class="nav navbar-nav">
         <% if logged_in? %>
 					<li><%= link_to "Home", root_path %></li>
-					<% if (current_user.supervisees.any? || current_user.admin?) %>
+					<% if current_user.supervisees.any? %>
 		        <li class="dropdown">
 		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Co-workers <span class="caret"></span></a>
 		          <ul class="dropdown-menu">
-		            <% if current_user.supervisees.any? %>
-						      <li><%= link_to "My Supervisees", supervisees_path %></li>
-						    <% end %>
-						    <li><%= link_to "All Co-Workers", all_coworkers_path %></li>
-		            <% if current_user.admin? %>
-		            	<li role="separator" class="divider"></li>
-		            	<li><%= link_to "Confer admin status", make_admin_path %></li>
-						      <li><%= link_to "Delete user", delete_user_path %></li>
-						    <% end %>
+					      <li><%= link_to "My Supervisees", supervisees_path %></li>
+						    <li><%= link_to "All Co-Workers", users_path %></li>
 		          </ul>
 		        </li>
 	        <% else %>
-		        <li><%= link_to "All Co-workers", all_coworkers_path %></li>
+		        <li><%= link_to "All Co-workers", users_path %></li>
 		      <% end %>
 
 		      <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Info <span class="caret"></span></a>
 	          <ul class="dropdown-menu">
-	            <li><%= link_to "My grants", grantholdings_path %></li>
-	            <li><%= link_to "Edit info", edit_user_path(current_user) %></li>
+	            <li><%= link_to "View my grants", user_grantholdings_path(current_user) %></li>
+	            <li><%= link_to "Edit my info", edit_user_path(current_user) %></li>
 	          </ul>
 	        </li>
 
-	        <% unless current_user.admin? %>
-	        	<li><%= link_to "Help", help_path %></li>
-	        <% else %>
+	        <% if current_user.admin? %>
 	        	<li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help <span class="caret"></span></a>
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin Console <span class="caret"></span></a>
 		          <ul class="dropdown-menu">
-		            <li><%= link_to "General", help_path %></li>
-		            <li><%= link_to "Admin help", help_admin_path %></li>
+		          	<li class="dropdown-header">Edit Organization</li>
+		          	<li><%= link_to "Edit info", edit_organization_path(current_user.organization) %></li>
+		            <li><%= link_to "Edit grants", grants_path %></li>
+		            <li role="separator" class="divider"></li>
+		            <li class="dropdown-header">Edit Users</li>
+	            	<li><%= link_to "Make user an admin", make_admin_path %></li>
+					      <li><%= link_to "Remove user", delete_user_path %></li>
+					      <li role="separator" class="divider"></li>
+		            <li><%= link_to "Help", admin_help_path %></li>
 		          </ul>
 		        </li>
-		      <% end %>
+		       <% end %>
 
 					<li><%= link_to "Log out", logout_path, method: :delete %></li>
 

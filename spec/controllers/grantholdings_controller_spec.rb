@@ -152,7 +152,7 @@ describe GrantholdingsController do
         end
         
         it "redirects to :index" do
-          expect(response).to redirect_to(grantholdings_path)
+          expect(response).to redirect_to(user_grantholdings_path(user))
         end
       end
 
@@ -195,7 +195,7 @@ describe GrantholdingsController do
       end
       
       it "redirects to :index" do
-        expect(response).to redirect_to(grantholdings_path)
+        expect(response).to redirect_to(user_grantholdings_path(user))
       end
     end
   end  

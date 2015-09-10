@@ -20,5 +20,5 @@
   <%= @timelog.end_time %>
 </p>
 
-<%= link_to 'Edit', edit_timelog_path(@timelog) %> |
-<%= link_to 'Back', timelogs_path %>
+<%= link_to 'Edit', edit_user_timelog_path(@timelog.user, @timelog) %> |
+<%= link_to 'Back', user_timelogs_path(@timelog.user) %>

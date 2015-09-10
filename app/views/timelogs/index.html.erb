@@ -2,7 +2,7 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Timelogs Dudesssss</h1>
+<h1>Timelogs</h1>
 
 <table>
   <thead>
@@ -18,13 +18,13 @@
   <tbody>
     <% @timelogs.each do |timelog| %>
       <tr>
-        <td><%= timelog.user %></td>
+        <td><%= full_name timelog.user %></td>
         <td><%= timelog.comments %></td>
         <td><%= timelog.start_time %></td>
         <td><%= timelog.end_time %></td>
-        <td><%= link_to 'Show', timelog %></td>
-        <td><%= link_to 'Edit', edit_timelog_path(timelog) %></td>
-        <td><%= link_to 'Destroy', timelog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', user_timelog_path(@user, timelog) %></td>
+        <td><%= link_to 'Edit', edit_user_timelog_path(timelog.user, timelog) %></td>
+        <td><%= link_to 'Destroy', user_timelog_path(@user, timelog), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -32,4 +32,4 @@
 
 <br>
 
-<%= link_to 'New Timelog', new_timelog_path %>
+<%= link_to 'New Timelog', new_user_timelog_path(current_user) %>

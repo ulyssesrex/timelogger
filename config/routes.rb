@@ -2,39 +2,54 @@ Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 # TODO: different host.
 
 Rails.application.routes.draw do
+
   resources :users do
-    collection do
-      post 'grants_fulfillments_table'
+    post 'grants_fulfillments_table', 
+      to: 'users#grants_fulfillements_table', 
+      on: :member
+    resources :supervisions,  only: [:create, :destroy]
+    resources :grantholdings
+    resources :timelogs do
+      post 'timer_start', to: 'timelogs#new', on: :member
+      post 'finish_from_button', to: 'timelogs#finish_from_button', on: :collection
     end
   end
-    resources :timelogs, except: [:index] do
-    collection do
-      post 'timer_start'
-      post 'finish_from_button'
-    end
-  end
-  resources :grants   
-  resources :organizations,       except: [:index]
-  resources :grantholdings,       except: [:show]
-  resources :supervisions,        only:   [:create, :destroy]
+  
+  resources :sessions, only: [:new, :create, :destroy]
+  get 'get_current_user_id', to: 'sessions#get_current_user_id'
+
   resources :account_activations, only:   [:edit]
   resources :password_resets,     only:   [:new, :create, :edit, :update]
+  resources :organizations,       only:   [:show]
+
+  scope "/admin" do
+    get    'admin_help',  to: 'static_pages#admin_help'
+    get    'make_admin',  to: 'users#make_admin_index'
+    put    'make_admin',  to: 'users#make_admin'
+    get    'delete_user', to: 'users#delete_other_user_index'
+    delete 'delete_user', to: 'users#delete_other_user'
+    get    'reset_keyword/:id', 
+      to:  'organizations#reset_keyword_form', 
+      as:  'reset_keyword_form'
+    patch  'reset_keyword/:id',
+      to:  'organizations#reset_keyword',
+      as:  'reset_keyword'
+    resources :grants, except: [:show]
+    resources :organizations, except: [:show, :index]
+  end
   
-  get    'home'          => 'static_pages#home'
-  get    'about'         => 'static_pages#about'
-  get    'help'          => 'static_pages#help'
-  get    'help/admin'    => 'static_pages#admin_help'
-  get    'signup'        => 'users#new'
-  post   'signup'        => 'users#create'
-  get    'make_admin'    => 'users#make_admin_index'
-  put    'make_admin'    => 'users#make_admin'
-  get    'delete_user'   => 'users#delete_other_user_index'
-  delete 'delete_user'   => 'users#delete_other_user'
-  get    'timelogs/:id'  => 'timelogs#index'
-  get    'login'         => 'sessions#new'
-  post   'login'         => 'sessions#create'
-  delete 'logout'        => 'sessions#destroy'
-  get    'all_coworkers' => 'users#index'
-  get    'supervisees'   => 'supervisions#supervisees'
+  get    'login',  to: 'sessions#new'
+  post   'login',  to: 'sessions#create'
+  delete 'logout', to: 'sessions#destroy' 
+  get    'home',   to: 'static_pages#home'
+  get    'about',  to: 'static_pages#about'
+  get    'help',   to: 'static_pages#help'
+  get    'signup', to: 'users#new'
+  post   'signup', to: 'users#create'
+  get    'supervisees', to: 'supervisions#supervisees'
+
+  # TODO: grep all 'log_path' and 'logs_path' to include proper @user route variable.
+  # TODO: update controllers to pass @user to views where necessary.
+
   root   'static_pages#home'
 end

@@ -2,41 +2,18 @@ class UsersController < ApplicationController
   require 'date'
   
   before_action :logged_in,        
-    except: [
-      :new, 
-      :create
-    ]
+    except: [:new, :create]
   before_action :set_organization, 
-    except: [
-      :new, 
-      :create
-    ]
+    except: [:new, :create]
   before_action :find_user_by_id,  
-    only: [
-      :show, 
-      :edit, 
-      :update, 
-      :destroy, 
-      :delete_other_user, 
-      :make_admin
-    ]
+    only: [:show, :edit, :update, :destroy, :delete_other_user, :make_admin]
   before_action :is_supervisor_or_current_user_or_admin, 
-    only: [
-      :show
-    ]
+    only: [:show]
   before_action :is_current_user_or_admin, 
-    only: [
-      :edit, 
-      :update, 
-      :destroy
-    ]
+    only: [:edit, :update, :destroy]
   before_action :admin,            
-    only: [
-      :delete_other_user_index,
-      :delete_other_user,
-      :make_admin_index, 
-      :make_admin
-    ]
+    only: [:delete_other_user_index, :delete_other_user, 
+           :make_admin_index, :make_admin]
   
   def new
     @user = User.new

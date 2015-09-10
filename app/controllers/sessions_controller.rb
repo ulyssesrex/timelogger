@@ -16,6 +16,12 @@ class SessionsController < ApplicationController
     log_out if logged_in?
     redirect_to root_url
   end
+
+  def get_current_user_id
+    respond_to do |format|
+      format.js { render js: "var $user_id = (#{current_user.id}).toString();" }
+    end
+  end
   
   private
     

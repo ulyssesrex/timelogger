@@ -388,7 +388,7 @@ describe UsersController do
       end
 
       it "redirects to delete user index" do
-        expect(response).to redirect_to(users_delete_other_user_path)
+        expect(response).to redirect_to(delete_user_path)
       end
 
       context "user is not admin" do

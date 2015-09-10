@@ -1,34 +1,24 @@
 class TimelogsController < ApplicationController
-  before_action :find_timelog_by_id, only: [:show, :edit, :update, :destroy]  
+
+  before_action :find_timelog_by_id, 
+    only: [:show, :edit, :update, :destroy]  
+  before_action :find_timelogs_owner, 
+    only: [:show, :index, :edit, :update, :destroy]
   before_action :logged_in
-  before_action :current_user_or_admin, only: [:edit, :update, :destroy]
-  before_action :current_user_or_supervisor_or_admin, only: [:index]
+  before_action :current_user_or_admin, 
+    only: [:edit, :update, :destroy]
 
   def new
-    @user = current_user
-    @timelog = Timelog.new
-    @user.grantholdings.each do |gh|
-      @timelog.time_allocations.build(grantholding_id: gh.id)
-    end
-    if params[:start_time] && params[:finish_time]
-      @start = parse_timestamp(params[:start_time])
-      @end   = parse_timestamp(params[:finish_time])
-    end
+    set_up_new_timelog_variables
   end
-
-  # def timer_start
-  #   cookies[:start_time] = params[:start_time]
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
 
   def finish_from_button
     query_string = { 
       start_time:  params[:start_time], 
       finish_time: params[:finish_time] 
     }.to_query
-    render js: %(window.location.href='#{new_timelog_path}?#{query_string}')
+    set_up_new_timelog_variables
+    render js: %(window.location.href='#{new_user_timelog_path(@user)}?#{query_string}')
   end
   
   def create
@@ -57,13 +47,17 @@ class TimelogsController < ApplicationController
   def show
     unless current_user?(@timelog.user) || 
       current_user.supervisees.include?(@timelog.user) || 
-      current_user.admin? #-->
+      current_user.admin? # then
       redirect_to user_path(current_user) and return 
     end
   end
 
   def index
-    @user = User.find(params[:id])
+    unless current_user?(@user) ||
+       current_user.supervises?(@user) ||
+       current_user.admin?
+       redirect_to users_path and return
+    end
     @timelogs = Timelog.where(user: @user.id)
   end
   
@@ -101,11 +95,27 @@ class TimelogsController < ApplicationController
     
     def current_user_or_admin
       unless current_user?(@timelog.user) || current_user.admin?
-        redirect_to user_path(current_user) and return
+        redirect_to users_path and return
       end
     end
-    
+
     def find_timelog_by_id
       @timelog = Timelog.find(params[:id])
     end    
+
+    def find_timelogs_owner
+      @user = User.find(params[:user_id])
+    end
+
+    def set_up_new_timelog_variables
+      @user = current_user
+      @timelog = Timelog.new
+      @user.grantholdings.each do |gh|
+        @timelog.time_allocations.build(grantholding_id: gh.id)
+      end
+      if params[:start_time] && params[:finish_time]
+        @start = parse_timestamp(params[:start_time])
+        @end   = parse_timestamp(params[:finish_time])
+      end
+    end
 end
