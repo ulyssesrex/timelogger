@@ -12,12 +12,12 @@
 			locals: { user: supervisee, index: @index } 
 	%>
 	<br>
-	<%= link_to "User info", user_path(supervisee.id) %>
+	<%= link_to "User info", user_path(supervisee) %>
 	<br>
-	<%= link_to "View timelogs", timelogs_path(supervisee.id) %>
+	<%= link_to "View timelogs", user_timelogs_path(supervisee) %>
 	<br>
 	<%= 
-			link_to "Stop supervising", supervision_path(supervision.id),
+			link_to "Stop supervising", user_supervision_path(supervision),
 			method: :delete, 
 			prompt: "Are you sure you want to end this supervision?" 
 	%><br>

@@ -36,7 +36,7 @@ $(document).ready(function() {
 		this.time = function() {
 			return now() - $start_time;
 		}
-	};
+	}
 
 	var x = new timeloggerClock();
 
@@ -71,7 +71,8 @@ $(document).ready(function() {
     var s = currentTime.getSeconds();
     if (h == 0) {
         h = 12
-    } else if (h > 12) {
+    } 
+    else if (h > 12) {
         h = h - 12;
         diem = "PM";
     }
@@ -90,7 +91,7 @@ $(document).ready(function() {
 	function updateRegularClock() {
 		$clockText.html(function() {
 			return formatClock;
-		})
+		});
 	}
 
 	// Sets clock running, updated every second.
@@ -121,7 +122,7 @@ $(document).ready(function() {
 	var restingButtons = $('.timelog-button-resting');
 
 	// Shows or hides the appropriate set of timelog button options.
-	function timerRunningDisplay() {;
+	function timerRunningDisplay() {
 		runningButtons.removeClass('hidden');
 		restingButtons.addClass('hidden');
 	}
@@ -132,7 +133,9 @@ $(document).ready(function() {
 	}
 
 //////////////////////////////////////////////////////////////////////////////
-// Cookies
+// Cookies and Storage
+	
+	var $user_id;
 
 	// Returns cookie's value, given its name.
 	function getCookie(cname) {
@@ -188,22 +191,36 @@ $(document).ready(function() {
 			if(!(date_inputs.hasClass('hidden'))) {
 				date_inputs.addClass('hidden');
 			}
-			$.ajax({
-				type: "POST",
-				url: "http://localhost:3000/users/grants_fulfillments_table",
-				data: { since_date: select_val }
-			});
+			$.get("http://localhost:3000/get_current_user_id",
+				function() {
+					$.ajax({
+						type: "POST",
+						url: "http://localhost:3000/users/" + $user_id + "/grants_fulfillments_table",
+						data: { since_date: select_val }
+					});
+				}
+			);
+		}
+		if((typeof $user_id !== 'undefined') || $user_id !== null) {
+			$user_id = null;
 		}
 	});
 
 	$(document).on("click", "#date-input-submit", function(e) {
 		e.preventDefault;
 		var select_val = $('#date-input-entry').val();
-		$.ajax({
-			type: "POST",
-			url: "http://localhost:3000/users/grants_fulfillments_table",
-			data: { since_date: select_val }
-		})
+		$.get("http://localhost:3000/get_current_user_id",
+			function() {
+				$.ajax({
+					type: "POST",
+					url: "http://localhost:3000/users/" + $user_id + "/grants_fulfillments_table",
+					data: { since_date: select_val }
+				});
+			}
+		);
+		if((typeof $user_id !== 'undefined') || $user_id !== null) {
+			$user_id = null;
+		}		
 	});
 
 	// On page load, check if user has previously
@@ -232,21 +249,29 @@ $(document).ready(function() {
 		e.preventDefault();
 		finish();
 		timerRestingDisplay();		
-		if (!$start_time) {
+		if ((typeof $start_time === 'undefined') || $start_time === null) {
 			$start_time = getCookie('start_time');
 		}
-		$.ajax({
-			type: "POST",
-			url: "http://localhost:3000/timelogs/finish_from_button",
-			data: {
-				start_time: $start_time,
-				finish_time: $finish_time
-			}
-		});
+		$.get("http://localhost:3000/get_current_user_id",
+			function() {
+				$.ajax({
+					type: "POST",
+					url: "http://localhost:3000/users/" + $user_id + "/timelogs/finish_from_button",
+					data: {
+						start_time: $start_time,
+						finish_time: $finish_time
+					}
+				});
+			}			
+		);		
 		deleteCookie('start_time', $start_time);
+		if((typeof $user_id !== 'undefined') || $user_id !== null) {
+			$user_id = null;
+		}
 	});		
 
-	$(document).on("defaultClick", '#cancel-timelog', function(){});
+	$(document).on("defaultClick", '#cancel-timelog', function() {}
+	);
 
 	// When user clicks cancel timelog button, delete the start time
 	// cookie if it exists and toggle the start button options.
@@ -255,5 +280,9 @@ $(document).ready(function() {
 		deleteCookie('start_time', $start_time);
 		timerRestingDisplay();
 		$('#cancel-timelog').trigger("defaultClick");
+		if((typeof $user_id !== 'undefined') || $user_id !== null) {
+			$user_id = null;
+		}
 	});
+
 });

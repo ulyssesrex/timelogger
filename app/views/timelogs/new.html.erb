@@ -2,7 +2,7 @@
 
 <h1>New Timelog</h1>
 
-<%= form_for @timelog, html: { class: "form-horizontal" } do |f| %>
+<%= form_for @timelog, url: { action: 'create', controller: 'timelogs' }, html: { class: "form-horizontal" } do |f| %>
   <fieldset id="timelog-meta">
     <ul>
       <li class="control-group">

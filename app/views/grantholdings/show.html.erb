@@ -1,14 +1,17 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Grant:</strong>
-  <%= @grantholding.grant %>
+  <strong>Name:</strong>
+  <%= @grantholding.grant.name %>
 </p>
 
 <p>
-  <strong>User:</strong>
-  <%= @grantholding.user %>
+  <strong>Description:</strong>
+  <%= @grantholding.grant.comments %>
 </p>
 
-<%= link_to 'Edit', edit_grantholding_path(@grantholding) %> |
-<%= link_to 'Back', grantholdings_path %>
+<%= 
+	link_to 'Edit my grant info', 
+	edit_user_grantholding_path(@user, @grantholding) 
+%> | 
+<%= link_to 'Back', user_grantholdings_path(@user) %>

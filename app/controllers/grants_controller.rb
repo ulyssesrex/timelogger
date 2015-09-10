@@ -12,15 +12,16 @@ class GrantsController < ApplicationController
     @grant = Grant.new(grant_params)
     if @grant.save
       flash[:success] = "Grant created."
-      redirect_to organization_path(@grant.organization_id) and return
+      redirect_to organization_path(@grant.organization) and return
     else
       render 'new'
     end
   end
   
-  def show
-    @grantholding = @grant.grantholdings.where(user: current_user)
-  end
+  # def show
+  #   @user = current_user
+  #   @grantholding = @grant.grantholdings.find_by(user: @user)
+  # end
   
   def index
     @grants = Grant.all
@@ -32,7 +33,7 @@ class GrantsController < ApplicationController
   def update
     if @grant.update(grant_params)
       flash[:success] = "Grant updated."
-      redirect_to organization_path(@grant.organization_id) and return
+      redirect_to organization_path(@grant.organization) and return
     else
       render 'edit'
     end
@@ -42,7 +43,7 @@ class GrantsController < ApplicationController
     @organization = Organization.find(@grant.organization_id)
     @grant.destroy
     flash[:success] = "Grant deleted."
-    redirect_to organization_path(@organization.id)
+    redirect_to organization_path(@organization)
   end
   
   private

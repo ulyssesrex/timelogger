@@ -14,18 +14,19 @@
     <th> </th>
     <th> </th>
   </tr>
+  <%#= TODO: how much access will supervisors/admin have to this page? EG removing/editing user grantholdings. %>
   <% @grantholdings.each do |grantholding| %>
     <tr>
       <td><%= grantholding.grant.name %></td>
       <td><%= format_duration grantholding.required_hours %></td>
-      <td><%= link_to 'View', grantholding.grant %></td>
-      <td><%= link_to 'Edit', edit_grantholding_path(grantholding) %></td>
+      <td><%= link_to 'View', user_grantholding_path(@user, grantholding) %></td>
+      <td><%= link_to 'Edit', edit_user_grantholding_path(@user, grantholding) %></td>
       <td>
         <% msg = "Are you sure? Removing this grant will permanently" %>
         <% msg += " delete all of your time information associated" %>
         <% msg += " with it." %>
         <%= 
-            link_to 'Remove', grantholding, 
+            link_to 'Remove', user_grantholding_path(@user, grantholding), 
             method: :delete, data: { confirm: msg }
         %>
       </td>
@@ -33,4 +34,4 @@
   <% end %>
 </table>
 <br><br>
-<%= link_to 'Add Grant', new_grantholding_path %>
+<%= link_to 'Add Grant', new_user_grantholding_path(@user) %>

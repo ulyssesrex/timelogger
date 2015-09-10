@@ -10,7 +10,7 @@
       locals: { user: user, index: true } 
   %>
   <br>
-  <% if current_user.supervisees.include?(user) || current_user?(user) || current_user.admin? %><%= link_to "User info", user_path(user.id) %><br>
-    <%= link_to "View timelogs", timelogs_path(user.id) %>
+  <% if current_user.supervisees.include?(user) || current_user?(user) || current_user.admin? %><%= link_to "User info", user_path(user) %><br>
+    <%= link_to "View timelogs", user_timelogs_path(user) %>
   <% end %>  
 <% end %>

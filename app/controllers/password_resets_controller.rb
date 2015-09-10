@@ -22,6 +22,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def edit
+    @reset = params[:id]
   end
 
   def update

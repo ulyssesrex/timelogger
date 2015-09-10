@@ -1,6 +1,36 @@
-<h1>Editing Organization</h1>
+<% provide(:title, 'Edit organization info') %>
 
-<%= render 'form' %>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+		<%= 
+			form_for @organization, 
+				url: { action: 'update', controller: 'organizations' } do |f| 
+		%>
 
-<%= link_to 'Show', @organization %> |
-<%= link_to 'Back', organizations_path %>
+			<% if @organization.errors.any? %>
+		    <%= render partial: 'errors', locals: { organization: @organization } %>
+		  <% end %>
+
+		  <h1><%= "Edit your organization's info" %></h1>
+
+		  <div class="field">
+			  Organization name<br>
+			  <%= f.text_field :name, class: 'form-control' %>
+			</div>
+
+			<div class="field">
+			  Organization description<br>
+			  <%= f.text_area :description, class: 'form-control' %>
+			</div>
+
+			<%= link_to "Reset organization keyword", reset_keyword_form_path(@organization) %>
+
+		  <div class="actions">
+		  	<% msg =  "Are you sure? Changes will be made " %>
+		  	<% msg += "for all users in #{@organization.name}." %>
+				<%= f.submit "Cancel", class: "btn btn-primary my-btn" %>
+		    <%= f.submit "Submit", class: "btn btn-primary my-btn", prompt: msg %>
+		  </div>
+		<% end %>
+	</div>
+</div>
