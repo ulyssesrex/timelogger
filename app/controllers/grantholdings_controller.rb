@@ -26,7 +26,7 @@ class GrantholdingsController < ApplicationController
   end
   
   def index
-    @grantholdings = Grantholding.where(user: @user)
+    @grantholdings = Grantholding.where(user_id: @user.id)
   end
 
   def show
@@ -45,8 +45,6 @@ class GrantholdingsController < ApplicationController
         flash[:success] = msg
         redirect_to user_grantholdings_path(@user) and return
       else
-        @grantholding = Grantholding.find(params[:id])
-        @grants = Grant.all
         render 'edit' and return
       end
     else

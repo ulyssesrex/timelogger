@@ -18,8 +18,9 @@ class SessionsController < ApplicationController
   end
 
   def get_current_user_id
+    @id = current_user.id
     respond_to do |format|
-      format.js { render js: "var $user_id = (#{current_user.id}).toString();" }
+      format.js
     end
   end
   

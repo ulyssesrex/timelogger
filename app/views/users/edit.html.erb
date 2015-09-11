@@ -4,5 +4,5 @@
 
 <%= render 'edit_form' %>
 
-
-
+<br>
+<%= link_to "Delete my profile", users_path(@user), method: :destroy, confirm: "Are you sure you want to delete your Timelogger profile?" %>
