@@ -35,10 +35,11 @@
 						)
 					)
 				%>
+				<%= hidden_field_tag 'user-id-catch', nil %>
 				<%= text_field_tag(:other_date, 'mm/dd/yyyy', class: 'date-input hidden', id: 'date-input-entry') %>
 				<%= submit_tag('View', class: 'date-input hidden', id: 'date-input-submit') %>
-			<% end %><br>
-
+			<% end %>
+			<br>
 			<% if !@grantholdings.empty? %>
 				<ul class="grants-allocations">
 					<%= render partial: 'grantholding', collection: @grantholdings %>

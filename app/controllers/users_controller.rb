@@ -57,9 +57,7 @@ class UsersController < ApplicationController
       format.js
     end
   end
-  
-  # TODO: Allow user to specify their own 'since' date for grants fulfillments table.
-  
+    
   def edit
   end
   
@@ -157,7 +155,7 @@ class UsersController < ApplicationController
         current_user.admin? 
         #...
         flash_error_msg
-        redirect_to user_path(current_user)
+        redirect_to users_path
       end
     end
     
@@ -173,7 +171,5 @@ class UsersController < ApplicationController
     
     def flash_error_msg
       flash[:danger] = "Cannot perform that action."
-    end
-
-    
+    end    
 end

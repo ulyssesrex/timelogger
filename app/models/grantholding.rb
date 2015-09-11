@@ -6,21 +6,10 @@ class Grantholding < ActiveRecord::Base
   belongs_to :user
   has_many   :time_allocations
     
-  validates :grant, presence: true
-  validates :user,  presence: true
+  validates :grant_id, presence: true
+  validates :user_id,  presence: true
 
   # A grant can't be associated with a user more than once.
   validates :grant_id, uniqueness: { scope: :user_id }
   
-  # def time_allocated_since(datetime) # EDIT TO REFLECT 'HOURS' COLUMN INSTEAD OF END TIME
-  #   time_allocated = 0
-  #   time_allocations.where("end_time >= ?", datetime).each do |ta|
-  #     if ta.start_time < datetime
-  #       time_allocated += (ta.end_time - datetime)
-  #     else
-  #       time_allocated += ta.total_time
-  #     end
-  #   end
-  #   time_allocated 
-  # end 
 end

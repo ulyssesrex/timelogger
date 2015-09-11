@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :users do
     post 'grants_fulfillments_table', 
-      to: 'users#grants_fulfillements_table', 
+      to: 'users#grants_fulfillments_table', 
       on: :member
     resources :supervisions,  only: [:create, :destroy]
     resources :grantholdings
@@ -47,9 +47,6 @@ Rails.application.routes.draw do
   get    'signup', to: 'users#new'
   post   'signup', to: 'users#create'
   get    'supervisees', to: 'supervisions#supervisees'
-
-  # TODO: grep all 'log_path' and 'logs_path' to include proper @user route variable.
-  # TODO: update controllers to pass @user to views where necessary.
 
   root   'static_pages#home'
 end

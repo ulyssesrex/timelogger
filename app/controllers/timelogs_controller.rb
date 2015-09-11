@@ -30,7 +30,8 @@ class TimelogsController < ApplicationController
       h = params[:timelog][:time_allocations_attributes][:hours]
       params[:timelog][:time_allocations_attributes][:hours] = convert_to_duration(h)
     end
-    @timelog = current_user.timelog.new(timelog_params)
+    @timelog = Timelog.new(timelog_params)
+    @timelog.user = current_user
     if !current_user?(@timelog.user) || 
        !current_user.admin? ||
        params[:commit] == "Cancel" # then

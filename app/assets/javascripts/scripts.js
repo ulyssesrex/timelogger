@@ -135,8 +135,6 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////
 // Cookies and Storage
 	
-	var $user_id;
-
 	// Returns cookie's value, given its name.
 	function getCookie(cname) {
 	  var name = cname + "=";
@@ -177,49 +175,53 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////
 // Listeners
 
+	// Set user id hidden field value to null on page load.
+	$('#user-id-catch').val(null);
+
 	// Run current time clock on page load.
 	runClock();
 
+	// Handles grants fulfillments menu selections.
 	$(document).on("change", "#since_date", function(e) {
 		e.preventDefault();
 		var select_val  = $('#since_date option:selected').val();
 		var date_inputs = $('.date-input');
+		// When "other date" option is selected,
 		if(select_val === "other") {
+			// show manual date entry field.
 			date_inputs.removeClass('hidden');
 		}
+		// When a selection other than "other date" is made,
 		else {
 			if(!(date_inputs.hasClass('hidden'))) {
+				// hide manual date entry fields if they're shown.
 				date_inputs.addClass('hidden');
 			}
-			$.get("http://localhost:3000/get_current_user_id",
-				function() {
-					$.ajax({
-						type: "POST",
-						url: "http://localhost:3000/users/" + $user_id + "/grants_fulfillments_table",
-						data: { since_date: select_val }
-					});
-				}
-			);
+			$.get("http://localhost:3000/get_current_user_id", function() {
+				$.ajax({
+					type: "POST",
+					url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/grants_fulfillments_table",
+					data: { since_date: select_val }
+				});
+			});
 		}
-		if((typeof $user_id !== 'undefined') || $user_id !== null) {
-			$user_id = null;
+		if($('#user-id-catch').val() !== null) {
+			$('#user-id-catch').val(null);
 		}
 	});
 
 	$(document).on("click", "#date-input-submit", function(e) {
 		e.preventDefault;
 		var select_val = $('#date-input-entry').val();
-		$.get("http://localhost:3000/get_current_user_id",
-			function() {
-				$.ajax({
-					type: "POST",
-					url: "http://localhost:3000/users/" + $user_id + "/grants_fulfillments_table",
-					data: { since_date: select_val }
-				});
-			}
-		);
-		if((typeof $user_id !== 'undefined') || $user_id !== null) {
-			$user_id = null;
+		$.get("http://localhost:3000/get_current_user_id", function() {
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/grants_fulfillments_table",
+				data: { since_date: select_val }
+			});
+		});
+		if($('#user-id-catch').val() !== null) {
+			$('#user-id-catch').val(null);
 		}		
 	});
 
@@ -252,21 +254,19 @@ $(document).ready(function() {
 		if ((typeof $start_time === 'undefined') || $start_time === null) {
 			$start_time = getCookie('start_time');
 		}
-		$.get("http://localhost:3000/get_current_user_id",
-			function() {
-				$.ajax({
-					type: "POST",
-					url: "http://localhost:3000/users/" + $user_id + "/timelogs/finish_from_button",
-					data: {
-						start_time: $start_time,
-						finish_time: $finish_time
-					}
-				});
-			}			
-		);		
+		$.get("http://localhost:3000/get_current_user_id", function() {
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/timelogs/finish_from_button",
+				data: {
+					start_time: $start_time,
+					finish_time: $finish_time
+				}
+			});
+		});		
 		deleteCookie('start_time', $start_time);
-		if((typeof $user_id !== 'undefined') || $user_id !== null) {
-			$user_id = null;
+		if($('#user-id-catch').val() !== null) {
+			$('#user-id-catch').val(null);
 		}
 	});		
 
@@ -280,8 +280,8 @@ $(document).ready(function() {
 		deleteCookie('start_time', $start_time);
 		timerRestingDisplay();
 		$('#cancel-timelog').trigger("defaultClick");
-		if((typeof $user_id !== 'undefined') || $user_id !== null) {
-			$user_id = null;
+		if($('#user-id-catch').val() !== null) {
+			$('#user-id-catch').val(null);
 		}
 	});
 
