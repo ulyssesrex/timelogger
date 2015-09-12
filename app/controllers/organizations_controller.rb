@@ -45,7 +45,7 @@ class OrganizationsController < ApplicationController
     unless params[:commit] == "Cancel"
       if @organization.update(organization_params)
         flash[:success] = "Your organization was successfully updated."
-        redirect_to @organization and return
+        redirect_to organization_path(@organization) and return
       else
         render 'edit'
       end
@@ -68,14 +68,14 @@ class OrganizationsController < ApplicationController
       if params[:organization][:password].blank?
         flash.now[:danger] = "Password can't be blank."
         render 'reset_keyword_form' and return
-      elsif @organization.update_attributes(organization_params)
+      elsif @organization.update(organization_params)
         flash[:success] = "Keyword has been reset."
         redirect_to organization_path(current_user.organization) and return
       else
         render 'reset_keyword_form' and return
       end
     else
-      redirect_to @organization
+      redirect_to organization_path(current_user.organization)
     end
   end
 

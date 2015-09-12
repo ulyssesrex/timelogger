@@ -3,6 +3,7 @@ require 'rails_helper'
 describe AccountActivationsController do
   let(:organization) { create(:organization) }
   let(:user)  { create(:user, activated: false) }
+  let(:admin) { create(:user, activated: false, admin: true) }
   
   before(:each) { organization }
   
@@ -38,10 +39,20 @@ describe AccountActivationsController do
       get :edit, id: user.activation_token, email: user.email
       expect(flash[:success]).to be_present
     end
+
+    it 'redirects to help page on success if user is admin' do
+      get :edit, id: admin.activation_token, email: admin.email
+      expect(response).to redirect_to(admin_help_path)
+    end
     
-    it 'redirects users to their home page' do
+    it 'redirects users to their home page on success' do
       get :edit, id: user.activation_token, email: user.email
       expect(response).to redirect_to(user_path(user))
+    end
+
+    it 'redirects to root on failure' do
+      get :edit, id: user.activation_token, email: "invalid@wrong.com"
+      expect(response).to redirect_to(root_path)
     end
   end
 end

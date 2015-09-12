@@ -1,21 +1,17 @@
 require 'rails_helper'
 
 describe GrantsController do
-  let(:organization) { create(:organization) }
-  let(:organization_2) { create(:organization_2) }
+  let(:organization)   { create(:organization) }
+  let(:organization_2) { create(:organization, name: 'Organization2') }
   let(:user)    { create(:user, admin: false) }
   let(:admin)   { create(:user, admin: true) }
-  let(:admin_2) { create(:user_2, admin: true) }
+  let(:admin_2) { create(:user, admin: true, organization: organization_2) }
   let(:grant)   { create(:grant) }
-  let(:grant_2) { create(:grant_2) }
+  let(:grant_2) { create(:grant, organization: organization_2) }
 
-  def create_grant
-    post :create, grant: attributes_for(:grant)
-    @grant = Grant.last
-  end
+  before(:each) { organization }
   
-  describe 'filters' do
-        
+  describe 'filters' do    
     describe "#logged_in" do      
       context "user isn't logged in" do
         before(:each) do
@@ -33,11 +29,12 @@ describe GrantsController do
       end
       
       context "user is logged in" do
-        it "does not redirect to login page" do
-          organization
-          admin
+        before(:each) do
           log_in admin
           get :new
+        end
+
+        it "does not redirect to login page" do
           expect(response).not_to redirect_to(login_url)
         end
       end
@@ -46,8 +43,6 @@ describe GrantsController do
     describe "#admin" do      
       context "user isn't an admin" do        
         before(:each) do
-          organization
-          user
           log_in user          
           get :new
         end
@@ -63,8 +58,6 @@ describe GrantsController do
       
       context "user is an admin" do
         before(:each) do
-          organization
-          admin
           log_in admin
           get :new
         end
@@ -78,8 +71,7 @@ describe GrantsController do
   
   describe 'actions' do
     before(:each) do 
-      organization
-      admin
+      # Most Grant actions are in admin scope, so admin is used as example.
       log_in admin
     end
     
@@ -95,8 +87,11 @@ describe GrantsController do
       end
     end
     
-    describe "POST #create" do      
-      
+    describe "POST #create" do    
+      def create_grant
+        post :create, grant: attributes_for(:grant)
+      end  
+
       def attempt_to_create_invalid_grant
         post :create, grant: attributes_for(:grant, name: nil)
       end
@@ -131,31 +126,23 @@ describe GrantsController do
       end
     end
     
-    describe "GET #show" do
-      it "renders the :show template" do
-        grant
-        get :show, id: grant.id
-        expect(response).to render_template(:show)
-      end
-    end
-    
     describe "GET #index" do       
-      before(:each) { grant }        
+      before(:each) do 
+        grant
+        get :index
+      end
       
       it "creates instance of Grants" do
-        get :index
-        expect(assigns(:grants).last).to be_a_kind_of(Grant)
+        expect(assigns(:grants).take).to be_a_kind_of(Grant)
       end
       
       it "renders the :index template" do
-        get :index
         expect(response).to render_template(:index)
       end
     end
     
     describe "GET #edit" do            
       it "renders the :edit template" do
-        grant
         get :edit, id: grant.id
         expect(response).to render_template(:edit)
       end
@@ -164,17 +151,16 @@ describe GrantsController do
     describe "PUT #update" do            
       context "successful update" do
         def update_grant
-          put :update, id: @grant.id, grant: { name: 'Updated Name' }
-          @grant.reload
+          put :update, id: grant.id, grant: { name: 'Updated Name' }
+          grant.reload
         end
 
-        before(:each) { create_grant }
         before(:each) { |spec| update_grant unless spec.metadata[:skip_update] }
 
         it "saves the changes to the record", :skip_update do
           expect { 
             update_grant 
-          }.to change(@grant, :name).to('Updated Name')
+          }.to change(grant, :name).to('Updated Name')
         end
         
         it "displays a success flash" do
@@ -188,8 +174,7 @@ describe GrantsController do
       
       context "unsuccessful update" do
         it "renders the :edit template" do
-          create_grant
-          put :update, id: @grant.id, grant: { name: nil }
+          put :update, id: grant.id, grant: { name: nil }
           expect(response).to render_template(:edit)
         end
       end
@@ -197,15 +182,16 @@ describe GrantsController do
     
     describe "DELETE #destroy" do
       def delete_grant
-        delete :destroy, id: @grant.id
+        grant
+        delete :destroy, id: grant.id
       end
-      
-      before(:each) { create_grant }
+
       before(:each) { |spec| delete_grant unless spec.metadata[:skip_delete] }
                
       it "destroys the grant record", :skip_delete do
+        grant
         expect { 
-          delete :destroy, id: @grant.id 
+          delete :destroy, id: grant.id 
         }.to change(Grant, :count).by(-1)
       end
       
