@@ -70,16 +70,6 @@ describe OrganizationsController do
         end
       end
     end
-    
-    describe "#logged_in" do
-      it { # is already tested.
-      }
-    end
-    
-    describe "#admin" do
-      it { # is already tested.
-      }
-    end
   end
   
   describe "actions" do        
@@ -274,79 +264,6 @@ describe OrganizationsController do
       it "redirects to root" do
         expect(response).to redirect_to(root_url)
       end
-    end
-
-    describe "#reset_keyword_form" do
-      it "renders the :reset_keyword_form template" do
-        get :reset_keyword_form, id: organization.id
-      end
-    end
-
-    describe "#reset_keyword" do
-      def successful_keyword_update
-        patch :reset_keyword, 
-          id: organization.id, 
-          organization: 
-          { 
-            password: 'password', 
-            password_confirmation: 'password' 
-          }
-      end
-
-      def blank_keyword_update
-        patch :reset_keyword,
-          id: organization.id,
-          organization:
-          {
-            password: '',
-            password_confirmation: ''
-          }
-      end
-
-      def invalid_keyword_update
-        patch :reset_keyword,
-          id: organization.id,
-          organization:
-          {
-            password: 'short',
-            password_confirmation: 'short'
-          }
-      end
-      
-      def canceled_keyword_update_form
-        patch :reset_keyword,
-          id: organization.id,
-          confirm: 'Cancel'
-      end
-
-      context "successful keyword update" do
-        before(:each) do |spec|
-          unless spec.metadata[:skip_update]
-            successful_keyword_update
-          end
-        end
-
-        it "updates the record", :skip_update do
-          expect { successful_keyword_update }.to change(assigns(:organization), :password)
-        it "displays a success flash"
-        it "redirects to :show"
-      end
-
-      context "keyword field is blank" do
-        it "does not update the record"
-        it "displays a danger flash"
-        it "redirects to the reset keyword form"
-      end
-
-      context "invalid update attempt" do
-        it "does not update the record"
-        it "redirects to the reset keyword form"
-      end
-
-      context "reset keyword form canceled" do
-        it "does not update the record"
-        it "redirects to :show"
-      end
-    end
+    end    
   end
 end
