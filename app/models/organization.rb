@@ -12,9 +12,10 @@ class Organization < ActiveRecord::Base
   validates_confirmation_of :password
   accepts_nested_attributes_for :users
   
-  def authenticated?(token)
-    return false if password_digest.nil?
-    BCrypt::Password.new(password_digest).is_password?(token)
+  def authenticated?(attribute, token)
+    digest = send("#{attribute}_digest")
+    return false if digest.nil?
+    BCrypt::Password.new(digest).is_password?(token)
   end
   
   def grant_admin_status_to(user)
@@ -36,9 +37,4 @@ class Organization < ActiveRecord::Base
   def keyword_reset_expired?
     reset_sent_at < 2.hours.ago
   end
-
-  def authenticated?(reset_token)
-    return false if password_digest.nil?
-    BCrypt::Password.new(digest).is_password?(reset_token)
-  end  
 end
