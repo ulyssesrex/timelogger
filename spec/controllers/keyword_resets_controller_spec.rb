@@ -1,35 +1,37 @@
 require 'rails_helper'
 
 describe KeywordResetsController, type: :controller do
-  let(:organization) { create(:organization) }
-  let(:admin)        { create(:user, admin: true) }
-  let(:reset_token)  { User.new_token }
+  let(:organization)   { create(:organization) }
+  let(:organization_a) { create(:organization_with_reset_info) }
+  let(:admin)   { organization.users.first   }  
+  let(:admin_a) { organization_a.users.first }
+
 
   def edit_keyword_reset
-    get :edit, id: reset_token, email: admin.email
+    get :edit, id: organization_a.reset_token, email: admin_a.email
   end
 
-  before(:each) { organization }
+  before(:each) { organization; organization_a }
 
   describe "filters" do
     describe "#find_organization" do
       it "assigns instance of organization based on user email param" do
         edit_keyword_reset
-        expect(assigns(:organization)).to eq(admin.organization)
+        expect(assigns(:organization)).to eq(admin_a.organization)
       end
     end
 
     describe "#valid_org_scenario" do
       context "@organization is nil" do 
         it "redirects to root" do
-          get :edit, id: reset_token, email: 'invalid'
+          get :edit, id: organization_a.reset_token, email: 'invalid'
           expect(response).to redirect_to(root_path)
         end
       end
 
       context "can't authenticate reset token" do
         it "redirects to root" do
-          get :edit, id: 'invalid', email: admin.email
+          get :edit, id: 'invalid', email: admin_a.email
           expect(response).to redirect_to(root_path)
         end
       end
@@ -44,6 +46,7 @@ describe KeywordResetsController, type: :controller do
 
     describe "#check_expiration" do
       context "reset was sent more than two hours ago" do
+        let(:reset_token) { User.new_token }
         let(:org_with_expired_password_reset) do
           create(
             :organization, 
@@ -53,7 +56,7 @@ describe KeywordResetsController, type: :controller do
           )
         end
 
-        let(:other_admin) do 
+        let(:admin_b) do 
           create(
             :user, 
             admin: true, 
@@ -64,7 +67,7 @@ describe KeywordResetsController, type: :controller do
         before(:each) do
           get :edit, 
             id: org_with_expired_password_reset.reset_token, 
-            email: other_admin.email
+            email: admin_b.email
         end
 
         it "displays a danger flash" do
@@ -99,7 +102,7 @@ describe KeywordResetsController, type: :controller do
 
     describe "GET #create" do
       def create_keyword_reset
-        post :create, keyword_reset: { email: admin.email } }
+        post :create, keyword_reset: { email: admin.email }
       end 
            
       it "sets an instance of User" do
@@ -114,20 +117,17 @@ describe KeywordResetsController, type: :controller do
 
       context "@admin and @organization both valid" do
         before(:each) do |spec|
-          unless spec.metadata[:skip]
+          unless spec.metadata[:skip_create]
             create_keyword_reset
           end
         end
 
-        it "creates a reset digest for @organization", :skip do
-          expect { 
-            create_keyword_reset 
-          }.to change(
-            organization,:reset_digest
-          )
+        it "creates a reset digest for @organization" do
+          reset_digest = Organization.find(organization.id).reset_digest
+          expect(reset_digest).not_to be_nil
         end
 
-        it "sends an email to @admin", :skip do
+        it "sends an email to @admin", :skip_create do
           expect {
             create_keyword_reset
           }.to change { 
@@ -150,7 +150,7 @@ describe KeywordResetsController, type: :controller do
         end
 
         before(:each) do |spec|
-          unless spec.metadata[:skip]
+          unless spec.metadata[:skip_create]
             invalid_create
           end
         end
@@ -163,31 +163,29 @@ describe KeywordResetsController, type: :controller do
           expect(response).to render_template(:new)
         end
 
-        it "does not create a reset digest", :skip do
-          expect { 
-            invalid_create 
-          }.not_to change { 
-            assigns(:organization).reset_digest 
-          }
+        it "does not create a reset digest" do
+          reset_digest = Organization.find(organization.id).reset_digest
+          expect(reset_digest).to be_nil
         end
 
-        it "does not send an email", :skip do
+        it "does not send an email", :skip_create do
           expect {
             invalid_create
-          }.not_to change { 
-            ActionMailer::Base.deliveries.count 
-          }.by(1)
+          }.not_to change(
+            ActionMailer::Base.deliveries, :count
+          )
+        end
       end
     end
 
     describe "GET #edit" do
       def edit_keyword_reset
-        get :edit, id: reset_token, email: admin.email
+        get :edit, id: organization_a.reset_token, email: admin_a.email
       end
 
       it "sets @reset from id param" do
         edit_keyword_reset
-        expect(assigns(:reset)).to eq(organization.reset_token)
+        expect(assigns(:reset)).to eq(organization_a.reset_token)
       end
 
       it "renders :edit template" do
@@ -199,14 +197,13 @@ describe KeywordResetsController, type: :controller do
     describe "GET #update" do
       def update_keyword_reset
         put :update, 
-          id: organization.id, 
-          email: admin.email, 
+          id: organization_a.reset_token, 
+          email: admin_a.email, 
           organization: 
           { 
-            password: 'password', 
-            password_confirmation: 'password' 
+            password: 'different', 
+            password_confirmation: 'different' 
           }
-        organization.reload
       end      
 
       it "sets an instance of User" do
@@ -217,56 +214,52 @@ describe KeywordResetsController, type: :controller do
       context "user submits blank keyword" do
         def blank_keyword_reset
           put :update, 
-            id: organization.id, 
-            email: admin.email, 
+            id: organization_a.reset_token, 
+            email: admin_a.email, 
             organization: 
             { 
               password: '', 
               password_confirmation: '' 
-            }
-          organization.reload
+            } 
         end
 
         before(:each) do |spec|
-          unless spec.metadata[:skip]
+          unless spec.metadata[:skip_update]
             blank_keyword_reset
           end
-        end
-
-        it "displays a danger flash" do
-          expect(flash[:danger]).to be_present
         end
 
         it "renders :edit template" do
           expect(response).to render_template(:edit)
         end
 
-        it "does not update organization keyword", :skip do
+        it "does not update organization keyword", :skip_update do
           expect { 
             blank_keyword_reset 
           }.not_to change(
-            organization, :password_digest
+            organization_a, :password_digest
           )
         end
       end
 
       context "user submits non-blank keyword" do
         before(:each) do |spec|
-          unless spec.metadata[:skip]
+          unless spec.metadata[:skip_update]
             update_keyword_reset
           end
         end
 
-        it "updates organization keyword", :skip do
-          expect { 
+        it "updates organization keyword", :skip_update do
+          expect do 
             update_keyword_reset 
-          }.to change(
-            organization, :reset_digest
+            organization_a.reload
+          end.to change(
+            organization_a, :password_digest
           )
         end
 
         it "logs in admin" do
-          expect(session[:user_id]).to eq(admin.id)
+          expect(session[:user_id]).to eq(admin_a.id)
         end
 
         it "displays a success flash" do
@@ -274,20 +267,27 @@ describe KeywordResetsController, type: :controller do
         end
 
         it "redirects to admin home page" do
-          expect(response).to redirect_to(user_path(admin))
+          expect(response).to redirect_to(user_path(admin_a))
         end
       end
 
       context "update error" do
         def keyword_reset_update_error
-          put :update, id: 'invalid'
+          put :update,   
+            id: organization_a.reset_token, 
+            email: admin_a.email, 
+            organization: 
+            { 
+              password: 'short', 
+              password_confirmation: 'short' 
+            } 
         end
 
         it "does not update organization keyword" do
           expect { 
             keyword_reset_update_error 
           }.not_to change(
-            organization, :reset_digest
+            organization_a, :reset_digest
           )
         end
 

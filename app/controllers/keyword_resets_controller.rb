@@ -10,7 +10,7 @@ class KeywordResetsController < ApplicationController
 
   def create
   	@admin = User.find_by(email: params[:keyword_reset][:email].downcase)
-  	@organization = @admin.organization
+  	@organization = @admin.organization if @admin
   	if @admin && @organization
   		@organization.create_reset_digest
   		@admin.send_keyword_reset_email(@organization)
@@ -30,7 +30,6 @@ class KeywordResetsController < ApplicationController
   end
 
   def update
-  	@admin = User.find_by(email: params[:email])
     if params[:organization][:password].blank?
       flash.now[:danger] = "Keyword can't be blank."
       render 'edit' and return
@@ -46,14 +45,15 @@ class KeywordResetsController < ApplicationController
   private
 
   	def find_organization
-  		@organization = User.find_by(email: params[:email]).organization
+      @admin = User.find_by(email: params[:email])
+  		@organization = @admin.organization if @admin
   	end
 
   	def valid_org_scenario
   		unless
-  			@organization && @organization.authenticated?(params[:id])
-  			redirect_to root_url  			
-  		end  		
+  			@organization && @organization.authenticated?(:reset, params[:id])
+  			redirect_to root_url
+  		end
   	end
 
     def check_expiration

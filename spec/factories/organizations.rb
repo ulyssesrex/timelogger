@@ -5,14 +5,21 @@ FactoryGirl.define do
     name                  'Organization'
     password              'password'
     password_confirmation 'password'
-    password_digest       { User.digest('password') }
+    password_digest       User.digest('password')
     
     after(:create) do |organization|
-      organization.users << create(:user)      
+      organization.users << create(:user, admin: true)      
     end
     
-    factory :organization_with_reset_token do
-      reset_token { User.new_token }
+    factory :organization_with_reset_info do
+      reset_token   { User.new_token }
+      reset_sent_at { Time.zone.now  }
+      after(:create) do |organization|
+        organization.update_attribute(
+          :reset_digest, 
+          User.digest(organization.reset_token)
+        )
+      end
     end
 
     trait :with_users do
