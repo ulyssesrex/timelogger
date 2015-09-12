@@ -59,12 +59,11 @@ class KeywordResetsController < ApplicationController
     def check_expiration
       if @organization.keyword_reset_expired?
         flash[:danger] = "Password reset has expired."
-        redirect_to new_password_reset_url
+        redirect_to new_keyword_reset_url
       end
     end
 
   	def keyword_params
   		params.require(:organization).permit(:password, :password_confirmation)
   	end
-
 end
