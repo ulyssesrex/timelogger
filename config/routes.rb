@@ -3,6 +3,14 @@ Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
 Rails.application.routes.draw do
 
+  get 'keyword_resets/new'
+
+  get 'keyword_resets/create'
+
+  get 'keyword_resets/edit'
+
+  get 'keyword_resets/update'
+
   resources :users do
     post 'grants_fulfillments_table', 
       to: 'users#grants_fulfillments_table', 
@@ -18,9 +26,10 @@ Rails.application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   get 'get_current_user_id', to: 'sessions#get_current_user_id'
 
-  resources :account_activations, only:   [:edit]
-  resources :password_resets,     only:   [:new, :create, :edit, :update]
-  resources :organizations,       only:   [:show]
+  resources :account_activations, only: [:edit]
+  resources :password_resets,     only: [:new, :create, :edit, :update]
+  resources :keyword_resets,      only: [:new, :create, :edit, :update]
+  resources :organizations,       only: [:show]
 
   scope "/admin" do
     get    'admin_help',  to: 'static_pages#admin_help'

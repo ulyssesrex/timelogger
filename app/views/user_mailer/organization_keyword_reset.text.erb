@@ -1,0 +1,10 @@
+<%= @greeting %>
+
+Please visit the address below to select a new keyword for <%= "#{@organization.name}" %>. 
+
+If you didn't request this email, just ignore it. This link will expire in two hours.
+
+<%= edit_keyword_reset_url(@organization.reset_token, email: @admin.email) %>
+
+Happy Logging,
+Timelogger Staff

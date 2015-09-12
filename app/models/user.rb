@@ -5,13 +5,13 @@ class User < ActiveRecord::Base
                 :organization_name,
                 :organization_password
   
-###---Callbacks---###
+##### Callbacks
 
   acts_as_tenant :organization
   before_save    :downcase_email
   before_create  :create_activation_digest
   
-###---Validations---###
+##### Validations
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   has_secure_password
   validates_confirmation_of :password
   
-###---Association Logic---###
+##### Association Logic
 
   belongs_to :organization
   
@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
              
   accepts_nested_attributes_for :grantholdings, allow_destroy: true             
              
-###---Instance Methods---###
+##### Instance Methods
   
   def activate
     update_columns(activated: true, activated_at: Time.zone.now)
@@ -111,16 +111,20 @@ class User < ActiveRecord::Base
     UserMailer.account_activation(self).deliver_now
   end
 
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
+
+  def send_keyword_reset_email(organization)
+    UserMailer.keyword_reset(organization, self).deliver_now
+  end
+
   def create_reset_digest
     self.reset_token = User.new_token
     update_columns(
       reset_digest:  User.digest(reset_token),
       reset_sent_at: Time.zone.now
     )
-  end
-
-  def send_password_reset_email
-    UserMailer.password_reset(self).deliver_now
   end
 
   def password_reset_expired?
@@ -163,7 +167,7 @@ class User < ActiveRecord::Base
     self.activation_digest = User.digest(activation_token)
   end
   
-###---Class Methods---###  
+##### Class Methods 
 
   # Returns string formatted version of float hours duration.
   def User.duration_to_hours_display(duration)
@@ -242,7 +246,7 @@ class User < ActiveRecord::Base
     SecureRandom.urlsafe_base64
   end
 
-###---Private Methods---###
+##### Private Methods
   
   private
     
