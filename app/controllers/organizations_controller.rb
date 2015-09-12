@@ -4,7 +4,7 @@ class OrganizationsController < ApplicationController
   before_action :admin,            
     only: [:edit, :update, :destroy]
   before_action :find_organization,
-    only: [:show, :edit, :update, :destroy, :reset_keyword, :reset_keyword_form]
+    only: [:show, :edit, :update, :destroy]
     
   def new
     @organization = Organization.new
@@ -12,11 +12,8 @@ class OrganizationsController < ApplicationController
   end
   
   def create
-    # Cancel -->
     if params[:commit] == "Cancel"
       redirect_to root_url and return
-      
-    # Submit -->
     else
       @organization = Organization.new(organization_params)
       if @organization.save
@@ -60,26 +57,6 @@ class OrganizationsController < ApplicationController
     redirect_to root_url   
   end
 
-  # def reset_keyword_form
-  # end
-
-  # def reset_keyword
-  #   unless params[:commit] == "Cancel"
-  #     if params[:organization][:password].blank?
-  #       flash.now[:danger] = "Password can't be blank."
-  #       render 'reset_keyword_form' and return
-  #     elsif @organization.update(organization_params)
-  #       flash[:success] = "Keyword has been reset."
-  #       redirect_to organization_path(current_user.organization) and return
-  #     else
-  #       render 'reset_keyword_form' and return
-  #     end
-  #   else
-  #     redirect_to organization_path(current_user.organization)
-  #   end
-  # end
-
-  
   private
   
   def find_organization
