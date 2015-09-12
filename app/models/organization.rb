@@ -1,4 +1,5 @@
 class Organization < ActiveRecord::Base
+  attr_accessor :reset_token
   
   has_many :users,   dependent: :destroy
   has_many :grants,  dependent: :destroy
@@ -30,5 +31,14 @@ class Organization < ActiveRecord::Base
       reset_digest:  User.digest(reset_token),
       reset_sent_at: Time.zone.now
     )
+  end
+
+  def keyword_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
+
+  def authenticated?(reset_token)
+    return false if password_digest.nil?
+    BCrypt::Password.new(digest).is_password?(reset_token)
   end  
 end

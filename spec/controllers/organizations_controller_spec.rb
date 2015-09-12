@@ -318,10 +318,16 @@ describe OrganizationsController do
           id: organization.id,
           confirm: 'Cancel'
       end
-      
+
       context "successful keyword update" do
-        it "updates the record" do
-          
+        before(:each) do |spec|
+          unless spec.metadata[:skip_update]
+            successful_keyword_update
+          end
+        end
+
+        it "updates the record", :skip_update do
+          expect { successful_keyword_update }.to change(assigns(:organization), :password)
         it "displays a success flash"
         it "redirects to :show"
       end

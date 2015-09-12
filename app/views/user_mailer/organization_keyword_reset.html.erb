@@ -1,0 +1,22 @@
+<p><%= @greeting %></p>
+
+<p>
+	Please click the link below to select a new keyword for <%= "#{@organization.name}" %>. 
+</p>
+
+<p>
+	If you didn't request this email, just ignore it. This link will expire in two hours.
+</p>
+
+<%= 
+	link_to "Click here to reset keyword.", 
+	edit_keyword_reset_url(
+		@organization.reset_token, 
+		email: @admin.email
+	) 
+%>
+
+<p>
+	Happy Logging,<br>
+	Timelogger Staff
+</p>
