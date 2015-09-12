@@ -3,7 +3,10 @@ require 'rails_helper'
 describe PasswordResetsController do
   let(:user) { create(:user_with_reset) }
   
-  describe 'filters' do               
+  describe 'filters' do
+    
+    # #find_user already tested
+
     describe '#valid_user' do     
       it "does not redirect a valid user" do
         get :edit, id: user.reset_token, email: user.email
@@ -19,8 +22,7 @@ describe PasswordResetsController do
     describe '#check_expiration' do      
       context 'expired password_reset' do
         let(:expired_reset_user) do 
-          user.update_attribute(:reset_sent_at, 2.hours.ago)
-          user.save; user
+          create(:user_with_reset, reset_sent_at: 2.hours.ago)
         end
         
         def get_expired_reset
@@ -34,9 +36,9 @@ describe PasswordResetsController do
           expect(flash[:danger]).to be_present
         end
         
-        it "redirects to the new_password_reset_url" do
+        it "redirects to the new_password_reset page" do
           get_expired_reset
-          expect(response).to redirect_to(new_password_reset_url)
+          expect(response).to redirect_to(new_password_reset_path)
         end
       end
       
@@ -57,8 +59,8 @@ describe PasswordResetsController do
       end
     end
     
-    describe 'POST #create' do       
-      let(:create_password_reset) do
+    describe 'POST #create' do 
+      def create_password_reset
         post :create, password_reset: { email: user.email }
       end
       

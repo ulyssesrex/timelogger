@@ -1,8 +1,8 @@
 class GrantsController < ApplicationController
   before_action :set_organization, except: [:new, :create]
   before_action :logged_in
-  before_action :set_grant, only:   [:show, :edit, :update, :destroy]
-  before_action :admin,     except: [:show]
+  before_action :set_grant, only: [:edit, :update, :destroy]
+  before_action :admin
     
   def new
     @grant = Grant.new
@@ -17,11 +17,6 @@ class GrantsController < ApplicationController
       render 'new'
     end
   end
-  
-  # def show
-  #   @user = current_user
-  #   @grantholding = @grant.grantholdings.find_by(user: @user)
-  # end
   
   def index
     @grants = Grant.all

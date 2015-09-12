@@ -3,16 +3,15 @@ require 'rails_helper'
 describe SessionsController do 
   let(:user) { create(:user, :with_remembering) }
   
-  def create_session(current_user)
+  def create_session(user)
     post :create, session: { 
-                    email: current_user.email, 
+                    email: user.email, 
                     password:    'password', 
                     remember_me: '0' 
                   }
   end
   
-  describe 'filters' do
-          
+  describe 'filters' do          
     describe 'find_user' do      
       before(:each) { create_session(user) }
       
@@ -92,17 +91,18 @@ describe SessionsController do
       
       context "remember me is checked" do
         it "remembers the user" do
-          post :create, session: { 
-                          email: user.email, 
-                          password: 'password', 
-                          remember_me: '1' 
-                        }
+          post :create, 
+            session: 
+            { 
+              email: user.email, 
+              password: 'password', 
+              remember_me: '1' 
+            }
           expect(cookies[:remember_token]).not_to be_nil
         end          
       end
       
-      context "remember me is not checked" do
-        
+      context "remember me is not checked" do        
         it "forgets the user" do
           create_session(user)
           expect(user.remember_digest).to be_nil

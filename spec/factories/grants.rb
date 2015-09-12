@@ -7,11 +7,6 @@ FactoryGirl.define do
     comments "Comments."
     organization_id 1
     
-    factory :grant_2 do
-      name  "Grant2"
-      organization_id 2
-    end
-    
     factory :grant_with_grantholdings do
       after(:create) { |grant| grant.grantholdings << create(:grantholding) }
     end   

@@ -5,10 +5,10 @@ class AccountActivationsController < ApplicationController
       user.activate
       log_in user
       flash[:success] = "Account activated. Welcome, #{user.first_name}!"
-      redirect_to help_url and return if user.admin?
+      redirect_to admin_help_path and return if user.admin?
     else
       flash[:danger] = "Invalid activation link."
-      redirect_to root_url and return
+      redirect_to root_path and return
     end
     redirect_to user_path(user)
   end
