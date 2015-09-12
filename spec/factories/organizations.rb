@@ -11,6 +11,10 @@ FactoryGirl.define do
       organization.users << create(:user)      
     end
     
+    factory :organization_with_reset_token do
+      reset_token { User.new_token }
+    end
+
     trait :with_users do
       after(:create) do |organization|
         organization.users << create(:user)
