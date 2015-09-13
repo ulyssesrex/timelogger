@@ -3,19 +3,12 @@ Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
 Rails.application.routes.draw do
 
-  get 'keyword_resets/new'
-
-  get 'keyword_resets/create'
-
-  get 'keyword_resets/edit'
-
-  get 'keyword_resets/update'
-
   resources :users do
     post 'grants_fulfillments_table', 
       to: 'users#grants_fulfillments_table', 
       on: :member
     resources :supervisions,  only: [:create, :destroy]
+    get 'supervisees', to: 'supervisions#supervisees'    
     resources :grantholdings
     resources :timelogs do
       post 'timer_start', to: 'timelogs#new', on: :member
@@ -27,6 +20,7 @@ Rails.application.routes.draw do
   get 'get_current_user_id', to: 'sessions#get_current_user_id'
 
   resources :account_activations, only: [:edit]
+  resources :keyword_resets,      only: [:new, :create, :edit, :update]
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :keyword_resets,      only: [:new, :create, :edit, :update]
   resources :organizations,       only: [:show]
@@ -55,7 +49,6 @@ Rails.application.routes.draw do
   get    'help',   to: 'static_pages#help'
   get    'signup', to: 'users#new'
   post   'signup', to: 'users#create'
-  get    'supervisees', to: 'supervisions#supervisees'
 
   root   'static_pages#home'
 end
