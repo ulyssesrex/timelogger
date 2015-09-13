@@ -4,29 +4,36 @@ class SupervisionsController < ApplicationController
   before_action :set_organization
   
   def create
-    @user = User.find(params[:supervisor_id])    
-    current_user.add_supervisor(@user)    
-    flash[:success] = message_on_create @user  
+    @user = User.find(params[:user_id])
+    @supervisor = User.find(params[:supervisor]) 
+    @user.add_supervisor(@supervisor)    
+    flash[:success] = message_on_create @supervisor 
     redirect_to users_path
   end
   
   def supervisees
     @index = true
-    @user  = current_user
+    @user  = User.find(params[:user_id])
     @supervisees  = @user.supervisees
     @supervisions = Supervision.where(supervisor: @user)
   end
   
   def destroy
-    @user = User.find(params[:id])
-    if @user.supervises?(current_user)
+    @user = User.find(params[:user_id])
+    @other_user = User.find(params[:id])
+
+    # If you're ending your boss' supervision of you:
+    if @other_user.supervises?(@user)
       flash[:success] = message_on_delete(:supervisor)
-      @supervision = @user.non_initiated_supervisions
-                       .find_by(supervisee_id: current_user.id)
-    elsif @user.is_supervisee_of?(current_user)
-      flash[:success] = message_on_delete(:supervisee)
       @supervision = @user.initiated_supervisions
-                       .find_by(supervisor_id: current_user.id)
+                       .find_by(supervisor_id: @other_user.id)
+
+    # If you're ending supervising your employee:                   
+    elsif @other_user.is_supervisee_of?(@user)
+      flash[:success] = message_on_delete(:supervisee)
+      @supervision = @user.non_initiated_supervisions
+                       .find_by(supervisee_id: @other_user.id)
+                       
     else
       flash[:danger] = "Supervision can't be ended."
       redirect_to users_path and return
