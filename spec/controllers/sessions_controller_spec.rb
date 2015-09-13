@@ -1,7 +1,8 @@
 require 'rails_helper'
 
-describe SessionsController do 
-  let(:user) { create(:user, :with_remembering) }
+describe SessionsController do
+  let(:organization) { create(:organization) } 
+  let(:user) { create(:user, :with_remembering, organization: organization) }
   
   def create_session(user)
     post :create, session: { 
@@ -10,6 +11,8 @@ describe SessionsController do
                     remember_me: '0' 
                   }
   end
+
+  before(:each) { organization }
   
   describe 'filters' do          
     describe 'find_user' do      
@@ -130,8 +133,7 @@ describe SessionsController do
       end     
     end
     
-    describe 'DELETE #destroy' do
-      
+    describe 'DELETE #destroy' do      
       before(:each) do
         create_session(user) 
         delete :destroy
@@ -144,6 +146,21 @@ describe SessionsController do
       it "redirects to the root url" do
         expect(response).to redirect_to(root_url)
       end    
+    end
+
+    describe 'GET #get_current_user_id' do
+      before(:each) do
+        create_session(user)
+        xhr :get, :get_current_user_id, format: :js
+      end
+
+      it "assigns @id based on current_user's id" do
+        expect(assigns(:id)).to eq(user.id)
+      end
+
+      it "renders js template" do
+        expect(response).to render_template('sessions/get_current_user_id')
+      end
     end
   end
 end

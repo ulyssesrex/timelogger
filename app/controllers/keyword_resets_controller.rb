@@ -1,8 +1,9 @@
 class KeywordResetsController < ApplicationController
 
-	before_action :find_organization,  only: [:edit, :update]
-	before_action :valid_org_scenario, only: [:edit, :update]
-	before_action :check_expiration,   only: [:edit, :update]
+  before_action :set_organization,   except: [:new,  :create]
+	before_action :find_organization,  only:   [:edit, :update]
+	before_action :valid_org_scenario, only:   [:edit, :update]
+	before_action :check_expiration,   only:   [:edit, :update]
 
   def new
   	# Form for admin's email address.

@@ -1,6 +1,7 @@
 class GrantsController < ApplicationController
-  before_action :set_organization, except: [:new, :create]
+  
   before_action :logged_in
+  before_action :set_organization
   before_action :set_grant, only: [:edit, :update, :destroy]
   before_action :admin
     

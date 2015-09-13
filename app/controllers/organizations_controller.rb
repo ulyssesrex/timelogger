@@ -1,10 +1,9 @@
 class OrganizationsController < ApplicationController
-  before_action :logged_in,        
-    only: [:show, :edit, :update, :destroy]
-  before_action :admin,            
-    only: [:edit, :update, :destroy]
-  before_action :find_organization,
-    only: [:show, :edit, :update, :destroy]
+  
+  before_action :logged_in, only: [:show, :edit, :update, :destroy]
+  before_action :set_organization, except: [:new, :create]
+  before_action :admin, only: [:edit, :update, :destroy]
+  before_action :find_organization, only: [:show, :edit, :update, :destroy]
     
   def new
     @organization = Organization.new

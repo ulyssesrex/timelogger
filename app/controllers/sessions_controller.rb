@@ -1,7 +1,9 @@
 class SessionsController < ApplicationController  
-  before_action :find_user,       only: [:create]
-  before_action :valid_user,      only: [:create]
-  before_action :activated_user,  only: [:create]
+  
+  before_action :set_organization, except: [:new, :create]
+  before_action :find_user,        only:   [:create]
+  before_action :valid_user,       only:   [:create]
+  before_action :activated_user,   only:   [:create]
   
   def new
   end
@@ -43,7 +45,7 @@ class SessionsController < ApplicationController
         message += " If you've already registered,"
         message += " check your email for a Timelogger activation email."
         # TODO: Perhaps add a link here to generate another activation email instead.
-        # This would most likely be a POST :create, :controller => :users action.
+        # This would most likely be a POST UsersController#create action.
         flash[:warning] = message
         redirect_to root_url
       end

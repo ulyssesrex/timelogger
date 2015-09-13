@@ -4,11 +4,7 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   include SessionsHelper
-
-  before_action :set_organization
     
-  ###-----Before actions-----###
-
   # Through 'acts_as_tenant' gem,
   # limits all SQL queries to current_user's organization.
   def set_organization

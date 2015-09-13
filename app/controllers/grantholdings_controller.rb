@@ -1,5 +1,7 @@
 class GrantholdingsController < ApplicationController
+  
   before_action :logged_in
+  before_action :set_organization
   before_action :find_user
   
   def new

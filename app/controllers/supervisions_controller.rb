@@ -1,4 +1,5 @@
 class SupervisionsController < ApplicationController
+  
   before_action :logged_in
   before_action :set_organization
   
