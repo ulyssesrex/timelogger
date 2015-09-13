@@ -28,7 +28,7 @@ class UsersController < ApplicationController
       @user = User.new(user_params)
       organization = Organization.find_by(id: params[:user][:organization_id])
       if organization && 
-        organization.authenticated?(params[:user][:organization_password])
+        organization.authenticated?(:password, params[:user][:organization_password])
         @user.organization_id = organization.id
       else
         render 'new' and return

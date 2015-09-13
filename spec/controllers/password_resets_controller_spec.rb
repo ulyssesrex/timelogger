@@ -4,9 +4,6 @@ describe PasswordResetsController do
   let(:user) { create(:user_with_reset) }
   
   describe 'filters' do
-    
-    # #find_user already tested
-
     describe '#valid_user' do     
       it "does not redirect a valid user" do
         get :edit, id: user.reset_token, email: user.email
