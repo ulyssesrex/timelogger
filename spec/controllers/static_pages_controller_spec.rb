@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe StaticPagesController do
-  let(:user) { create(:user) }
+  let(:organization) { create(:organization) }
+  let(:user) { create(:user, organization: organization) }
   
   describe "filters" do
     describe "#logged_in" do
@@ -30,10 +31,19 @@ describe StaticPagesController do
       log_in user unless spec.metadata[:skip_login]
     end
     
-    describe "GET #home", :skip_login do
-      it "renders the :home template" do
-        get :home
-        expect(response).to render_template :home
+    describe "GET #home" do
+      before(:each) { get :home }
+
+      context "user is logged in" do
+        it "redirects to the user's page" do
+          expect(response).to redirect_to(user_path(current_user))
+        end
+      end
+
+      context "user is not logged in" do
+        it "renders the :home template", :skip_login do
+          expect(response).to render_template :home
+        end
       end  
     end
 
