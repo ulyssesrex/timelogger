@@ -1,18 +1,29 @@
 require 'rails_helper'
 
 describe UsersController do  
-  let(:user)   { create(:user) }
-  let(:other_user) { create(:user) }
-  let(:admin)  { create(:user, admin: true) }
-  let(:non)    { create(:user, activated: false, activated_at: nil, activation_digest: nil) }
   let(:organization) { create(:organization) }
+  let(:user)         { create(:user, organization: organization) }
+  let(:other_user)   { create(:user, organization: organization) }
+  let(:admin) { 
+    create(:user, 
+      admin: true, 
+      organization: organization
+    ) 
+  }
+  let(:non)   { 
+    create(:user, 
+      activated: false, 
+      activated_at: nil, 
+      activation_digest: nil, 
+      organization: organization
+    ) 
+  }  
 
   before(:each) { organization }
 
   describe 'filters' do  
     before(:each) do |spec| 
-      unless spec.metadata[:skip_login]
-        user 
+      unless spec.metadata[:skip_login] 
         log_in user
       end
     end
@@ -32,7 +43,7 @@ describe UsersController do
       
       it "assigns all activated Users to @users" do
         # Expecting site admin and user.
-        expect(assigns(:users).count).to eq(2)
+        expect(assigns(:users)).not_to include(non)
       end
     end
     
@@ -64,9 +75,17 @@ describe UsersController do
     end
     
     describe '#is_supervisor_or_user_or_admin' do      
-      let(:supervisee) { create(:user, :supervisee) }
+      let(:supervisee) { 
+        create(:user, 
+          :supervisee, 
+          organization: organization) 
+      }
       let(:supervisor) { supervisee.supervisors.last }
-      let(:some_guy)   { create(:user, admin: false) }
+      let(:some_guy)   { 
+        create(:user, 
+          admin: false, 
+          organization: organization) 
+      }
       
       before(:each) { supervisee; supervisor }
             
@@ -93,7 +112,7 @@ describe UsersController do
         some_guy
         log_in some_guy
         get :show, id: supervisee.id
-        expect(response).to redirect_to(user_path(some_guy))
+        expect(response).to redirect_to(users_path)
       end    
     end
     
@@ -145,12 +164,9 @@ describe UsersController do
       end
     end
   
-    describe "POST #create" do
-      let(:organization)        { create(:organization) }        
-      let(:new_user_attributes) { attributes_for(:user, :new) }
-        
+    describe "POST #create" do        
       def create_user
-        post :create, { user: new_user_attributes }
+        post :create, user: attributes_for(:user, organization_id: organization.id)
       end
           
       before(:each) do |spec|
@@ -158,7 +174,7 @@ describe UsersController do
           create_user
         end
       end
-      
+
       it "creates an instance of User" do
         expect(assigns(:user)).to be_an_instance_of(User)
       end
@@ -183,6 +199,19 @@ describe UsersController do
         end
       end
     
+      context "user cancels registration form" do
+        it "redirects to root" do   
+          post :create, commit: "Cancel"       
+          expect(response).to redirect_to(root_path)
+        end
+
+        it "does not create a user record" do
+          expect { 
+            post :create, commit: "Cancel" 
+          }.not_to change(User, :count)
+        end
+      end
+
       context "unsuccessful user creation" do              
         it "renders the :new template" do
           post :create, user: attributes_for(:user, :new, password: nil)
@@ -197,10 +226,10 @@ describe UsersController do
       end
       
       it "populates an array of all activated users" do
-        create(:user, activated: false)
+        non
         get :index
         # Expecting site admin and user.
-        expect(assigns(:users).count).to eq(2)        
+        expect(assigns(:users)).not_to include(non)      
       end
     
       it "renders the :index template" do
@@ -211,7 +240,8 @@ describe UsersController do
   
     describe "GET #edit" do      
       before(:each) do 
-        user; log_in user
+        user
+        log_in user
         get :edit, id: user.id
       end
     
@@ -224,9 +254,12 @@ describe UsersController do
       end
     end
   
+    describe "POST #grants_fulfillments_table"
+
     describe "PUT #update" do      
       before(:each) do
-        user; log_in user
+        user 
+        log_in user
       end
       
       def update_user
@@ -243,8 +276,7 @@ describe UsersController do
           update_user unless spec.metadata[:skip_update]
         end
           
-        it "updates the specified user attributes", :skip_update do
-          update_user
+        it "updates the specified user attributes" do
           expect(assigns(:user).first_name).to eq("Different")
         end
       
@@ -279,7 +311,8 @@ describe UsersController do
     describe "GET #show" do      
       before(:each) do |spec|
         unless spec.metadata[:skip_show]
-          user; log_in user
+          user 
+          log_in user
           get :show, id: user.id
         end
       end
@@ -293,6 +326,10 @@ describe UsersController do
     
       it "assigns the requested user to @user" do
         expect(assigns(:user)).to eq(user)
+      end
+
+      it "assigns @grantholdings from user's grantholdings" do
+        expect(assigns(:grantholdings)).to eq(user.grantholdings)
       end
     
       it "renders the :show template" do
@@ -327,7 +364,8 @@ describe UsersController do
         
         before(:each) do |spec|
           unless spec.metadata[:skip_login]
-            admin; non; log_in admin
+            user; admin; non 
+            log_in admin
             get :delete_other_user_index
           end
         end
@@ -362,7 +400,7 @@ describe UsersController do
     describe "DELETE #delete_other_user" do
       def delete_other_user
         admin; user; log_in admin
-        delete :delete_other_user, id: user.id
+        delete :delete_other_user, user_ids: [user.id]
       end
 
       before(:each) do |spec|
@@ -371,15 +409,15 @@ describe UsersController do
         end
       end
 
-      it "creates an instance of @user" do
-        expect(assigns(:user)).not_to be_nil
+      it "creates an instance of @selected_users" do
+        expect(assigns(:selected_users)).not_to be_nil
       end
 
       it "destroys user", :skip_delete do
         admin; user
         log_in admin
         expect do 
-          delete :delete_other_user, id: user.id
+          delete :delete_other_user, user_ids: [user.id]
         end.to change(User, :count).by(-1)
       end
 
@@ -388,21 +426,34 @@ describe UsersController do
       end
 
       it "redirects to delete user index" do
-        expect(response).to redirect_to(delete_user_path)
+        expect(response).to redirect_to(users_path)
       end
 
       context "user is not admin" do
         it "does not delete user", :skip_delete do
           expect do
             user; log_in user
-            delete :delete_other_user, id: other_user.id
+            delete :delete_other_user, user_ids: [other_user.id]
           end.not_to change(User, :all)
         end
 
         it "redirects to user page", :skip_delete do
           user; other_user; log_in user
-          delete :delete_other_user, id: other_user.id
+          delete :delete_other_user, user_ids: [other_user.id]
           expect(response).to redirect_to(user_path(current_user))
+        end
+      end
+
+      context "no users selected" do
+        it "does not delete any users" do
+          expect { 
+            delete :delete_other_user, user_ids: [] 
+          }.not_to change(User, :count)
+        end
+
+        it "redirects to delete other user page" do
+          delete :delete_other_user, user_ids: []
+          expect(response).to redirect_to(delete_user_path)
         end
       end
     end
@@ -416,7 +467,7 @@ describe UsersController do
         end
         
         it "assigns all activated users to @users" do
-          expect(assigns(:users)).not_to include(non)
+          expect(assigns(:non_admins)).not_to include(non)
         end
         
         it "renders the :make_admin_index template" do
@@ -445,7 +496,7 @@ describe UsersController do
     describe "PUT #make_admin" do
       def grant_admin_status_to(user)
         admin; user; log_in admin
-        put :make_admin, id: user.id
+        put :make_admin, user_ids: [user.id]
         user.reload
       end
 
@@ -468,7 +519,7 @@ describe UsersController do
       context "current user is not admin" do
         def no_admin_for_you
           user; log_in user
-          put :make_admin, id: user.id
+          put :make_admin, user_ids: [user.id]
           user.save
         end
 
