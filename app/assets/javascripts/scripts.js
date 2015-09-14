@@ -3,14 +3,14 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////
 // Timer
 
-	var $start_time, $finish_time, clocktimer, currenttime;
+	var $start_time, $end_time, clocktimer, currenttime;
 	var $timerText = $('#timelog-timer');
 	var $clockText = $('#current-time');		 
 
 	// Timer object
 	var timeloggerClock = function() {
 		$start_time  = 0;
-		$finish_time = 0;
+		$end_time = 0;
 
 		// Now.
 		var now = function() {
@@ -27,9 +27,9 @@ $(document).ready(function() {
 			$start_time = parseInt(getCookie('start_time'), 10);
 		}
 		
-		// Finish time is now.
-		this.finish = function() {
-			$finish_time = now();
+		// end time is now.
+		this.end = function() {
+			$end_time = now();
 		}
 		
 		// Time elapsed since user clicked button.
@@ -111,10 +111,10 @@ $(document).ready(function() {
 		clocktimer = setInterval(update, 1000);
 	}
 
-	// Sets finish time to now.
+	// Sets end time to now.
 	// Stops timer running.
-	function finish() {
-		x.finish();
+	function end() {
+		x.end();
 		clearInterval(clocktimer);
 	}
 
@@ -227,7 +227,7 @@ $(document).ready(function() {
 
 	// On page load, check if user has previously
 	// clicked the timelog start button but not the 
-	// timelog finish button.
+	// timelog end button.
 	// If so, start the timer from when the user first
 	// clicked the button.
 	if(isCookie('start_time') || $start_time) {
@@ -244,12 +244,12 @@ $(document).ready(function() {
   	setCookie('start_time', $start_time, 7);
 	});
 
-  // When user clicks timelog finish button, stop timer.
-  // Then find start time and post both start and finish times
+  // When user clicks timelog end button, stop timer.
+  // Then find start time and post both start and end times
   // to controller. Finally, delete the start time cookie if it exists.
-	$(document).on("click", '#finish-timelog', function(e) {
+	$(document).on("click", '#end-timelog', function(e) {
 		e.preventDefault();
-		finish();
+		end();
 		timerRestingDisplay();		
 		if ((typeof $start_time === 'undefined') || $start_time === null) {
 			$start_time = getCookie('start_time');
@@ -257,10 +257,10 @@ $(document).ready(function() {
 		$.get("http://localhost:3000/get_current_user_id", function() {
 			$.ajax({
 				type: "POST",
-				url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/timelogs/finish_from_button",
+				url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/timelogs/end_from_button",
 				data: {
 					start_time: $start_time,
-					finish_time: $finish_time
+					end_time: $end_time
 				}
 			});
 		});		

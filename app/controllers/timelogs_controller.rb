@@ -2,47 +2,49 @@ class TimelogsController < ApplicationController
 
   before_action :logged_in
   before_action :set_organization
-  before_action :current_user_or_admin, 
-    only: [:edit, :update, :destroy]
   before_action :find_timelog_by_id, 
-    only: [:show, :edit, :update, :destroy]  
+    only: [:show, :edit, :update, :destroy]   
   before_action :find_timelogs_owner, 
-    only: [:show, :index, :edit, :update, :destroy]    
+    only: [:show, :index, :edit, :update, :destroy]  
+  before_action :current_user_or_admin, 
+    only: [:edit, :update, :destroy] 
 
   def new
     set_up_new_timelog_variables
   end
 
-  def finish_from_button
+  def end_from_button
     query_string = { 
       start_time:  params[:start_time], 
-      finish_time: params[:finish_time] 
+      end_time: params[:end_time] 
     }.to_query
     set_up_new_timelog_variables
     render js: %(window.location.href='#{new_user_timelog_path(@user)}?#{query_string}')
   end
   
   def create
-    st = params[:timelog][:start_time]
-    et = params[:timelog][:end_time]
-    params[:timelog][:start_time] = convert_to_datetime(st)
-    params[:timelog][:end_time]   = convert_to_datetime(et)
-    if params[:timelog][:time_allocations_attributes]
-      h = params[:timelog][:time_allocations_attributes][:hours]
-      params[:timelog][:time_allocations_attributes][:hours] = convert_to_duration(h)
-    end
-    @timelog = Timelog.new(timelog_params)
-    @timelog.user = current_user
-    if !current_user?(@timelog.user) || 
-       !current_user.admin? ||
-       params[:commit] == "Cancel" # then
-       redirect_to user_path(current_user) and return
-    end
-    if @timelog.save
-      flash[:success] = "Timelog was saved."
-      redirect_to user_path(current_user) and return
+    unless params[:commit] == "Cancel"
+      st = params[:timelog][:start_time]
+      et = params[:timelog][:end_time]
+      params[:timelog][:start_time] = convert_to_datetime(st)
+      params[:timelog][:end_time]   = convert_to_datetime(et)
+      if params[:timelog][:time_allocations_attributes]
+        h = params[:timelog][:time_allocations_attributes][:hours]
+        params[:timelog][:time_allocations_attributes][:hours] = convert_to_duration(h)
+      end
+      @timelog = Timelog.new(timelog_params)
+      @timelog.user = current_user
+      unless current_user?(@timelog.user) || current_user.admin?
+        redirect_to user_path(current_user) and return
+      end
+      if @timelog.save
+        flash[:success] = "Timelog was saved."
+        redirect_to user_path(current_user) and return
+      else
+        render 'new' and return
+      end
     else
-      render 'new' and return
+      redirect_to(user_path(current_user))
     end
   end
   
@@ -115,9 +117,9 @@ class TimelogsController < ApplicationController
       @user.grantholdings.each do |gh|
         @timelog.time_allocations.build(grantholding_id: gh.id)
       end
-      if params[:start_time] && params[:finish_time]
+      if params[:start_time] && params[:end_time]
         @start = parse_timestamp(params[:start_time])
-        @end   = parse_timestamp(params[:finish_time])
+        @end   = parse_timestamp(params[:end_time])
       end
     end
 end
