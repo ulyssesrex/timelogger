@@ -9,6 +9,7 @@ class UserMailer < ApplicationMailer
 
   def password_reset(user)
     @user = user
+    @user.reset_token ||= User.new_token
     @greeting = "Hello #{@user.first_name},"
     mail to: @user.email, subject: "Reset your Timelogger password"
   end

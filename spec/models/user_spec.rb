@@ -8,7 +8,7 @@ describe User do
     it { expect(build(:user)).to be_valid }
     it { expect(build(:user, admin: true)).to be_valid }
     it { expect(build(:user, :with_grantholdings)).to be_valid }
-    it { expect(build(:user, :supervisor)).to be_valid }
+    it { expect(build(:supervisor)).to be_valid }
     it { expect(build(:user, :supervisee)).to be_valid }
     it { expect(build(:user, :intermediate)).to be_valid }
   end
@@ -72,7 +72,7 @@ describe User do
     end
     
     context 'executes its methods correctly' do    
-      let(:supervisor) { create(:user, :supervisor) }
+      let(:supervisor) { create(:supervisor) }
       let(:supervisee) { supervisor.supervisees.first }  
       
       context '#activate' do        
@@ -174,7 +174,7 @@ describe User do
       end
       
       context '#delete_supervisee' do
-        let(:supervisor) { create(:user, :supervisor) }
+        let(:supervisor) { create(:supervisor) }
         let(:supervisee) { supervisor.supervisees.first }
         
         it 'deletes a non-initiated supervision for the user' do

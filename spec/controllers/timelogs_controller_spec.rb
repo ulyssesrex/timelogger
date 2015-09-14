@@ -11,21 +11,21 @@ describe TimelogsController do
   let(:grant)      { create(:grant, organization: organization) }
   let(:grantholding) { create(:grantholding, grant: grant, user: user) }
   
-  describe 'actions' do        
-    describe 'GET #new' do
-      def new_timelog
-        log_in user
-        get :new, user_id: user.id
-      end
+  describe 'actions' do
+    def new_timelog
+      log_in user
+      get :new, user_id: user.id
+    end
 
-      def new_timelog_with_params
-        log_in user
-        get :new, 
-          user_id: user.id, 
-          start_time: Time.zone.now, 
-          end_time:   Time.zone.now
-      end
-            
+    def new_timelog_with_params
+      log_in user
+      get :new, 
+        user_id: user.id, 
+        start_time: Time.zone.now, 
+        end_time:   Time.zone.now
+    end     
+
+    describe 'GET #new' do            
       it "creates a new instance of User" do
         new_timelog
         expect(assigns(:user)).to be_an_instance_of(User)

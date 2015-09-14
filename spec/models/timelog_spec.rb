@@ -22,10 +22,9 @@ describe Timelog do
     end
 
     it 'rejects without start_time' do
-      expect(build(:timelog, start_time: nil, 
-                               end_time:   Time.zone.now
-                               ))
-      .not_to be_valid
+      expect(
+        build(:timelog, start_time: nil, end_time: Time.zone.now)
+      ).not_to be_valid
     end
 
     it 'rejects without end_time' do

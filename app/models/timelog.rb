@@ -18,7 +18,7 @@ class Timelog < ActiveRecord::Base
   
   # In seconds.
   def total_time
-    end_time - start_time
+    end_time.to_i - start_time.to_i
   end
   
   private
