@@ -112,7 +112,7 @@ class TimelogsController < ApplicationController
     end
 
     def set_up_new_timelog_variables
-      @user = current_user
+      find_timelogs_owner
       @timelog = Timelog.new
       @user.grantholdings.each do |gh|
         @timelog.time_allocations.build(grantholding_id: gh.id)

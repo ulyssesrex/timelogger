@@ -63,6 +63,18 @@ describe TimelogsController do
         expect(response).to render_template(:new)
       end
     end
+
+    describe 'POST #end_from_button' do
+      before(:each) do |spec|
+        new_timelog_with_params unless spec.metadata[:skip_button]
+      end
+
+      # Variables setup already tested in #new.
+
+      it "renders javascript" do
+        # Tested in feature specs.
+      end
+    end
     
     describe 'POST #create' do      
       let(:timelog) { build(:timelog) }

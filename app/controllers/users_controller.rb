@@ -20,10 +20,8 @@ class UsersController < ApplicationController
   end
   
   def create
-    # Cancel -->
     if params[:commit] == "Cancel"
       redirect_to root_url and return
-    # Submit -->
     else 
       @user = User.new(user_params)
       organization = Organization.find_by(id: params[:user][:organization_id])
@@ -139,9 +137,7 @@ class UsersController < ApplicationController
     end
     
     def find_user_by_id
-      if params[:id]
-        @user = User.find(params[:id])
-      end
+      @user = User.find_by(id: params[:id])
     end
 
     # Before filters with 'or' conditions:
