@@ -11,8 +11,8 @@ Rails.application.routes.draw do
     get 'supervisees', to: 'supervisions#supervisees'    
     resources :grantholdings
     resources :timelogs do
-      post 'timer_start', to: 'timelogs#new', on: :member
-      post 'finish_from_button', to: 'timelogs#finish_from_button', on: :collection
+      #post 'timer_start', to: 'timelogs#new', on: :member
+      post 'end_from_button', to: 'timelogs#end_from_button', on: :collection
     end
   end
   

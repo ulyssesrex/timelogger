@@ -98,7 +98,9 @@ class ApplicationController < ActionController::Base
 
     # Matches 'AM', 'PM', or variants thereof.
     def meridian(user_string)
-      user_string[/a\.*m\.*|p\.*m\.*/i].tr('.', '').upcase
+      if m = user_string[/a\.*m\.*|p\.*m\.*/i] 
+        m.tr('.', '').upcase
+      end
     end
 
     # Pads a string with zeros up to total length 'amount'

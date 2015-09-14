@@ -22,6 +22,12 @@ FactoryGirl.define do
       organization_password 'password'
     end
     
+    factory :supervisor do
+      after(:create) do |supervisor|
+        supervisor.supervisees << create(:user, organization: supervisor.organization)
+      end
+    end
+
     factory :user_with_reset do
       reset_token   { User.new_token }
       reset_digest  { User.digest(reset_token) }
@@ -49,11 +55,6 @@ FactoryGirl.define do
       end
     end
     
-    trait :supervisor do
-      after(:create) do |user|
-        user.supervisees << create(:user)
-      end
-    end
     
     trait :supervisee do
       after(:create) do |user|

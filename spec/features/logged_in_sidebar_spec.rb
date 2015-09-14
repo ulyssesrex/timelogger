@@ -21,11 +21,11 @@ describe "Logged-in sidebar"do
         #expect(find('#cancel-timelog')).not_to have_css('.hidden')
     	end
 
-      it "creates a finish timelog link", js: true do
+      it "creates a end timelog link", js: true do
         using_wait_time 10 do
           expect(page.to have_content("Finish Timelog"))
         end
-        #expect(find('#finish-timelog')).not_to have_css('.hidden')
+        #expect(find('#end-timelog')).not_to have_css('.hidden')
       end
 
       it "displays the timelog timer", js: true do
@@ -49,7 +49,7 @@ describe "Logged-in sidebar"do
       using_wait_time 10 do
           expect(page.not_to have_content("Finish Timelog"))
         end
-      #expect(find('#finish-timelog')).to have_css('.hidden', :visible => false)
+      #expect(find('#end-timelog')).to have_css('.hidden', :visible => false)
     end
 
     it "displays after user clicks start timelog button", js: true do
@@ -57,7 +57,7 @@ describe "Logged-in sidebar"do
       using_wait_time 10 do
           expect(page.to have_content("Finish Timelog"))
         end
-      #expect(find('#finish-timelog')).not_to have_css('.hidden')
+      #expect(find('#end-timelog')).not_to have_css('.hidden')
     end
 
     describe "On click" do
@@ -77,7 +77,7 @@ describe "Logged-in sidebar"do
         using_wait_time 10 do
           expect(page.not_to have_content("Finish Timelog"))
         end
-        #expect(find('#finish-timelog')).to have_css('.hidden', :visible => false)
+        #expect(find('#end-timelog')).to have_css('.hidden', :visible => false)
       end
 
       it "makes cancel timelog button invisible", js: true do
@@ -131,7 +131,7 @@ describe "Logged-in sidebar"do
 
     describe "On click" do
       it "redirects to the logged in home page"
-      it "hides finish timelog button"
+      it "hides end timelog button"
       it "hides timelog timer"
       it "displays start timelog button"
     end
@@ -150,12 +150,12 @@ describe "Logged-in sidebar"do
 	  	expect(page.title).to have_content(/New Timelog/)
 	  end
 
-    it "does not hide finish timelog button if clicked while timer is active", js: true do
+    it "does not hide end timelog button if clicked while timer is active", js: true do
       click_link("Timelog from scratch")
       using_wait_time 10 do
         expect(page.to have_content("Finish Timelog"))
       end
-      #expect(find('#finish-timelog')).not_to have_css('.hidden')
+      #expect(find('#end-timelog')).not_to have_css('.hidden')
     end
 	end
 
