@@ -1,39 +1,48 @@
 <% provide(:title, 'Sign up') %>
 
-<h1>Your information</h1>
-<h2>This will be used to create your profile.</h2>
+<%= form_for @user, html: { class: 'form-horizonal' } do |f| %>
+	<% if @user.errors.any? %>
+		<%= render partial: 'errors', user: @user %>
+	<% end %>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-		<%= form_for @user do |f| %>
-	
-			<% if @user.errors.any? %>
-				<%= render partial: 'errors', user: @user %>
-			<% end %>
-	
-			<%= render partial: 'user_fields', locals: { f: f } %>
-			
-			<div class="field">
-				Choose your user password:<br>
-				<%= f.password_field :password, class: 'form-control' %>
+	<fieldset>
+    <legend>Your information</legend>
+
+    <%= render partial: 'user_fields', locals: { f: f } %>
+		
+		<div class="form-group">
+			<%= f.label "Choose your password", class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= f.password_field :password, class: 'form-control', placeholder: "Password (must be greater than six characters)" %>
 			</div>
-			<div class="field">
-				Confirm your password:<br>
-				<%= f.password_field :password_confirmation, class: 'form-control' %>
+		</div>	
+
+		<div class="form-group">
+			<%= f.label "Confirm your password", class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= f.password_field :password_confirmation, class: 'form-control', placeholder: "Password" %>
 			</div>
-			<div class="field">
-				Your organization:<br>
-				<%= f.collection_select(:organization_id, Organization.all, :id, :name, prompt: true) %>
+		</div>
+
+		<div class="form-group">
+			<%= f.label "Your organization", class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= f.collection_select(:organization_id, Organization.all, :id, :name, { prompt: true }, { class: 'form-control'} ) %>
 			</div>
-			<div class="field">
-				Enter your organization's keyword.<br> 
-				Your organization's Timelogger administrator has this.<br>
-				<%= f.password_field :organization_password %>
+		</div>
+
+		<div class="form-group">
+			<%= f.label "Organization keyword", class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= f.password_field :organization_password, class: 'form-control', placeholder: "Keyword" %>
 			</div>
-			<div class="actions">
-				<%= f.submit "Cancel", class: "btn btn-primary my-btn" %>
-				<%= f.submit "Submit", class: "btn btn-primary my-btn" %>
-			</div>
-		<% end %>
-	</div>
-</div>
+		</div>
+
+		<div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <%= f.submit "Cancel", class: "btn btn-default" %>
+        <%= f.submit "Log in", class: "btn btn-primary" %>
+      </div>
+    </div>
+	</fieldset>
+<% end %>
