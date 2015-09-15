@@ -1,16 +1,30 @@
-<div class="field">
-  Organization name<br>
-  <%= f.text_field :name, class: 'form-control' %>
+<div class="form-group">
+	<%= f.label "Organization name", class: 'col-lg-2 control-label' %>
+	<div class="col-lg-10">
+		<%= f.text_field :name, class: 'form-control', placeholder: "Organization name" %>
+	</div>
 </div>
-<div class="field">
-  Organization description<br>
-  <%= f.text_area :description, class: 'form-control' %>
+
+<div class="form-group">
+	<%= f.label "Organization description", class: 'col-lg-2 control-label' %>
+	<div class="col-lg-10">
+		<%= f.text_area :description, class: 'form-control', rows: 3, placeholder: "Organization description" %>
+	</div>
 </div>
-<div class="field">
-  Choose an organization keyword. Remember what you selected -- other employees will need it to register.<br>
-  <%= f.password_field :password, class: 'form-control' %>
+
+<div class="form-group">
+	<%= f.label "Choose an organization keyword", class: 'col-lg-2 control-label' %>
+	<div class="col-lg-10">
+		<%= f.password_field :password, class: 'form-control', placeholder: "Keyword" %>
+		<span class="help-block">
+			Remember what you selected -- other employees will need this keyword to register.
+		</span>
+	</div>
 </div>
-<div class="field">
-	Confirm your organization's keyword.<br>
-	<%= f.password_field :password_confirmation, class: 'form-control' %>
+
+<div class="form-group">
+	<%= f.label "Confirm organization keyword", class: 'col-lg-2 control-label' %>
+	<div class="col-lg-10">
+		<%= f.password_field :password_confirmation, class: 'form-control', placeholder: "Confirm keyword" %>
+	</div>
 </div>
