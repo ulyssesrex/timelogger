@@ -1,15 +1,13 @@
-<div class="center">	
-	<%= image_tag "tree-trunk-rings.jpg" %>
-	<div class="row">
-		<div class="col-md-3"></div>
-		<div class="col-md-6">
-			<h1 id="below-picture">Timelogger: one, two, done.</h1>
-			<h2>Record time spent on your projects, view employees' progress, and more.</h2>
-		</div>
-		<div class="col-md-3"></div>
-	</div>
-		<%= link_to "Log in", login_path, class: "btn btn-lg my-btn" %>		
-		<%= link_to "Sign up", signup_path, class: "btn btn-lg my-btn" %>	
-		<%= link_to "Enroll organization", new_organization_path, class: "btn btn-lg my-btn" %>
-		<br><br><br>
+<div id="hero-unit-image">
+	<%= image_tag 'tree-trunk-rings.jpg' %>
+</div>
+
+<div class="jumbotron", id="jumbotron">
+  <h1>Timelogger: one, two, done.</h1>
+  <p>Record time spent on your projects, view employees' progress, and more.</p>
+  <p>
+  	<%= link_to "Log in", login_path, class: "btn btn-primary btn-lg" %>
+		<%= link_to "Sign up", signup_path, class: "btn btn-primary btn-lg" %>
+		<%= link_to "Enroll organization", new_organization_path, class: "btn btn-primary btn-lg" %>
+	</p>
 </div>

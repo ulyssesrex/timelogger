@@ -21,6 +21,7 @@ gem 'jquery-turbolinks'
 gem 'browser-timezone-rails'
 gem 'cocoon'
 gem 'bootstrap-sass', '~> 3.2.0'
+gem 'bootswatch-rails'
 gem 'autoprefixer-rails'
 
 group :development, :test do

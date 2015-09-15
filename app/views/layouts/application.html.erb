@@ -22,9 +22,7 @@
 		<% if logged_in? %>
 			<%= render 'layouts/sidebar' %>
 		<% end %>			
-		<div class="yield container col-md-6 col-md-offset-3">
-			<%= yield %>
-		</div>
+		<%= yield %>
 		<%= render 'layouts/footer' %>
 	</body>
 </html>

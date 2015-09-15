@@ -13,7 +13,7 @@ class GrantsController < ApplicationController
     @grant = Grant.new(grant_params)
     if @grant.save
       flash[:success] = "Grant created."
-      redirect_to organization_path(@grant.organization) and return
+      redirect_to grants_path and return
     else
       render 'new'
     end
