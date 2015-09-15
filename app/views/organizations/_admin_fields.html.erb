@@ -1,24 +1,41 @@
-<div class="field">
-	<%= f.label :first_name %><br>
-	<%= f.text_field :first_name, class: 'form-control' %>
+<div class="form-group">
+	<%= f.label :first_name, class: "col-lg-2 control-label" %>
+	<div class="col-lg-10">
+		<%= f.text_field :first_name, class: 'form-control', placeholder: "First name" %>
+	</div>
 </div>
-<div class="field">
-	<%= f.label :last_name %><br>
-	<%= f.text_field :last_name, class: 'form-control' %>
+
+<div class="form-group">
+	<%= f.label :last_name, class: "col-lg-2 control-label" %>
+	<div class="col-lg-10">
+		<%= f.text_field :last_name, class: 'form-control', placeholder: "Last name" %>
+	</div>
 </div>
-<div class="field">
-	<%= f.label :position %><br>
-	<%= f.text_field :position, class: 'form-control' %>
+
+<div class="form-group">
+	<%= f.label :position, class: "col-lg-2 control-label" %>
+	<div class="col-lg-10">
+		<%= f.text_field :position, class: 'form-control', placeholder: "Position" %>
+	</div>
 </div>
-<div class="field">
-	<%= f.label :email %><br>
-	<%= f.email_field :email, class: 'form-control' %>
+
+<div class="form-group">
+	<%= f.label :email, class: "col-lg-2 control-label" %>
+	<div class="col-lg-10">
+		<%= f.email_field :email, class: 'form-control', placeholder: "Email" %>
+	</div>
 </div>
-<div class="field">
-	<%= f.label :password %><br>
-	<%= f.password_field :password, class: 'form-control' %>
+
+<div class="form-group">
+	<%= f.label "Choose a password for yourself", class: "col-lg-2 control-label" %>
+	<div class="col-lg-10">
+		<%= f.password_field :password, class: 'form-control', placeholder: "User password (must be at least six characters)" %>
+	</div>
 </div>
-<div class="field">
-	<%= f.label :password_confirmation %><br>
-	<%= f.password_field :password_confirmation, class: 'form-control' %>
+
+<div class="form-group">
+	<%= f.label "Confirm your own password", class: "col-lg-2 control-label" %>
+	<div class="col-lg-10">
+		<%= f.password_field :password_confirmation, class: 'form-control', placeholder: "Confirm password" %>
+	</div>
 </div>
