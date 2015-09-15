@@ -18,11 +18,23 @@
 
 	<body>
 		<%= render 'layouts/header' %>
-		<%= render 'layouts/flash_handler' %>
-		<% if logged_in? %>
-			<%= render 'layouts/sidebar' %>
-		<% end %>			
-		<%= yield %>
-		<%= render 'layouts/footer' %>
+		<div class="container">
+			<div class="row">
+				<%= render 'layouts/flash_handler' %>
+				<% if logged_in? %>
+					<div class="col-md-3">
+						<%= render 'layouts/sidebar' %>
+					</div>
+					<div class="col-md-6">	
+						<%= yield %>
+					</div>
+				<% else %>
+					<div class="col-md-12">
+						<%= yield %>
+					</div>
+				<% end %>
+				<%= render 'layouts/footer' %>
+			</div>
+		</div>		
 	</body>
 </html>

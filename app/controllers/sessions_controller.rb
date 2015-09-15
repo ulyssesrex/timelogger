@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController  
   
   before_action :set_organization, except: [:new, :create]
+  before_action :check_cancel_create, only: [:create]
   before_action :find_user,        only:   [:create]
   before_action :valid_user,       only:   [:create]
   before_action :activated_user,   only:   [:create]
@@ -11,7 +12,7 @@ class SessionsController < ApplicationController
   def create
     log_in @user
     params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-    redirect_back_or user_path(@user)
+    redirect_back_or user_path(@user) and return
   end
   
   def destroy
@@ -49,5 +50,9 @@ class SessionsController < ApplicationController
         flash[:warning] = message
         redirect_to root_url
       end
+    end
+
+    def check_cancel_create
+      redirect_to root_path if params[:commit] == "Cancel"
     end
 end

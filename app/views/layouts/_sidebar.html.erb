@@ -1,14 +1,38 @@
-<div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-	<aside>
-	<br><br>
-	<div id="timelog-button">		
-		<%= link_to "Start Timelog", '#', class: 'timelog-button-resting', id: 'start-timelog' %>
-		<%= link_to "Finish Timelog", new_user_timelog_path(current_user), class: 'timelog-button-running hidden', id: 'end-timelog' %><br>
-		<%= link_to "Cancel Timelog", user_path(current_user), class: 'timelog-button-running hidden', id: 'cancel-timelog' %>
+<div class="sidebar-nav-fixed affix">
+  <div class="well">
+  	<ul class="nav ">
+			<li>
+					<div class='timelog-button-running hidden', id="timelog-timer"></div>
+			</li>
+			<li>
+				<%= 
+					link_to "Start Timelog", '#', 
+					class: 'timelog-button-resting', id: 'start-timelog' 
+				%>
+			</li>
+			<li>
+				<%= 
+					link_to "Finish Timelog", new_user_timelog_path(current_user), 
+					class: 'timelog-button-running hidden', id: 'end-timelog' 
+				%>
+			</li>
+			<li>
+				<%= 
+					link_to "Cancel Timelog", user_path(current_user), 
+					class: 'timelog-button-running hidden', id: 'cancel-timelog' 
+				%>
+			</li>
+			<li>
+				<%= 
+					link_to "Create New Timelog", new_user_timelog_path(current_user) 
+				%>
+			</li>
+			<li>
+				Current time:
+			</li>
+			<li>
+				<div id="current-time"></div>
+			</li>
+		</ul>
 	</div>
-		<%= link_to "Create New Timelog", new_user_timelog_path(current_user) %>
-		<div class='timelog-button-running hidden', id="timelog-timer"></div>
-		<p>Current time:</p>
-		<div id="current-time"></div>
-	</aside>
 </div>
