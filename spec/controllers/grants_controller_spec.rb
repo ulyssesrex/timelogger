@@ -113,8 +113,8 @@ describe GrantsController do
           expect(flash[:success]).to be_present
         end
         
-        it "redirects to organization page" do
-          expect(response).to redirect_to(organization_path(organization))
+        it "redirects to :index page" do
+          expect(response).to redirect_to(grants_path)
         end
       end
       
