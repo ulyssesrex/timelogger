@@ -1,8 +1,8 @@
 <% provide(:title, 'Sign up') %>
 
-<%= form_for @user, html: { class: 'form-horizonal' } do |f| %>
+<%= form_for @user, html: { class: 'form-horizontal' } do |f| %>
 	<% if @user.errors.any? %>
-		<%= render partial: 'errors', user: @user %>
+		<%= render partial: 'shared/error_messages', object: @user %>
 	<% end %>
 
 	<fieldset>

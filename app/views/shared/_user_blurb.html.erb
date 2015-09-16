@@ -1,12 +1,20 @@
-<br><br><br><br>
-<div class="user-blurb">
-	<ul>
-		<li><%= link_to gravatar_for(user), user_path(user) %></li>
-		<li><%= full_name user %></li>
-		<li>
-			<%= user.position %>
-			<%= "(&#x2606; Admin)" if user.admin? %>
-		</li>
-		<li><%= user.organization.name unless index %></li>
-	</ul>
+<div class="panel panel-default">
+  <div class="panel-body">
+		<div class="user-blurb">
+			<div class="user-gravatar">
+				<p><%= gravatar_for(user, size=120) %></p>
+			</div>
+			<div class="against-image">
+				<p><b><%= full_name user %></b></p>
+				<p><%= user.position %><% if user.admin? %> (&#x2606; Admin) <% end %></p> 
+				<p><%= user.organization.name unless index %></p>
+				<p><%= supervision_status(user) %></p>
+			</div>
+			<div class="view-records-button">
+			  <% if current_user.supervises?(user) || current_user?(user) || current_user.admin? %>
+    			<%= link_to "View records", user_timelogs_path(user), class: 'btn btn-primary' %>
+    		<% end %>
+    	</div>
+		</div>
+	</div>
 </div>

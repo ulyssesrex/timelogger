@@ -12,7 +12,7 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">      
 			<% unless logged_in? %>
-				<ul class="nav navbar-nav navbar-right">
+				<ul class="nav navbar-nav">
         	<li>
         		<%= link_to login_path, class: 'active' do %>
         			Log in <span class="sr-only">(current)</span>
@@ -56,11 +56,12 @@
             	</ul>
             </li>
           <% end %>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
           <li><%= link_to "Log out", logout_path, method: :delete %></li>
-        </ul>
+				</ul>
 		  <% end %>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to "&copy; 2015 Dan Wichman-Buescher".html_safe, about_path %></li>
+      </ul>
     </div>
   </div>
 </nav>
