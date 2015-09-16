@@ -106,7 +106,6 @@ GEM
     formatador (0.2.5)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
-    gravtastic (3.2.6)
     guard (2.12.5)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -300,7 +299,6 @@ DEPENDENCIES
   database_cleaner
   factory_girl_rails
   faker (= 1.4.2)
-  gravtastic
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
