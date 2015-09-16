@@ -1,53 +1,68 @@
 <% provide(:title, 'New Timelog') %>
 
-<h1>New Timelog</h1>
+<%= 
+  form_for @timelog, 
+  url: { action: 'create', controller: 'timelogs' }, 
+  html: { class: 'form-horizontal' } do |f| 
+%>
 
-<%= form_for(@timelog, url: { action: 'create', controller: 'timelogs' }, html: { class: "form-horizontal" }) do |f| %>
-  <fieldset id="timelog-meta">
-    <ul>
-      <li class="control-group">
-        <%= f.label :start_time, "Start time", class: "control-label" %>
-        <div class="field controls">
-          <%= 
-            f.text_field :start_time, 
-              value: @start, 
-              placeholder: "example: 8:45 AM, 7-21-2015" 
-          %>
+  <% if @timelog.errors.any? %>
+    <%= render partial: 'errors', object: @timelog %>
+  <% end %>
+
+  <fieldset>
+    <legend>New Timelog</legend>
+
+    <div class="form-group">
+      <%= f.label :start_time, class: "col-lg-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.text_field :start_time, class: 'form-control', value: @start, placeholder: "example: 8:45 AM, 7-21-2015" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :end_time, class: "col-lg-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.text_field :end_time, class: 'form-control', value: @end, placeholder: "example: 4:59 PM, 7-21-2015" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "General comments", class: "col-lg-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.text_area :comments, class: 'form-control', rows: 3, placeholder: "Comments" %>
+      </div>
+    </div>
+  </fieldset>
+  <br>
+
+  <fieldset>
+    <legend>Time to grants</legend>
+
+    <%= f.fields_for :time_allocations, html: { class: 'form-horizontal' } do |t| %>
+
+      <div class="form-group">
+        <%= t.label :hours, "#{t.object.grantholding.grant.name}", class: "col-lg-2 control-label" %>
+        <div class="col-lg-10">
+          <%= t.text_field :hours, class: 'form-control', placeholder: "HHH:MM:SS" %>
         </div>
-      </li>
-      <li class="control-group">
-        <%= f.label :end_time, "End time", class: "control-label" %>
-        <div class="field controls">
-          <%= 
-            f.text_field :end_time, 
-              value: @end, 
-              placeholder: "example: 4:59 PM, 7-21-2015" 
-          %>
+      </div>
+
+      <div class="form-group">
+        <%= t.label :comments, "Work description", class: "col-lg-2 control-label" %>
+        <div class="col-lg-10">
+          <%= t.text_area :comments, class: 'form-control', rows: 3, placeholder: "Description" %>
         </div>
-      </li>
-      <li class="control-group">
-        <%= f.label :comments, "Timelog comments", class: "control-label" %>
-        <div class="field controls">
-          <%= 
-            f.text_area :comments, 
-              rows: 5, 
-              placeholder: "Add any notes here" 
-          %>
-        </div>
-      </li>
-    </ul>
+      </div>   
+         
+    <% end %>
+
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <%= f.submit "Cancel", class: "btn btn-default" %>
+        <%= f.submit "Log in", class: "btn btn-primary" %>
+      </div>
+    </div>
   </fieldset>
 
-  <fieldset id="timelog-time_allocations">
-    <ul>
-      <%= f.fields_for :time_allocations do |time_allocation| %>
-        <%= render partial: 'time_allocation_field', locals: { t: time_allocation } %>
-      <% end %>
-    </ul>
-  </fieldset>
-
-  <div class="actions">
-    <%= f.submit "Cancel" %>
-    <%= f.submit "Submit" %>
-  </div>
-<% end %>
+<% end %><br><br>

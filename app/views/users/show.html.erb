@@ -1,13 +1,14 @@
 <% provide(:title, 'Home') %>
 
-<div class="row">
-	<div class="col-md-6">
+<h2>Home</h2>
+
+<%= 
+	render partial: "shared/user_blurb", 
+	locals: { user: @user, index: false } 
+%>
 		
-		<section class="user_info">
-			<%= 
-				render partial: "shared/user_blurb", 
-				locals: { user: @user, index: false } 
-			%>
+<!-- 		<section class="user_info">
+			
 		</section>
 		
 		<section>
@@ -47,4 +48,4 @@
 			<% end %>
 		</section>		
 	</div>
-</div>
+</div> -->

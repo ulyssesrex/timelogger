@@ -1,16 +1,10 @@
 <% provide(:title, "Co-Workers") %>
 
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Users</h1>
+<h2>My Co-Workers</h2>
 
 <% for user in @users %>
   <%=  
       render partial: 'shared/user_blurb', 
       locals: { user: user, index: true } 
   %>
-  <br>
-  <% if current_user.supervisees.include?(user) || current_user?(user) || current_user.admin? %><%= link_to "User info", user_path(user) %><br>
-    <%= link_to "View timelogs", user_timelogs_path(user) %>
-  <% end %>  
 <% end %>

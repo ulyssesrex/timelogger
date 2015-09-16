@@ -1,10 +1,13 @@
-<li class="control-group nested-fields">
-	<h2>Allocate time to your grants</h2>
-  <div class="controls">
-    <%= t.label :hours, "#{t.object.grantholding.grant.name} hours" %>
-    <%= t.text_field :hours, placeholder: "hhh:mm:ss" %>
+<div class="form-group">
+	<%= t.label :hours, "#{t.object.grantholding.grant.name}", class: "col-lg-2 control-label" %>
+	<div class="col-lg-10">
+		<%= t.text_field :hours, class: 'form-control', placeholder: "HHH:MM:SS" %>
+	</div>
+</div>
 
-    <%= t.label :comments %>
-    <%= t.text_area :comments, rows: 5, placeholder: "Describe today's grant-related work" %>
-  </div>
-</li>
+<div class="form-group">
+	<%= t.label :comments, "Description", class: "col-lg-2 control-label" %>
+	<div class="col-lg-10">
+		<%= t.text_area :comments, class: 'form-control', placeholder: "Description" %>
+	</div>
+</div>
