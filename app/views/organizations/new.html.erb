@@ -3,8 +3,9 @@
 <%= form_for(@organization, html: { class: 'form-horizontal' }) do |f| %>
 
 	<% if @organization.errors.any? %>
-    <%= render partial: 'errors', locals: { organization: @organization } %>
+    <%= render partial: 'shared/error_messages', locals: { object: @organization } %>
   <% end %>
+
   <fieldset>
 		<fieldset>
 	    <legend>Your organization's info</legend>
@@ -21,7 +22,7 @@
 		<div class="form-group">
 	    <div class="col-lg-10 col-lg-offset-2">
 	      <%= f.submit "Cancel", class: "btn btn-default" %>
-	      <%= f.submit "Log in", class: "btn btn-primary" %>
+	      <%= f.submit "Enroll", class: "btn btn-primary" %>
 	    </div>
 	  </div>
 	</fieldset>

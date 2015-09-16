@@ -8,7 +8,7 @@
 	<fieldset>
     <legend>Your information</legend>
 
-    <%= render partial: 'user_fields', locals: { f: f } %>
+    <%= render partial: 'user_fields', locals: { f: f, user: @user } %>
 		
 		<div class="form-group">
 			<%= f.label "Choose your password", class: "col-lg-2 control-label" %>
@@ -41,7 +41,7 @@
 		<div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
         <%= f.submit "Cancel", class: "btn btn-default" %>
-        <%= f.submit "Log in", class: "btn btn-primary" %>
+        <%= f.submit "Sign up", class: "btn btn-primary" %>
       </div>
     </div>
 	</fieldset>

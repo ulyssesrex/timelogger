@@ -1,17 +1,1 @@
-<%= form_for(@user) do |f| %>
 
-  <% if @user.errors.any? %>
-    <%= render partial: 'errors', user: @user %>
-  <% end %>
-
-  <%= render partial: 'user_fields', locals: { f: f } %>
-	
-	<h1>Grants</h1>
-	<%= render partial: 'user_grants_fields', locals: { f: f, user: @user } %>
-
-	<div class="actions">
-		<%= f.submit "Cancel", class: "btn btn-primary my-btn" %>
-		<%= f.submit "Submit", class: "btn btn-primary my-btn" %>
-	</div>
-	
-<% end %>
