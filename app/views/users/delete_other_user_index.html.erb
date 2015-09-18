@@ -1,19 +1,49 @@
 <% provide(:title, "Delete User") %>
 
-<h1>Delete User</h1>
+<h2>Delete user</h2>
 
-<%= form_tag delete_user_path, method: :delete do %>
-	<ul>
-		<% for user in @users %>
-			<li>
-				<%= check_box_tag "user_ids[]", user.id %>
-				<%= 
-					render partial: "shared/user_blurb", 
-					locals: { user: user, index: true } 
-				%>			
-			</li>
-		<% end %>
-	</ul>
-	<% msg = "Are you sure? Users' data will be deleted permanently." %>
-	<%= submit_tag "Delete", confirm: msg %>
+<% unless @users.empty? %>
+
+	<%= form_tag delete_user_path, method: :delete do %>
+
+		<table class="table table-striped table-hover ">
+		  <thead>
+		    <tr>
+		      <th>Name</th>
+		      <th>Position</th>
+		      <th>Admin</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <% @users.each do |user| %>
+		      <tr>
+		        <td><%= full_name(user) %></td>
+		        <td><%= user.position %></td>
+		        <td>
+		        	<div class="checkbox">
+		          	<%= check_box_tag 'user_ids[]', user.id %>
+		        	</div>
+		      	</td>
+		      </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+
+		<br><br>
+
+		<div class="form-group">
+		  <div class="col-lg-10 col-lg-offset-2">
+		    <%= submit_tag "Cancel", class: "btn btn-default" %>
+		    <%= submit_tag "Delete users", class: "btn btn-primary", prompt: "Are you sure you want to delete these users? Users' data will be permanently deleted." %>
+		  </div>
+		</div>
+	<% end %>
+
+<% else %>
+
+	<br>
+	<p>(No other users yet)</p>
+	<br>
+	<p><%= link_to 'Back to home', user_path(current_user) %></p>
+
 <% end %>

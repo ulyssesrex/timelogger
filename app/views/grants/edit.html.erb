@@ -1,6 +1,40 @@
-<h1>Editing Grant</h1>
+<% provide(:title, 'Edit grant') %>
 
-<%= render 'form' %>
+<%= form_for @grant, url: { action: 'update' }, html: { class: 'form-horizontal' } do |f| %>
+	<% if @grant.errors.any? %>
+		<%= render partial: 'shared/error_messages', locals: { object: @grant } %>
+	<% end %>
 
-<%= link_to 'Show', @grant %> |
-<%= link_to 'Back', grants_path %>
+	<fieldset>
+    <legend>Edit <%= @grant.name %></legend>
+
+			<div class="form-group">
+				<%= f.label :name, class: "col-lg-2 control-label" %>
+				<div class="col-lg-10">
+					<%= 
+						f.text_field :name, 
+						class: 'form-control', 
+						placeholder: (@grant.name || "Grant name") 
+					%>
+				</div>
+			</div>  
+
+		<div class="form-group">
+			<%= f.label :comments, class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= 
+					f.text_area :comments, 
+					class: 'form-control', rows: 3, 
+					placeholder: (@grant.comments || "Describe grant here") 
+				%>
+			</div>
+		</div>
+
+		<div class="form-group">
+	    <div class="col-lg-10 col-lg-offset-2">
+	      <%= f.submit "Cancel", class: "btn btn-default" %>
+	      <%= f.submit "Submit changes", class: "btn btn-primary" %>
+	    </div>
+	  </div>
+	</fieldset>	
+<% end %>

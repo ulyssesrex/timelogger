@@ -1,36 +1,52 @@
 <% provide(:title, 'Edit organization info') %>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-		<%= 
-			form_for @organization, 
-				url: { action: 'update', controller: 'organizations' } do |f| 
-		%>
+<%= form_for @organization, url: { action: 'update' }, html: { class: 'form-horizontal' } do |f| %>
+	<% if @organization.errors.any? %>
+		<%= render partial: 'shared/error_messages', locals: { object: @organization } %>
+	<% end %>
 
-			<% if @organization.errors.any? %>
-		    <%= render partial: 'errors', locals: { organization: @organization } %>
-		  <% end %>
+	<fieldset>
+    <legend><%= "#{@organization.name} info" %></legend>
 
-		  <h1><%= "Edit your organization's info" %></h1>
-
-		  <div class="field">
-			  Organization name<br>
-			  <%= f.text_field :name, class: 'form-control' %>
+		<div class="form-group">
+			<%= f.label :name, class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= 
+					f.text_field :name, 
+					class: 'form-control', placeholder: (@organization.name || "Name") 
+				%>
 			</div>
+		</div>
 
-			<div class="field">
-			  Organization description<br>
-			  <%= f.text_area :description, class: 'form-control' %>
+		<div class="form-group">
+			<%= f.label :description, class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= 
+					f.text_area :description, 
+					class: 'form-control', rows: 3, placeholder: (@organization.description || "Description") 
+				%>
 			</div>
+		</div>
 
-			<%= link_to "Reset organization keyword", reset_keyword_form_path(@organization) %>
+		<br>
 
-		  <div class="actions">
-		  	<% msg =  "Are you sure? Changes will be made " %>
-		  	<% msg += "for all users in #{@organization.name}." %>
-				<%= f.submit "Cancel", class: "btn btn-primary my-btn" %>
-		    <%= f.submit "Submit", class: "btn btn-primary my-btn", prompt: msg %>
-		  </div>
-		<% end %>
-	</div>
-</div>
+		<div class="form-group">
+			<%= link_to "Reset #{@organization.name}'s keyword", reset_keyword_form_path(@organization) %>
+		</div>
+
+		<div class="form-group">
+	    <div class="col-lg-10 col-lg-offset-2">
+	    	<% msg =  "Are you sure? Changes will be made " %>
+		  	<% msg += "for all users across organization." %>
+	      <%= f.submit "Cancel", class: "btn btn-default" %>
+	      <%= f.submit "Submit changes", class: "btn btn-primary", prompt: msg %>
+	    </div>
+	  </div>
+	</fieldset>	
+<% end %>
+
+<br><br>
+
+<% if current_user.admin? %>
+	<%= link_to "Delete organization", user_path(current_user), class: "btn btn-danger", prompt: "Are you absolutely sure? This will permanently delete ALL user and organization info from the Timelogger system. Make sure you have copied all necessary records before completing this step." %>
+<% end %>

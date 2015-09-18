@@ -2,7 +2,7 @@
 
 <%= form_for @user, html: { class: 'form-horizontal' } do |f| %>
 	<% if @user.errors.any? %>
-		<%= render partial: 'shared/error_messages', object: @user %>
+		<%= render partial: 'shared/error_messages', locals: {object: @user} %>
 	<% end %>
 
 	<fieldset>
@@ -13,7 +13,7 @@
 		<div class="form-group">
 			<%= f.label "Choose your password", class: "col-lg-2 control-label" %>
 			<div class="col-lg-10">
-				<%= f.password_field :password, class: 'form-control', placeholder: "Password (must be greater than six characters)" %>
+				<%= f.password_field :password, class: 'form-control', placeholder: "Password (must be at least six characters)" %>
 			</div>
 		</div>	
 

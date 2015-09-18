@@ -8,3 +8,8 @@
       locals: { user: user, index: true } 
   %>
 <% end %>
+
+<% if @users.empty? %>
+	<br>
+	<p>(No other users yet)</p>
+<% end %>
