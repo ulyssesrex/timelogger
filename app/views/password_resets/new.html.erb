@@ -1,13 +1,26 @@
 <% provide(:title, "Forgot password") %>
-<h1>Forgot password</h1>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%= form_for(:password_reset, url: password_resets_path) do |f| %>
-      <%= f.label :email %>
-      <%= f.email_field :email, class: 'form-control' %>
+<%= form_for :password_reset, 
+		url: password_resets_path, 
+		html: { class: 'form-horizontal' } do |f| 
+%>
+	<fieldset>
+	  <legend>Forgot password</legend>
+		<div class="form-group">
+			<%= f.label :email, class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= 
+					f.email_field :email, 
+					class: 'form-control', placeholder: 'Email'
+				%>
+			</div>
+		</div>
 
-      <%= f.submit "Submit", class: "btn btn-primary" %>
-    <% end %>
-  </div>
-</div>
+		<div class="form-group">
+	    <div class="col-lg-10 col-lg-offset-2">
+	      <%= f.submit "Cancel", class: "btn btn-default" %>
+	      <%= f.submit "Submit", class: "btn btn-primary" %>
+	    </div>
+	  </div>
+	</fieldset>
+<% end %>

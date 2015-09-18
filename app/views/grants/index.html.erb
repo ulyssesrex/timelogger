@@ -1,30 +1,21 @@
-<p id="notice"><%= notice %></p>
+<h2><%= @organization.name %> Grants</h2>
 
-<h1>Listing Grants</h1>
+<%= link_to "(+) Add grant", new_grant_path %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Comments</th>
+<br><br>
 
-      <th>Organization</th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
+<% for grant in @grants %>
 
-  <tbody>
-    <% @grants.each do |grant| %>
-      <tr>
-        <td><%= grant.name %></td>
-        <td><%= grant.comments %></td>
-        <td><%= link_to 'Edit', edit_grant_path(grant) %></td>
-        <td><%= link_to 'Destroy', grant, method: :delete, data: { confirm: 'Are you sure? This will delete the grant for everyone in your organization.' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Grant', new_grant_path %>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= grant.name %></h3>
+      <h3 class="panel-title right-heading">
+        (<%= link_to 'Edit', edit_grant_path(grant) %> | 
+        <%= link_to 'Delete', grant, method: :destroy, data: { confirm: 'Are you sure? This will delete the grant across your organization.' } %>)
+      </h3>
+    </div>
+    <div class="panel-body blurb-text">
+      <%= grant.comments %>
+    </div>
+  </div>  
+<% end %>

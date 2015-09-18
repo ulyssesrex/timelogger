@@ -17,10 +17,10 @@ class User < ActiveRecord::Base
   
   validates :first_name,      presence:    true
   validates :last_name,       presence:    true
+  validates_uniqueness_to_tenant :email
   validates :email,           presence:    true,
                               length:      { maximum: 255 },
                               format:      { with: VALID_EMAIL_REGEX },
-                              uniqueness:  { case_sensitive: false }
   validates :password,        length:      { minimum: 6 },
                               allow_blank: true
   validates :position,        presence:    true

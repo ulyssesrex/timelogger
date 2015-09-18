@@ -6,20 +6,28 @@
 	<% end %>
 
 	<fieldset>
-    <legend>Edit your info</legend>
+    <legend>Edit my info</legend>
 
   	<%= render partial: 'user_fields', locals: { f: f, user: @user } %>
   </fieldset>
 
   <fieldset>
-  	<legend>Edit your grants</legend>
+  	<legend>Edit my grants</legend>
   	
   	<%= render partial: 'user_grants_fields', locals: { f: f, user: @user } %>
+
+		<!-- This will be made into js only selector. -->
+		<div class="form-group" id="grant-selector">
+			<%= f.label "Add grant", class: "col-lg-2 control-label" %>
+			<div class="col-lg-10">
+				<%= f.collection_select(:grantholdings, Grant.all, :id, :name, { prompt: true }, { class: 'form-control'} ) %>
+			</div>
+		</div>
 	
 		<div class="form-group">
 	    <div class="col-lg-10 col-lg-offset-2">
 	      <%= f.submit "Cancel", class: "btn btn-default" %>
-	      <%= f.submit "Submit", class: "btn btn-primary" %>
+	      <%= f.submit "Submit changes", class: "btn btn-primary" %>
 	    </div>
 	  </div>
 	</fieldset>	
@@ -34,9 +42,9 @@
 		class: 'btn btn-default' 
 	%>
 	<%= 
-		link_to "Delete my profile", users_path(@user), method: :destroy, 
+		link_to "Delete my profile", @user, method: :delete, 
 		class: 'btn btn-default', 
-		confirm: "Are you sure you want to delete your Timelogger profile?"
+		data: { confirm: "Are you sure you want to delete your Timelogger profile?" }
 	%>
 </fieldset>
 

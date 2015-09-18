@@ -21,17 +21,22 @@ class GrantsController < ApplicationController
   
   def index
     @grants = Grant.all
+    @organization = @grants.take.organization
   end
   
   def edit
   end
   
   def update
-    if @grant.update(grant_params)
-      flash[:success] = "Grant updated."
-      redirect_to organization_path(@grant.organization) and return
+    unless params[:commit] == "Cancel"
+      if @grant.update(grant_params)
+        flash[:success] = "Grant updated."
+        redirect_to grants_path and return
+      else
+        render 'edit'
+      end
     else
-      render 'edit'
+      redirect_to grants_path and return
     end
   end
   
@@ -39,7 +44,7 @@ class GrantsController < ApplicationController
     @organization = Organization.find(@grant.organization_id)
     @grant.destroy
     flash[:success] = "Grant deleted."
-    redirect_to organization_path(@organization)
+    redirect_to grants_path
   end
   
   private

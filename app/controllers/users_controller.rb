@@ -76,7 +76,7 @@ class UsersController < ApplicationController
   end
   
   def index
-    @users = User.where(activated: true)
+    @users = User.where(activated: true).where.not(id: current_user.id)
   end
   
   def destroy
@@ -105,13 +105,22 @@ class UsersController < ApplicationController
   end
 
   def make_admin_index
-    @non_admins = User.where(activated: true, admin: false)
+    @users = User.where(activated: true).where.not(id: current_user.id)
   end
 
   def make_admin
-    @selected_users = User.where("id IN (?)", params[:user_ids])
-    @selected_users.update_all admin: true
-    flash[:success] = "Admin status granted."
+    @to_admins  = User.where("id IN (?)", params[:user_ids])
+    @to_regular = User.where.not("id IN (?)", params[:user_ids])
+    @to_admins.update_all admin: true
+    demoted = 0
+    @to_regular.each do |reg_user|
+      next unless reg_user.admin?
+      reg_user.update admin: true
+      demoted += 1
+    end
+    message  = "Admin status granted to #{pluralize @to_admins.count, 'user' }. "
+    message += "Admin status removed from #{pluralize demoted, 'user' }." 
+    flash[:success] = message
     redirect_to users_path
   end
   

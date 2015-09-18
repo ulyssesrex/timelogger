@@ -1,16 +1,13 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @organization.name %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @organization.description %>
-</p>
-
-<%#= TODO: Make edit link only available to admin users. %>
-
-<%= link_to 'Edit', edit_organization_path(@organization) %> |
-
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= @organization.name %></h3>
+    <% if current_user.admin? %>
+	    <h3 class="panel-title right-heading">
+				<%= link_to 'Edit', edit_organization_path(organization) %>
+    	</h3>
+    <% end %>
+  </div>
+  <div class="panel-body">
+    <%= @organization.description %>
+  </div>
+</div><br><br>
