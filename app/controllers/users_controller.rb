@@ -43,8 +43,13 @@ class UsersController < ApplicationController
   end
   
   def show
-    @grantholdings = @user.grantholdings
     redirect_to users_path unless @user.activated?
+    @grantholdings = @user.grantholdings
+    @start_date_table = (params[:start_date_table] || 
+                            User.date_of_last('Monday', weeks=2)).to_time
+    @end_date_table   = (params[:end_date_table] ||
+                            Time.zone.now).to_time
+    @days = User.days(@start_date_table, @end_date_table)
   end
   
   def grants_fulfillments_table
@@ -60,11 +65,9 @@ class UsersController < ApplicationController
   end
   
   def update
-    # If Cancel
     if params[:commit] == "Cancel"
       redirect_to user_path(current_user) and return
 
-    # If Submit -->
     else
       if @user.update(user_params)
         flash[:success] = "Profile updated."
@@ -122,6 +125,17 @@ class UsersController < ApplicationController
     message += "Admin status removed from #{pluralize demoted, 'user' }." 
     flash[:success] = message
     redirect_to users_path
+  end
+
+  def add_grantholding_field
+    @user = User.find(params[:user_id])
+    Grantholding.new(
+      user_id: params[:user_id], 
+      grant_id: params[:grant_id]
+    )
+    respond_to do |format|
+      format.js
+    end
   end
   
   private

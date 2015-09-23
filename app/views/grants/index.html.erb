@@ -11,7 +11,7 @@
       <h3 class="panel-title"><%= grant.name %></h3>
       <h3 class="panel-title right-heading">
         (<%= link_to 'Edit', edit_grant_path(grant) %> | 
-        <%= link_to 'Delete', grant, method: :destroy, data: { confirm: 'Are you sure? This will delete the grant across your organization.' } %>)
+        <%= link_to 'Delete', grant, method: :delete, data: { confirm: 'Are you sure? This will delete the grant across your organization.' } %>)
       </h3>
     </div>
     <div class="panel-body blurb-text">

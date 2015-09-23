@@ -1,5 +1,8 @@
 class AccountActivationsController < ApplicationController
-  
+# possible bug here with acts_as_tenant -- 
+# can i set a tenant scope on this action, 
+# even though there might be no current user?
+
   def edit
     user = User.find_by(email: params[:email])
     if user && !user.activated? && user.authenticated?(:activation, params[:id])

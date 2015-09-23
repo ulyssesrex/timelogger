@@ -20,9 +20,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_to_tenant :email
   validates :email,           presence:    true,
                               length:      { maximum: 255 },
-                              format:      { with: VALID_EMAIL_REGEX },
-  validates :password,        length:      { minimum: 6 },
-                              allow_blank: true
+                              format:      { with: VALID_EMAIL_REGEX }
+  validates :password,        allow_blank: true,
+                              length:      { minimum: 6 }                              
   validates :position,        presence:    true
   has_secure_password
   validates_confirmation_of :password
@@ -139,6 +139,7 @@ class User < ActiveRecord::Base
   end
   
   def total_hours_worked(start, stop)
+    start = start.to_time; stop = stop.to_time
     total_seconds = 0
     timelogs.where(start_time: start..stop,
                      end_time:   start..stop
@@ -149,22 +150,31 @@ class User < ActiveRecord::Base
     total_seconds / 3600.0 # Gives time in hours.
   end
 
-  # Returns '0:00' format of total hours user has worked on grant since date.
-  def hours_worked_on_grant(since_date, grant_name)
-    
-    timelogs_in_range = self.timelogs.where('start_time >= ?', since_date)
-    hours_worked = 0
-    timelogs_in_range.each do |timelog|
-      timelog.time_allocations.each do |ta|
-        hours_worked += ta.hours if ta.to_grant?(grant_name)
-      end
+  def allocated_time_from(start, stop)
+    start = start.to_time
+    stop  = stop.to_time
+    allocated_time = 0
+    grantholdings.each do |g|
+      allocated_time += g.hours_worked_from(start, stop)
     end
-    hours_worked
+    allocated_time
+  end
+
+  def unallocated_time_from(start, stop)
+    start = start.to_time
+    stop  = stop.to_time
+    total_hours_worked(start, stop) - allocated_time_from(start, stop)
   end
   
   def create_activation_digest
     self.activation_token  = User.new_token
     self.activation_digest = User.digest(activation_token)
+  end
+
+  def timelogs_in_range(start_time, end_time)
+    timelogs
+      .where('start_time >= ?', start_time)
+      .where('end_time <= ?', end_time)
   end
   
 ##### Class Methods 
@@ -220,6 +230,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Returns Datetime object of last 'day' (Monday, Sunday, etc.)
+  def User.date_of_last(day, weeks=1)
+    date  = Date.parse(day)
+    delta = date < Date.today ? 0 : (7 * weeks)
+    date - delta
+  end
+
   # Returns all numbers separated by ':'s
   def User.time_array(user_string)
     user_string.scan(/\d+(?=:)|(?<=:)\d+/).flatten.compact.map!(&:to_i)
@@ -233,6 +250,16 @@ class User < ActiveRecord::Base
   # Matches 'AM', 'PM', or variants thereof.
   def User.meridian(user_string)
     user_string[/a\.*m\.*|p\.*m\.*/i].tr('.', '').upcase
+  end
+
+  # Array of all days within start and end times.
+  def User.days(start_time, end_time)
+    start_d    = start_time.to_date
+    end_d      = end_time.to_date
+    date_range = start_d..end_d
+    days = []
+    date_range.each { |day| days << day }
+    days
   end
 
   def User.digest(string)

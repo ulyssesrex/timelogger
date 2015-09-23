@@ -175,54 +175,78 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////
 // Listeners
 
-	// Set user id hidden field value to null on page load.
-	$('#user-id-catch').val(null);
+	// // Set user id hidden field value to null on page load.
+	// $('#user-id-catch').val(null);
 
 	// Run current time clock on page load.
 	runClock();
 
-	// Handles grants fulfillments menu selections.
-	$(document).on("change", "#since_date", function(e) {
-		e.preventDefault();
-		var select_val  = $('#since_date option:selected').val();
-		var date_inputs = $('.date-input');
-		// When "other date" option is selected,
-		if(select_val === "other") {
-			// show manual date entry field.
-			date_inputs.removeClass('hidden');
-		}
-		// When a selection other than "other date" is made,
-		else {
-			if(!(date_inputs.hasClass('hidden'))) {
-				// hide manual date entry fields if they're shown.
-				date_inputs.addClass('hidden');
-			}
-			$.get("http://localhost:3000/get_current_user_id", function() {
-				$.ajax({
-					type: "POST",
-					url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/grants_fulfillments_table",
-					data: { since_date: select_val }
-				});
-			});
-		}
-		if($('#user-id-catch').val() !== null) {
-			$('#user-id-catch').val(null);
-		}
-	});
+	// // Handles grants fulfillments menu selections.
+	// $(document).on("change", "#since_date", function(e) {
+	// 	e.preventDefault();
+	// 	var select_val  = $('#since_date option:selected').val();
+	// 	var date_inputs = $('.date-input');
+	// 	// When "other date" option is selected,
+	// 	if(select_val === "other") {
+	// 		// show manual date entry field.
+	// 		date_inputs.removeClass('hidden');
+	// 	}
+	// 	// When a selection other than "other date" is made,
+	// 	else {
+	// 		if(!(date_inputs.hasClass('hidden'))) {
+	// 			// hide manual date entry fields if they're shown.
+	// 			date_inputs.addClass('hidden');
+	// 		}
+	// 		$.get("http://localhost:3000/get_current_user_id", function() {
+	// 			$.ajax({
+	// 				type: "POST",
+	// 				url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/grants_fulfillments_table",
+	// 				data: { since_date: select_val }
+	// 			});
+	// 		});
+	// 	}
+	// 	if($('#user-id-catch').val() !== null) {
+	// 		$('#user-id-catch').val(null);
+	// 	}
+	// });
 
-	$(document).on("click", "#date-input-submit", function(e) {
-		e.preventDefault;
-		var select_val = $('#date-input-entry').val();
-		$.get("http://localhost:3000/get_current_user_id", function() {
-			$.ajax({
-				type: "POST",
-				url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/grants_fulfillments_table",
-				data: { since_date: select_val }
-			});
+	// $(document).on("click", "#date-input-submit", function(e) {
+	// 	e.preventDefault;
+	// 	var select_val = $('#date-input-entry').val();
+	// 	$.get("http://localhost:3000/get_current_user_id", function() {
+	// 		$.ajax({
+	// 			type: "POST",
+	// 			url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/grants_fulfillments_table",
+	// 			data: { since_date: select_val }
+	// 		});
+	// 	});
+	// 	if($('#user-id-catch').val() !== null) {
+	// 		$('#user-id-catch').val(null);
+	// 	}		
+	// });
+
+	// Finds current url.
+	var currentUrl = window.location.href;
+
+	// Regex that looks for user_id in url.
+	var userIdRegex = /users\/(\d+?).*/;
+
+	// Matches user id from urls containing user_id, eg. /users/12/edit matches '12'.
+	if(userIdRegex.test(currentUrl)) {
+		var userId = currentUrl.match(userIdRegex)[1];
+	}
+
+	$(document).on('change', '#grant-selector', function(e) {
+		e.preventDefault();		
+		var selectedGrantId = $("#grant-selector option:selected").val();
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:3000/users/" + userId + "/add_grantholding_field",
+			data: {
+				user_id: userId,
+				grant_id: selectedGrantId
+			}
 		});
-		if($('#user-id-catch').val() !== null) {
-			$('#user-id-catch').val(null);
-		}		
 	});
 
 	// On page load, check if user has previously
@@ -254,22 +278,18 @@ $(document).ready(function() {
 		if ((typeof $start_time === 'undefined') || $start_time === null) {
 			$start_time = getCookie('start_time');
 		}
-		$.get("http://localhost:3000/get_current_user_id", function() {
-			$.ajax({
-				type: "POST",
-				url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/timelogs/end_from_button",
-				data: {
-					start_time: $start_time,
-					end_time: $end_time
-				}
-			});
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:3000/users/" + userId + "/timelogs/end_from_button",
+			data: {
+				start_time: $start_time,
+				end_time: $end_time
+			}
 		});		
 		deleteCookie('start_time', $start_time);
-		if($('#user-id-catch').val() !== null) {
-			$('#user-id-catch').val(null);
-		}
 	});		
 
+	// Triggered by clicking on 'Cancel Timelog', below.
 	$(document).on("defaultClick", '#cancel-timelog', function() {}
 	);
 
@@ -280,9 +300,5 @@ $(document).ready(function() {
 		deleteCookie('start_time', $start_time);
 		timerRestingDisplay();
 		$('#cancel-timelog').trigger("defaultClick");
-		if($('#user-id-catch').val() !== null) {
-			$('#user-id-catch').val(null);
-		}
 	});
-
 });

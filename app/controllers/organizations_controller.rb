@@ -21,7 +21,7 @@ class OrganizationsController < ApplicationController
         UserMailer.organization_activation(@organization, @admin).deliver_now   
         msg  = "#{@organization.name} was created."
         msg += "Please check your email to activate your account."    
-        flash[:success] = msg
+        flash[:info] = msg
         redirect_to root_url and return
       else
         @organization = Organization.new

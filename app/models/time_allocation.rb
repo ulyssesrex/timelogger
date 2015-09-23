@@ -3,8 +3,7 @@ class TimeAllocation < ActiveRecord::Base
   belongs_to :grantholding
   belongs_to :timelog
 
-  def to_grant?(grant_name)
-  	grantholding.grant.name == grant_name
+  def to_grant?(grant)
+  	grantholding.grant == grant
   end
-  #TODO: what about grants that have the same name? Rewrite method and context.
 end

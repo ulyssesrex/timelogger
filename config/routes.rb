@@ -7,6 +7,9 @@ Rails.application.routes.draw do
     post 'grants_fulfillments_table', 
       to: 'users#grants_fulfillments_table', 
       on: :member
+    post 'add_grantholding_field',
+      to: 'users#add_grantholding_field',
+      on: :member
     resources :supervisions,  only: [:create, :destroy]
     get 'supervisees', to: 'supervisions#supervisees'    
     resources :grantholdings
@@ -16,9 +19,7 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :sessions, only: [:new, :create, :destroy]
-  get 'get_current_user_id', to: 'sessions#get_current_user_id'
-
+  resources :sessions,            only: [:new, :create, :destroy]
   resources :account_activations, only: [:edit]
   resources :keyword_resets,      only: [:new, :create, :edit, :update]
   resources :password_resets,     only: [:new, :create, :edit, :update]
