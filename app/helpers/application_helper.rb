@@ -35,8 +35,8 @@ module ApplicationHelper
     m = (duration / 60).floor
     duration -= m * 60
     s = duration
-    if float_hours.floor.zero?
-      display = "no time allocated since date"
+    if duration.zero?
+      display = "0 min"
     elsif h.zero? && m.zero?
       display = "< 1 min"
     else

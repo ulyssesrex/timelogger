@@ -2,50 +2,20 @@
 
 <h2>Home</h2>
 
+<!-- User blurb -->
 <%= 
 	render partial: "shared/user_blurb", 
 	locals: { user: @user, index: false } 
 %>
-		
-<!-- 		<section class="user_info">
-			
-		</section>
-		
-		<section>
-			<%= 
-				render partial: 'timelog_feed_selectors', 
-				locals: { user: @user } 
-			%>
-			<%= 
-				render partial: 'timelog_feed', 
-				locals: { user: @user } 
-			%>			
-		</section>
-		
-		<section>
-			<h3>View grant fulfillments since:</h3>
-			<%= form_tag('#') do %>
-				<%= select_tag(:since_date, 
-							options_for_select(
-							[
-								['Last Monday', date_of_last("Monday", previous: false) ],
-								['Monday before last', date_of_last("Monday", previous: true)],
-								['The first of this month', first_of_month.to_time],
-								['Other date', 'other']
-							]
-						)
-					)
-				%>
-				<%= hidden_field_tag 'user-id-catch', nil %>
-				<%= text_field_tag(:other_date, 'mm/dd/yyyy', class: 'date-input hidden', id: 'date-input-entry') %>
-				<%= submit_tag('View', class: 'date-input hidden', id: 'date-input-submit') %>
-			<% end %>
-			<br>
-			<% if !@grantholdings.empty? %>
-				<ul class="grants-allocations">
-					<%= render partial: 'grantholding', collection: @grantholdings %>
-				</ul>
-			<% end %>
-		</section>		
-	</div>
-</div> -->
+
+<!-- Timelogs table -->
+<%= 
+	render partial: "timelogs_table", 
+	locals: { 
+		grantholdings: @grantholdings, 
+		user: @user, 
+		start_date_table: @start_date_table, 
+		end_date_table: @end_date_table, 
+		days: @days 
+	} 
+%>

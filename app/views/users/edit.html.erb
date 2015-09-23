@@ -11,17 +11,25 @@
   	<%= render partial: 'user_fields', locals: { f: f, user: @user } %>
   </fieldset>
 
+  <br>
+
   <fieldset>
   	<legend>Edit my grants</legend>
-  	
-  	<%= render partial: 'user_grants_fields', locals: { f: f, user: @user } %>
 
-		<!-- This will be made into js only selector. -->
-		<div class="form-group" id="grant-selector">
-			<%= f.label "Add grant", class: "col-lg-2 control-label" %>
+		<div class="form-group">
+			<p class="col-lg-2 control-label">Add grant</p>
 			<div class="col-lg-10">
-				<%= f.collection_select(:grantholdings, Grant.all, :id, :name, { prompt: true }, { class: 'form-control'} ) %>
+				<%= 
+					select_tag 'grantholdings', 
+					options_from_collection_for_select(Grant.all, :id, :name),
+					prompt: "Select grant", id: 'grant-selector', class: 'form-control'
+				%>
 			</div>
+		</div>
+		<br>
+
+		<div id="user-grants-fields">
+			<%= render partial: 'user_grants_fields', locals: { f: f, user: @user } %>
 		</div>
 	
 		<div class="form-group">

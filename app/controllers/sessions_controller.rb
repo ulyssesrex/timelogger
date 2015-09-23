@@ -19,13 +19,6 @@ class SessionsController < ApplicationController
     log_out if logged_in?
     redirect_to root_url
   end
-
-  def get_current_user_id
-    @id = current_user.id
-    respond_to do |format|
-      format.js
-    end
-  end
   
   private
     

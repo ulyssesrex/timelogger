@@ -16,10 +16,12 @@ class TimelogsController < ApplicationController
   def end_from_button
     query_string = { 
       start_time:  params[:start_time], 
-      end_time: params[:end_time] 
+      end_time:    params[:end_time] 
     }.to_query
     set_up_new_timelog_variables
-    render js: %(window.location.href='#{new_user_timelog_path(@user)}?#{query_string}')
+    goto_new_timelog  = "window.location.href="
+    goto_new_timelog += "'#{new_user_timelog_path(@user)}?#{query_string}'" 
+    render js: goto_new_timelog
   end
   
   def create

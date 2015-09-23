@@ -3,12 +3,22 @@
 		<div class="user-blurb">
 			<div class="user-gravatar">
 				<p><%= gravatar_for(user, size=120) %></p>
+				<% if current_user?(user) %>
+					<p><%= link_to 'Edit image', 'http://en.gravatar.com/', target: '_blank' %></p>
+				<% end %>
 			</div>
 			<div class="against-image">
 				<p><b><%= full_name user %></b></p>
 				<p><%= user.position %><% if user.admin? %> (&#x2606; Admin) <% end %></p> 
 				<p><%= user.organization.name unless index %></p>
-				<p><%= supervision_status(user) %></p>
+				<% if supervision_status(user) == "Supervisor" %>
+					<p class="text-info">
+				<% elsif supervision_status(user) == "Supervisee" %>
+					<p class="text-success">
+				<% else %>
+					<p>
+				<% end %>
+				<b><%= supervision_status(user) %></b></p>
 			</div>
 			<div class="view-records-button">
 			  <% if current_user.supervises?(user) || current_user?(user) || current_user.admin? %>

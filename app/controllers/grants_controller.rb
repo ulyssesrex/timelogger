@@ -21,7 +21,7 @@ class GrantsController < ApplicationController
   
   def index
     @grants = Grant.all
-    @organization = @grants.take.organization
+    @organization = Organization.take
   end
   
   def edit
