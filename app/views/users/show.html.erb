@@ -2,20 +2,12 @@
 
 <h2>Home</h2>
 
-<!-- User blurb -->
-<%= 
-	render partial: "shared/user_blurb", 
-	locals: { user: @user, index: false } 
-%>
+<fieldset>
 
-<!-- Timelogs table -->
-<%= 
-	render partial: "timelogs_table", 
-	locals: { 
-		grantholdings: @grantholdings, 
-		user: @user, 
-		start_date_table: @start_date_table, 
-		end_date_table: @end_date_table, 
-		days: @days 
-	} 
-%>
+	<!-- User blurb -->
+	<%= 
+		render partial: "shared/user_blurb", 
+		locals: { user: @user, index: false } 
+	%>
+
+</fieldset>

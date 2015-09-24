@@ -88,12 +88,14 @@ module ApplicationHelper
 
   # Returns float value of duration in hours.
   def convert_to_duration(hours_param)
-    times_array = hours_param.split(":")
-    hrs = times_array[0].to_f
-    min = times_array[1].to_f
-    sec = times_array[2].to_f
-    min = min / 60
-    sec = sec / (60 * 60)
-    hrs += (min + sec)
+    unless hours_param.nil?
+      times_array = hours_param.split(":")
+      hrs = times_array[0].to_f
+      min = times_array[1].to_f
+      sec = times_array[2].to_f
+      min = min / 60
+      sec = sec / (60 * 60)
+      hrs += (min + sec)
+    end
   end
 end
