@@ -1,35 +1,26 @@
-<% provide(:title, "Timelogs") %>
+<% provide(:title, "View Timelogs") %>
 
-<p id="notice"><%= notice %></p>
-
-<h1>Timelogs</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Comments</th>
-      <th>Start time</th>
-      <th>End time</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @timelogs.each do |timelog| %>
-      <tr>
-        <td><%= full_name timelog.user %></td>
-        <td><%= timelog.comments %></td>
-        <td><%= timelog.start_time %></td>
-        <td><%= timelog.end_time %></td>
-        <td><%= link_to 'Show', user_timelog_path(@user, timelog) %></td>
-        <td><%= link_to 'Edit', edit_user_timelog_path(timelog.user, timelog) %></td>
-        <td><%= link_to 'Destroy', user_timelog_path(@user, timelog), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<h2>
+  <% if current_user?(@user) %>
+    <%= "My Timelogs" %>
+  <% else %>
+    <%= "#{@user.first_name}'s Timelogs" %>
+  <% end %>
+</h2>
 
 <br>
 
-<%= link_to 'New Timelog', new_user_timelog_path(current_user) %>
+<%= 
+  render partial: "tt_date_selectors", locals: { user: @user } 
+%>
+
+<%= 
+  render partial: "timelogs_table", 
+  locals: { 
+    grantholdings: @grantholdings, 
+    user: @user, 
+    start_date_table: @start_date_table, 
+    end_date_table: @end_date_table, 
+    days: @days 
+  } 
+%>

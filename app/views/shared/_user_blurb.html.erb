@@ -21,9 +21,27 @@
 				<b><%= supervision_status(user) %></b></p>
 			</div>
 			<div class="view-records-button">
-			  <% if current_user.supervises?(user) || current_user?(user) || current_user.admin? %>
-    			<%= link_to "View Timelogs", user_timelogs_path(user), class: 'btn btn-primary' %>
-    		<% end %>
+  			<% if user.has_supervisees? && (current_user?(user) || current_user.admin?) %>
+					<div class="btn-group">
+					  <a href="#" class="btn btn-primary">View Timelogs</a>
+					  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+					  <ul class="dropdown-menu">
+					  	<li><%= link_to "Me", user_timelogs_path(user_id: user.id) %></li>
+					  	<li class="divider"></li>
+					  	<li class="dropdown-header">Supervisees</li>
+					  	<% for supervisee in current_user.supervisees %> 
+					    	<li>
+					    		<%= 
+					    			link_to "#{full_name supervisee}", 
+					    			user_timelogs_path(user_id: supervisee.id) 
+					    		%>
+					    	</li>
+					    <% end %>
+					  </ul>
+					</div>
+				<% elsif current_user.supervises?(user) || current_user?(user) || current_user.admin? %>
+					<%= link_to "View Timelogs", user_timelogs_path(user_id: user.id), class: "btn btn-primary" %>
+				<% end %>
     	</div>
 		</div>
 	</div>

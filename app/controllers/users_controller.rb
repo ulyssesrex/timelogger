@@ -44,22 +44,16 @@ class UsersController < ApplicationController
   
   def show
     redirect_to users_path unless @user.activated?
-    @grantholdings = @user.grantholdings
-    @start_date_table = (params[:start_date_table] || 
-                            User.date_of_last('Monday', weeks=2)).to_time
-    @end_date_table   = (params[:end_date_table] ||
-                            Time.zone.now).to_time
-    @days = User.days(@start_date_table, @end_date_table)
   end
   
-  def grants_fulfillments_table
-    @user = User.find(session[:user_id])
-    @grantholdings = @user.grantholdings
-    @since_date = User.convert_to_datetime(params[:since_date], time=false)
-    respond_to do |format| 
-      format.js
-    end
-  end
+  # def grants_fulfillments_table
+  #   @user = User.find(session[:user_id])
+  #   @grantholdings = @user.grantholdings
+  #   @since_date = User.convert_to_datetime(params[:since_date], time=false)
+  #   respond_to do |format| 
+  #     format.js
+  #   end
+  # end
     
   def edit
   end
@@ -67,7 +61,6 @@ class UsersController < ApplicationController
   def update
     if params[:commit] == "Cancel"
       redirect_to user_path(current_user) and return
-
     else
       if @user.update(user_params)
         flash[:success] = "Profile updated."
@@ -143,19 +136,20 @@ class UsersController < ApplicationController
     def user_params
       params
         .require(:user)
-        .permit(:first_name, 
-                :last_name,
-                :position,
-                :email, 
-                :password, 
-                :password_confirmation,
-                :organization_id,
-                :organization_password,
-                grantholdings_attributes: [
-                  :id, 
-                  :_destroy, 
-                  :required_hours
-                ]
+        .permit(
+          :first_name, 
+          :last_name,
+          :position,
+          :email, 
+          :password, 
+          :password_confirmation,
+          :organization_id,
+          :organization_password,
+          grantholdings_attributes: [
+            :id, 
+            :_destroy, 
+            :required_hours
+          ]
          )
     end
     
