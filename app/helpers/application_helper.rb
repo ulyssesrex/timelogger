@@ -28,21 +28,20 @@ module ApplicationHelper
     army_time ? time.strftime('%T') : time.strftime('%r')
   end
 
-  def format_duration(float_hours)
-    duration = (float_hours * 3600).round
-    h = (duration / 3600).floor
-    duration -= h * 3600
-    m = (duration / 60).floor
-    duration -= m * 60
-    s = duration
-    if duration.zero?
+  def format_duration(float_hours, neg=false)
+    dur = (float_hours * 3600).round
+    h = (dur / 3600).floor
+    dur -= h * 3600
+    m = (dur / 60).floor
+    dur -= m * 60
+    s = dur
+    if h.zero? && m.zero? && s.zero?
       display = "0 min"
     elsif h.zero? && m.zero?
       display = "< 1 min"
     else
       display = "#{h} hrs, #{m} min"
     end
-    display
   end
 
   def hours_to_seconds(float_hours)

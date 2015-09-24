@@ -230,10 +230,10 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Returns Datetime object of last 'day' (Monday, Sunday, etc.)
+  # Returns Datetime object of last 'day' ('Monday', 'Sunday', etc.)
   def User.date_of_last(day, weeks=1)
     date  = Date.parse(day)
-    delta = date < Date.today ? 0 : (7 * weeks)
+    delta = date < Date.today ? (7 * (weeks - 1)) : (7 * weeks)
     date - delta
   end
 
@@ -254,11 +254,13 @@ class User < ActiveRecord::Base
 
   # Array of all days within start and end times.
   def User.days(start_time, end_time)
-    start_d    = start_time.to_date
-    end_d      = end_time.to_date
-    date_range = start_d..end_d
+    start_date = start_time.to_date
+    end_date    = end_time.to_date
+    date_range = start_date..end_date
     days = []
-    date_range.each { |day| days << day }
+    date_range.each do |day| 
+      days << day
+    end
     days
   end
 

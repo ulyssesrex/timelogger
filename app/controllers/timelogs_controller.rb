@@ -5,11 +5,11 @@ class TimelogsController < ApplicationController
   before_action :find_timelog_by_id, 
     only: [:show, :edit, :update, :destroy]   
   before_action :find_timelogs_owner, 
-    only: [:show, :index, :other_user_index, :edit, :update, :destroy]  
+    only: [:show, :index, :edit, :update, :destroy]  
   before_action :current_user_or_admin,
     only: [:edit, :update, :destroy]
   before_action :user_supervisor_or_admin,
-    only: [:show, :index, :other_user_index]
+    only: [:show, :index]
 
   def new
     set_up_new_timelog_variables
@@ -63,18 +63,19 @@ class TimelogsController < ApplicationController
   end
 
   def index
-    @start_date_table = User.date_of_last('Monday', weeks=2).to_time
-    @end_date_table   = Time.zone.now.to_time
+    if params[:start_date_table]
+      @start_date_table = params[:start_date_table].to_time
+    else
+      @start_date_table = User.date_of_last('Monday', weeks=2).to_time
+    end
+    if params[:end_date_table]
+      @end_date_table = params[:end_date_table].to_time
+    else
+      @end_date_table = Time.zone.now.to_time
+    end
     set_up_index_variables
   end
 
-  def other_user_index
-    @start_date_table = params[:start_date_table].to_time
-    @end_date_table   = params[:end_date_table].to_time
-    set_up_index_variables
-  end
-
-  
   def edit
   end
   
