@@ -175,8 +175,7 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////
 // Listeners
 
-	// // Set user id hidden field value to null on page load.
-	// $('#user-id-catch').val(null);
+
 
 	// Run current time clock on page load.
 	runClock();
@@ -210,21 +209,6 @@ $(document).ready(function() {
 	// 	}
 	// });
 
-	// $(document).on("click", "#date-input-submit", function(e) {
-	// 	e.preventDefault;
-	// 	var select_val = $('#date-input-entry').val();
-	// 	$.get("http://localhost:3000/get_current_user_id", function() {
-	// 		$.ajax({
-	// 			type: "POST",
-	// 			url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/grants_fulfillments_table",
-	// 			data: { since_date: select_val }
-	// 		});
-	// 	});
-	// 	if($('#user-id-catch').val() !== null) {
-	// 		$('#user-id-catch').val(null);
-	// 	}		
-	// });
-
 	// Finds current url.
 	var currentUrl = window.location.href;
 
@@ -235,6 +219,26 @@ $(document).ready(function() {
 	if(userIdRegex.test(currentUrl)) {
 		var userId = currentUrl.match(userIdRegex)[1];
 	}
+
+	// Listens for timelogs page filter submit button,
+	// POSTs filter form data to Timelogs#filter_index.
+	$(document).on('click', '#timelogs-filter-submit', function(e) {
+		e.preventDefault();
+		var fromDate = $('#date-selector-from').val();
+		var untilDate = $('#date-selector-until').val();
+		var timelogOrder = $('input[name="timelogOrder"]:checked').val();
+		var order = $('input[name=timelogOrder]:checked').val();
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:3000/users/" + userId + "/timelogs/filter_index",
+			data: {
+				user_id: userId,
+				start_date_table: fromDate,
+				end_date_table: untilDate,
+				order: order
+			}
+		});
+	});
 
 	$(document).on('change', '#grant-selector', function(e) {
 		e.preventDefault();		

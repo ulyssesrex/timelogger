@@ -4,9 +4,9 @@ Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 Rails.application.routes.draw do
 
   resources :users do
-    post 'grants_fulfillments_table', 
-      to: 'users#grants_fulfillments_table', 
-      on: :member
+    # post 'grants_fulfillments_table', 
+    #   to: 'users#grants_fulfillments_table', 
+    #   on: :member
     post 'add_grantholding_field',
       to: 'users#add_grantholding_field',
       on: :member
@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :timelogs do
       #post 'timer_start', to: 'timelogs#new', on: :member
       post 'end_from_button', to: 'timelogs#end_from_button', on: :collection
+      post 'filter_index', to: 'timelogs#filter_index', on: :collection
     end
   end
   
