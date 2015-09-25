@@ -15,8 +15,8 @@
     <%= f.text_area :comments %>
   </div>  
   <div class="actions">
-    <%= f.submit "Cancel" %>
-		<%= f.submit "Submit" %>
+    <%= link_to "Cancel", user_path(@user), class: "btn btn-default" %>
+		<%= f.submit "Submit", class: "btn btn-primary" %>
   </div>
 	
 <% end %>

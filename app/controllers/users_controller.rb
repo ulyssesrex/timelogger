@@ -20,9 +20,9 @@ class UsersController < ApplicationController
   end
   
   def create
-    if params[:commit] == "Cancel"
-      redirect_to root_url and return
-    else 
+    # if params[:commit] == "Cancel"
+    #   redirect_to root_url and return
+    # else 
       @user = User.new(user_params)
       organization = Organization.find_by(id: params[:user][:organization_id])
       if organization && 
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
       else
         render 'new'
       end
-    end
+    # end
   end
   
   def show
@@ -59,16 +59,16 @@ class UsersController < ApplicationController
   end
   
   def update
-    if params[:commit] == "Cancel"
-      redirect_to user_path(current_user) and return
-    else
+    # if params[:commit] == "Cancel"
+    #   redirect_to user_path(current_user) and return
+    # else
       if @user.update(user_params)
         flash[:success] = "Profile updated."
         redirect_to user_path(current_user) and return
       else
         render 'edit' and return
       end
-    end
+    # end
   end
   
   def index

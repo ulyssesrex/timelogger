@@ -13,7 +13,7 @@
 		  <%= render partial: 'keyword_fields', locals: { f: f } %>
 
 		  <div class="actions">
-				<%= f.submit "Cancel", class: "btn btn-primary my-btn" %>
+				<%= link_to "Cancel", organization_path(@organization), class: "btn btn-primary my-btn" %>
 		    <%= f.submit "Submit", class: "btn btn-primary my-btn" %>
 		  </div>
 

@@ -11,9 +11,9 @@ class OrganizationsController < ApplicationController
   end
   
   def create
-    if params[:commit] == "Cancel"
-      redirect_to root_url and return
-    else
+    # if params[:commit] == "Cancel"
+    #   redirect_to root_url and return
+    # else
       @organization = Organization.new(organization_params)
       if @organization.save
         @admin = @organization.users.first
@@ -28,7 +28,7 @@ class OrganizationsController < ApplicationController
         @user = @organization.users.build
         render 'new'
       end
-    end
+    # end
   end
   
   def show
@@ -38,18 +38,18 @@ class OrganizationsController < ApplicationController
   end
   
   def update
-    unless params[:commit] == "Cancel"
+    # unless params[:commit] == "Cancel"
       if @organization.update(organization_params)
         flash[:success] = "Your organization was successfully updated."
         redirect_to organization_path(@organization) and return
       else
         render 'edit'
       end
-    else
-      redirect_to organization_path(@organization)
-    end
+    # else
+    #   redirect_to organization_path(@organization)
+    # end
   end
-  
+
   def destroy
     @organization.destroy
     flash[:success] = "#{@organization.name} successfully deleted."

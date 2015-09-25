@@ -34,7 +34,7 @@
 	    <div class="col-lg-10 col-lg-offset-2">
 	    	<% msg =  "Are you sure? Changes will be made " %>
 		  	<% msg += "for all users across organization." %>
-	      <%= f.submit "Cancel", class: "btn btn-default" %>
+	      <%= link_to "Cancel", organization_path(@organization), class: "btn btn-default" %>
 	      <%= f.submit "Submit changes", class: "btn btn-primary", prompt: msg %>
 	    </div>
 	  </div>
@@ -46,5 +46,5 @@
 <% if current_user.admin? %>
 	<%= link_to "Reset #{@organization.name}'s keyword", reset_keyword_form_path(@organization), class: "btn btn-warning" %>
 	<br>
-	<%= link_to "Delete organization", user_path(current_user), class: "btn btn-danger", prompt: "Are you absolutely sure? This will permanently delete ALL user and organization info from the Timelogger system. Make sure you have copied all necessary records before completing this step." %>
+	<%= link_to "Delete organization", user_path(current_user), class: "btn btn-danger", prompt: "Are you absolutely sure? This will permanently delete ALL employees' info from the Timelogger system. Make sure you have copied all necessary records before completing this step." %>
 <% end %>

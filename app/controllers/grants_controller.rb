@@ -28,16 +28,16 @@ class GrantsController < ApplicationController
   end
   
   def update
-    unless params[:commit] == "Cancel"
+    # unless params[:commit] == "Cancel"
       if @grant.update(grant_params)
         flash[:success] = "Grant updated."
         redirect_to grants_path and return
       else
         render 'edit'
       end
-    else
-      redirect_to grants_path and return
-    end
+    # else
+    #   redirect_to grants_path and return
+    # end
   end
   
   def destroy

@@ -10,7 +10,7 @@ class GrantholdingsController < ApplicationController
   end
   
   def create
-    unless params[:commit] == "Cancel"
+    # unless params[:commit] == "Cancel"
       @grantholding = Grantholding.new(grantholding_params)
       @grantholding.user_id = current_user.id
       if @grantholding.save
@@ -22,9 +22,9 @@ class GrantholdingsController < ApplicationController
         @grants = Grant.all
         render 'new'
       end
-    else
-      redirect_to user_grantholdings_path(@user)
-    end
+    # else
+    #   redirect_to user_grantholdings_path(@user)
+    # end
   end
   
   def index
@@ -41,7 +41,7 @@ class GrantholdingsController < ApplicationController
   
   def update
     @grantholding = Grantholding.find(params[:id])
-    unless params[:commit] == "Cancel"
+    # unless params[:commit] == "Cancel"
       if @grantholding.update(grantholding_params)
         msg = "Your info for #{@grantholding.grant.name} was updated."
         flash[:success] = msg
@@ -49,9 +49,9 @@ class GrantholdingsController < ApplicationController
       else
         render 'edit' and return
       end
-    else
-      redirect_to user_grantholdings_path(@user) and return      
-    end
+    # else
+    #   redirect_to user_grantholdings_path(@user) and return      
+    # end
   end
   
   def destroy

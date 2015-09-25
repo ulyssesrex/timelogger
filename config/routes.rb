@@ -1,30 +1,23 @@
 Rails.application.routes.default_url_options[:host] = 'localhost:3000'
-# TODO: different host.
-
 Rails.application.routes.draw do
 
   resources :users do
-    # post 'grants_fulfillments_table', 
-    #   to: 'users#grants_fulfillments_table', 
-    #   on: :member
     post 'add_grantholding_field',
       to: 'users#add_grantholding_field',
       on: :member
-    resources :supervisions,  only: [:create, :destroy]
-    get 'supervisees', to: 'supervisions#supervisees'    
+    get 'supervisees', to: 'supervisions#supervisees' 
+    resources :supervisions, only: [:create, :destroy]   
     resources :grantholdings
     resources :timelogs do
-      #post 'timer_start', to: 'timelogs#new', on: :member
       post 'end_from_button', to: 'timelogs#end_from_button', on: :collection
       post 'filter_index', to: 'timelogs#filter_index', on: :collection
+      post 'day_index', to: 'timelogs#day_index', on: :collection
     end
   end
   
   resources :sessions,            only: [:new, :create, :destroy]
   resources :account_activations, only: [:edit]
-  resources :keyword_resets,      only: [:new, :create, :edit, :update]
   resources :password_resets,     only: [:new, :create, :edit, :update]
-  resources :keyword_resets,      only: [:new, :create, :edit, :update]
   resources :organizations,       only: [:show]
 
   scope "/admin" do
@@ -33,12 +26,7 @@ Rails.application.routes.draw do
     put    'make_admin',  to: 'users#make_admin'
     get    'delete_user', to: 'users#delete_other_user_index'
     delete 'delete_user', to: 'users#delete_other_user'
-    get    'reset_keyword/:id', 
-      to:  'organizations#reset_keyword_form', 
-      as:  'reset_keyword_form'
-    patch  'reset_keyword/:id',
-      to:  'organizations#reset_keyword',
-      as:  'reset_keyword'
+    resources :keyword_resets, only: [:new, :create, :edit, :update]
     resources :grants, except: [:show]
     resources :organizations, except: [:show, :index]
   end
@@ -51,6 +39,5 @@ Rails.application.routes.draw do
   get    'help',   to: 'static_pages#help'
   get    'signup', to: 'users#new'
   post   'signup', to: 'users#create'
-
   root   'static_pages#home'
 end

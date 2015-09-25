@@ -33,7 +33,7 @@
 
 		<div class="form-group">
 		  <div class="col-lg-10 col-lg-offset-2">
-		    <%= submit_tag "Cancel", class: "btn btn-default" %>
+		    <%= link_to "Cancel", user_path(current_user), class: "btn btn-default" %>
 		    <%= submit_tag "Delete users", class: "btn btn-primary", prompt: "Are you sure you want to delete these users? Users' data will be permanently deleted." %>
 		  </div>
 		</div>
@@ -44,6 +44,6 @@
 	<br>
 	<p>(No other users yet)</p>
 	<br>
-	<p><%= link_to 'Back to home', user_path(current_user) %></p>
+	<p><%= link_to 'Back to home', user_path(current_user), class: "btn btn-default" %></p>
 
 <% end %>
