@@ -1,0 +1,43 @@
+<fieldset>
+  <legend><%= "Timelogs for #{date}" %></legend>
+</fieldset>
+
+<% for timelog in timelogs_on_day %>
+
+	<blockquote>
+		<p>
+			<b>User: </b><%= full_name timelog.user %>
+		</p>
+		<p>
+			<b>Start: </b><%= time_display timelog.start_time %>
+		</p>
+		<p>
+			<b>End: </b><%= time_display timelog.end_time %>
+		</p>
+		<% unless timelog.comments.blank? %>
+			<p>
+				<b>General comments: </b><%= timelog.comments %>
+			</p>
+		<% end %>
+		<p>
+			<b>Time to grants: </b>
+			<ul>
+				<% for t in timelog.time_allocations %>
+					<li>
+						<%= t.grantholding.grant.name %>: 
+						<%= User.duration_to_hours_display(t.hours) %>
+					</li>
+					<li>Work description: <%= t.comments %></li>
+				<% end %>
+			</ul>
+		</p>
+	</blockquote>
+
+<% end %>
+
+<% if timelogs_on_day.empty? %>
+	(none)
+	<br>	
+<% end %>
+
+<%= link_to "Back to #{user.first_name}'s Timelogs", user_timelogs_path(user_id: user.id) %>

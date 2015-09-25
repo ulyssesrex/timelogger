@@ -27,8 +27,8 @@ class TimelogsController < ApplicationController
   end
   
   def create
-    # If user cancels form, redirect to home.
-    unless params[:commit] == "Cancel"      
+    # # If user cancels form, redirect to home.
+    # unless params[:commit] == "Cancel"      
       # Convert Timelog start, end params to DateTime
       st = convert_to_datetime(params[:timelog][:start_time])
       et = convert_to_datetime(params[:timelog][:end_time])
@@ -54,9 +54,9 @@ class TimelogsController < ApplicationController
       else
         render 'new' and return
       end
-    else
-      redirect_to(user_path(current_user))
-    end
+    # else
+    #   redirect_to(user_path(current_user))
+    # end
   end
   
   def show
@@ -84,6 +84,17 @@ class TimelogsController < ApplicationController
     @order = params[:order]
     set_up_index_variables
     respond_to { |format| format.js }
+  end
+
+  def day_index
+    @user  = User.find(params[:user_id])
+    @date  = Date.parse(params[:date])
+    start  = @date.beginning_of_day
+    endd   = @date.end_of_day
+    @timelogs_on_day = @user.timelogs_in_range(start, endd)
+    respond_to do |format|
+      format.js
+    end
   end
 
   def edit

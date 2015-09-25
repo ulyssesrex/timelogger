@@ -8,7 +8,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    unless params[:commit] == "Cancel"
+    # unless params[:commit] == "Cancel"
       @user = User.find_by(email: params[:password_reset][:email].downcase)
       if @user
         @user.create_reset_digest
@@ -21,9 +21,9 @@ class PasswordResetsController < ApplicationController
         flash.now[:danger] = "Email address not found."
         render 'new'
       end
-    else
-      redirect_to user_path(current_user)
-    end
+    # else
+    #   redirect_to user_path(current_user)
+    # end
   end
 
   def edit

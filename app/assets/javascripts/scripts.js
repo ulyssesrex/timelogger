@@ -1,3 +1,5 @@
+var hostUrl = "http://localhost:3000/";
+
 $(document).ready(function() {
 
 //////////////////////////////////////////////////////////////////////////////
@@ -230,7 +232,7 @@ $(document).ready(function() {
 		var order = $('input[name=timelogOrder]:checked').val();
 		$.ajax({
 			type: "POST",
-			url: "http://localhost:3000/users/" + userId + "/timelogs/filter_index",
+			url: hostUrl + "users/" + userId + "/timelogs/filter_index",
 			data: {
 				user_id: userId,
 				start_date_table: fromDate,
@@ -240,12 +242,27 @@ $(document).ready(function() {
 		});
 	});
 
+	// On clicking a specific day within timelog list, POSTs day
+	// data to #day_index.
+	$(document).on('click', '.timelogs-day-link', function(e) {
+		e.preventDefault();
+		var date = $(this).text();
+		$.ajax({
+			type: "POST", 
+			url: hostUrl + "users/" + userId + "/timelogs/day_index",
+			data: {
+				user_id: userId,
+				date: date,
+			}
+		});
+	});
+
 	$(document).on('change', '#grant-selector', function(e) {
 		e.preventDefault();		
 		var selectedGrantId = $("#grant-selector option:selected").val();
 		$.ajax({
 			type: "POST",
-			url: "http://localhost:3000/users/" + userId + "/add_grantholding_field",
+			url: hostUrl + "users/" + userId + "/add_grantholding_field",
 			data: {
 				user_id: userId,
 				grant_id: selectedGrantId
@@ -284,7 +301,7 @@ $(document).ready(function() {
 		}
 		$.ajax({
 			type: "POST",
-			url: "http://localhost:3000/users/" + userId + "/timelogs/end_from_button",
+			url: hostUrl + "users/" + userId + "/timelogs/end_from_button",
 			data: {
 				start_time: $start_time,
 				end_time: $end_time

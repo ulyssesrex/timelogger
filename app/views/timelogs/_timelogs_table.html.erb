@@ -87,7 +87,9 @@
         <tr>
 
           <!-- Date column -->
-          <td><%= day_display(day) %></td>
+          <td>
+            <%= link_to "#{day_display(day)}", '#', class: 'timelogs-day-link' %>
+          </td>
 
           <!-- User grant hours worked that day -->
           <% for grantholding in grantholdings %>

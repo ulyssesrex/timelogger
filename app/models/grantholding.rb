@@ -15,8 +15,8 @@ class Grantholding < ActiveRecord::Base
   # Returns '0:00' format of total hours user has worked on grant 
   # from since_date to end_date (type=Time).
   def hours_worked_from(since_time, end_time)    
-    since_time = since_time.to_time
-    end_time = end_time.to_time
+    since_time   = since_time.to_time
+    end_time     = end_time.to_time
     hours_worked = 0
     user.timelogs_in_range(since_time, end_time).each do |timelog|
       timelog.time_allocations.each do |ta|
