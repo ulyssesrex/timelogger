@@ -191,17 +191,23 @@ class User < ActiveRecord::Base
     "#{User.pad(h,3)}:#{User.pad(m,2)}:#{User.pad(s,2)}"
   end
 
-  def User.convert_to_datetime(user_string, time=true)    
+  def User.convert_to_datetime(user_string, contains_time=true)    
+    # Match all numbers separated by '-'s or '/'s.
     dates = User.date_array(user_string)
-    # Matches a four digit number in user string,
-    # assigns it to year.
-    fdigit_year = dates.find { |n| /\d{4}/ =~ n }
-    year = fdigit_year || ("20" + dates.last.to_s).to_i
+    # Matches a four digit number in user string.
+    four_digit_year = dates.find { |n| /\d{4}/ =~ n }
+    # If no four digit numbers, prefix '20' to final match.
+    year = four_digit_year || ("20" + dates.last.to_s).to_i
     hrs = min = sec = 0
-    if time
+    # If user string contains time,
+    # match all numbers separated by ':'
+    # and assign them to hrs, min, sec.
+    if contains_time
       times = User.time_array(user_string)
       hrs, min, sec = times[0], times[1], times[2]
-      # Convert hours to military time if needed.
+      # Find if user_string is 'AM' or 'PM' (no result returns nil).
+      # If user_string uses 'PM' and non-military time, convert to 
+      # parseable time by adding hours.
       m = User.meridian(user_string)
       if hrs == 12 && m == "AM"
         hrs = 0 
@@ -209,12 +215,13 @@ class User < ActiveRecord::Base
         hrs += 12
       end
     end
-    # Determines order of year, month, and day from user string.
-    if fdigit_year != dates[0]
+    # Determines where in user string the month and day are.
+    if four_digit_year != dates[0]
       month, day = dates[0], dates[1]
     else
       month, day = dates[1], dates[2]
     end
+    # Returns time object.
     Time.new(year, month, day, hrs, min, sec)
   end
 
@@ -237,29 +244,32 @@ class User < ActiveRecord::Base
     date - delta
   end
 
-  # Returns all numbers separated by ':'s
+  # Returns all numbers separated by ':'s. Nil returns 0.
   def User.time_array(user_string)
-    user_string.scan(/\d+(?=:)|(?<=:)\d+/).flatten.compact.map!(&:to_i)
+    user_string.scan(/\d+(?=:)|(?<=:)\d+/).flatten.compact.map(&:to_i)
   end
 
-  # Matches all numbers separated by '-'s or '/'s
+  # Matches all numbers separated by '-'s or '/'s.
   def User.date_array(user_string)
     user_string.scan(/\d+(?=-)|(?<=-)\d+|\d+(?=\/)|(?<=\/)\d+/)
   end
 
   # Matches 'AM', 'PM', or variants thereof.
   def User.meridian(user_string)
-    user_string[/a\.*m\.*|p\.*m\.*/i].tr('.', '').upcase
+    if m = user_string[/a\.*m\.*|p\.*m\.*/i]
+      m.tr('.', '').upcase
+    end
   end
 
   # Array of all days within start and end times.
-  def User.days(start_time, end_time)
+  def User.days(start_time, end_time, newfirst=true)
     start_date = start_time.to_date
-    end_date    = end_time.to_date
-    date_range = start_date..end_date
+    end_date   = end_time.to_date
     days = []
-    date_range.each do |day| 
-      days << day
+    if newfirst
+      end_date.downto(start_date) { |d| days << d }  
+    else
+      start_date.upto(end_date) { |d| days << d }
     end
     days
   end

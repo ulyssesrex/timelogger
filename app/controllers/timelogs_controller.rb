@@ -5,7 +5,7 @@ class TimelogsController < ApplicationController
   before_action :find_timelog_by_id, 
     only: [:show, :edit, :update, :destroy]   
   before_action :find_timelogs_owner, 
-    only: [:show, :index, :edit, :update, :destroy]  
+    only: [:show, :index, :filter_index, :edit, :update, :destroy]  
   before_action :current_user_or_admin,
     only: [:edit, :update, :destroy]
   before_action :user_supervisor_or_admin,
@@ -63,17 +63,27 @@ class TimelogsController < ApplicationController
   end
 
   def index
-    if params[:start_date_table]
-      @start_date_table = params[:start_date_table].to_time
+    @start_date_table = User.date_of_last('Monday', weeks=2).to_time
+    @end_date_table = Time.zone.now.to_time
+    set_up_index_variables
+  end
+
+  def filter_index
+    sd = params[:start_date_table]
+    ed = params[:end_date_table]
+    unless sd.blank?      
+      @start_date_table = User.convert_to_datetime(sd, contains_time=false)
     else
       @start_date_table = User.date_of_last('Monday', weeks=2).to_time
     end
-    if params[:end_date_table]
-      @end_date_table = params[:end_date_table].to_time
+    unless ed.blank?
+      @end_date_table = User.convert_to_datetime(ed, contains_time=false)
     else
-      @end_date_table = Time.zone.now.to_time
+      @end_date_table = Time.zone.now
     end
+    @order = params[:order]
     set_up_index_variables
+    respond_to { |format| format.js }
   end
 
   def edit
@@ -145,8 +155,12 @@ class TimelogsController < ApplicationController
 
     def set_up_index_variables
       @timelogs = Timelog.where(user: @user.id)
-      @grantholdings = @user.grantholdings    
-      @days = User.days(@start_date_table, @end_date_table)
+      @grantholdings = @user.grantholdings
+      if @order && @order == "oldfirst"
+        @days = User.days(@start_date_table, @end_date_table, newfirst=false)
+      else
+        @days = User.days(@start_date_table, @end_date_table)
+      end
     end
 
     def set_up_new_timelog_variables

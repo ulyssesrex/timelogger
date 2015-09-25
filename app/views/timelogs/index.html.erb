@@ -14,13 +14,15 @@
   render partial: "tt_date_selectors", locals: { user: @user } 
 %>
 
-<%= 
-  render partial: "timelogs_table", 
-  locals: { 
-    grantholdings: @grantholdings, 
-    user: @user, 
-    start_date_table: @start_date_table, 
-    end_date_table: @end_date_table, 
-    days: @days 
-  } 
-%>
+<div id="timelogs-table">
+  <%= 
+    render partial: "timelogs_table", 
+    locals: { 
+      grantholdings: @grantholdings, 
+      user: @user, 
+      start_date_table: @start_date_table, 
+      end_date_table: @end_date_table, 
+      days: @days 
+    } 
+  %>
+</div>

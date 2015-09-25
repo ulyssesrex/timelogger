@@ -32,18 +32,18 @@
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-xs-6">
+      <div class="form-group col-xs-6" id="order-select">
         <%= label_tag "Order", nil, class: "col-lg-2 control-label" %>
         <div class="col-lg-10">
           <div class="radio">
             <label>
-              <input name="optionsRadios" id="optionsRadiosNewOld" value="0" checked="" type="radio">
+              <input name="timelogOrder" id="newfirst" value="newfirst" checked="" type="radio">
               New -> Old
             </label>
           </div>
           <div class="radio">
             <label>
-              <input name="optionsRadios" id="optionsRadiosOldNew" value="1" type="radio">
+              <input name="timelogOrder" id="oldfirst" value="oldfirst" type="radio">
               Old -> New
             </label>
           </div>
@@ -53,7 +53,7 @@
 
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
-        <button type="submit" class="btn btn-primary">Filter</button>
+        <button type="submit" class="btn btn-primary", id="timelogs-filter-submit">Filter</button>
       </div>
     </div>
   </fieldset>
