@@ -257,16 +257,13 @@ $(document).ready(function() {
 		});
 	});
 
-	$(document).on('change', '#grant-selector', function(e) {
+	// Dynamically adds more grantholding fields to new grantholding form.
+	$(document).on('click', '#add-grant-fields-button', function(e) {
 		e.preventDefault();		
-		var selectedGrantId = $("#grant-selector option:selected").val();
 		$.ajax({
 			type: "POST",
-			url: hostUrl + "users/" + userId + "/add_grantholding_field",
-			data: {
-				user_id: userId,
-				grant_id: selectedGrantId
-			}
+			url: hostUrl + "users/" + userId + "/add_grantholding_fields",
+			data: { user_id: userId }
 		});
 	});
 

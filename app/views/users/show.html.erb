@@ -11,3 +11,25 @@
 	%>
 
 </fieldset>
+
+<fieldset>
+	<legend>My grants</legend>
+	<p><%= link_to "(+) Add grants", new_user_grantholding_path(@user) %></p>
+
+	<table class="table table-striped table-hover ">
+	  <thead>
+	    <tr>
+	      <th>Grant</th>
+	      <th>Description</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <% for grantholding in @user.grantholdings %>
+	      <tr>     
+	        <td><%= grantholding.grant.name %></td>
+	        <td><%= grantholding.grant.comments %></td>
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+</fieldset>

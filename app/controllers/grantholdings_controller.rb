@@ -5,26 +5,34 @@ class GrantholdingsController < ApplicationController
   before_action :find_user
   
   def new
-    @grantholding = Grantholding.new
     @grants = Grant.all
   end
+
+  # def add_grantholding_fields
+  #   @user = User.find(params[:user_id])
+  #   respond_to do |format|
+  #     format.js
+  #   end
+  # end
   
   def create
-    # unless params[:commit] == "Cancel"
-      @grantholding = Grantholding.new(grantholding_params)
-      @grantholding.user_id = current_user.id
-      if @grantholding.save
-        msg  = "#{@grantholding.grant.name} "
-        msg += "has been added to your grants." 
-        flash[:success] = msg
-        redirect_to user_path(current_user) and return
-      else
-        @grants = Grant.all
-        render 'new'
+    selected_grants = Grant.where("id IN (?)", params[:grant_ids])
+    if selected_grants.none?
+      flash[:danger] = "No grants selected."
+      redirect_to new_user_grantholding_path(@user) and return
+    elsif selected_grants.map { |index, grant| Grant.new(grant).save } # add index?
+      grant_names = []
+      selected_grants.each do |g|
+        grant_names << g.name
       end
-    # else
-    #   redirect_to user_grantholdings_path(@user)
-    # end
+      msg  = "#{grant_names.join('and ')} #{pluralize_was(grant_names.count)} "
+      msg += "added to your grants." 
+      flash[:success] = msg
+      redirect_to edit_user_path(@user) and return
+    else
+      @grants = Grant.all
+      render 'new'
+    end
   end
   
   def index
@@ -41,17 +49,13 @@ class GrantholdingsController < ApplicationController
   
   def update
     @grantholding = Grantholding.find(params[:id])
-    # unless params[:commit] == "Cancel"
-      if @grantholding.update(grantholding_params)
-        msg = "Your info for #{@grantholding.grant.name} was updated."
-        flash[:success] = msg
-        redirect_to user_grantholdings_path(@user) and return
-      else
-        render 'edit' and return
-      end
-    # else
-    #   redirect_to user_grantholdings_path(@user) and return      
-    # end
+    if @grantholding.update(grantholding_params)
+      msg = "Your info for #{@grantholding.grant.name} was updated."
+      flash[:success] = msg
+      redirect_to user_grantholdings_path(@user) and return
+    else
+      render 'edit' and return
+    end
   end
   
   def destroy
@@ -71,5 +75,9 @@ class GrantholdingsController < ApplicationController
 
   def find_user
     @user = User.find(params[:user_id])
+  end
+
+  def pluralize_was(count)
+    count > 1 ? 'were' : 'was'
   end
 end

@@ -16,20 +16,13 @@
   <fieldset>
   	<legend>Edit my grants</legend>
 
-		<div class="form-group">
-			<p class="col-lg-2 control-label">Add grant</p>
-			<div class="col-lg-10">
-				<%= 
-					select_tag 'grantholdings', 
-					options_from_collection_for_select(Grant.all, :id, :name),
-					prompt: "Select grant", id: 'grant-selector', class: 'form-control'
-				%>
-			</div>
-		</div>
-		<br>
+		<%= link_to "(+) Add grants", new_user_grantholding_path(@user) %>
+		<br><br>
 
 		<div id="user-grants-fields">
-			<%= render partial: 'user_grants_fields', locals: { f: f, user: @user } %>
+			<%= f.fields_for :grantholdings do |ff| %>
+				<%= render partial: 'user_grants_fields', locals: { ff: ff, user: @user } %>
+			<% end %>
 		</div>
 	
 		<div class="form-group">

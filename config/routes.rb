@@ -2,10 +2,6 @@ Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 Rails.application.routes.draw do
 
   resources :users do
-    post 'add_grantholding_field',
-      to: 'users#add_grantholding_field',
-      on: :member
-    get 'supervisees', to: 'supervisions#supervisees' 
     resources :supervisions, only: [:create, :destroy]   
     resources :grantholdings
     resources :timelogs do

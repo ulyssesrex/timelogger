@@ -1,5 +1,45 @@
-<h1>Add Grant</h1>
+<% provide(:title, 'Add grants') %>
 
-<%= render 'new_form' %>
+<h2>Add grants</h2>
 
-<%= link_to 'View my grants', user_grantholdings_path(@user) %>
+<% unless @grants.empty? %>
+
+	<%= form_tag user_grantholdings_path(@user), method: :post do %>
+
+		<table class="table table-striped table-hover ">
+		  <thead>
+		    <tr>
+		    	<th></th>
+		      <th>Name</th>
+		      <th>Comments</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <% @grants.each do |grant| %>
+		      <tr>
+		        <td><%= check_box_tag 'grant_ids[]', grant.id %></td>		      
+		        <td><%= grant.name %></td>
+		        <td><%= grant.comments %></td>
+		      </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+
+		<br><br>
+
+		<div class="form-group">
+		  <div class="col-lg-10 col-lg-offset-2">
+		    <%= link_to "Cancel", edit_user_path(@user), class: "btn btn-default" %>
+		    <%= submit_tag "Add grants", class: "btn btn-primary" %>
+		  </div>
+		</div>
+	<% end %>
+
+<% else %>
+
+	<br>
+	<p><%= "#{@user.organization} has no grants yet." %></p>
+	<br>
+	<p><%= link_to 'Back to Edit', edit_user_path(@user), class: "btn btn-default" %></p>
+
+<% end %>

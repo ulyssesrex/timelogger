@@ -1,0 +1,30 @@
+<div class="form-group">
+	<p class="col-lg-2 control-label">
+		Grants in <%= "#{@grants.take.organization.name}" %>:
+	</p>
+	<div class="col-lg-10">
+		<%= 
+			select_tag 'grantholdings', 
+			options_from_collection_for_select(@grants, :id, :name),
+			prompt: "Select grant", id: 'grant-selector', class: 'form-control'
+		%>
+	</div>
+</div>
+
+<div class="form-group">
+	<%= 
+		label_tag "Hours required", 
+		class: "col-lg-2 control-label" 
+	%>
+	<div class="col-lg-10">
+		<%= 
+			text_field_tag :required_hours, 
+			class: 'form-control', 
+			placeholder: "HH:MM"
+		%><br>
+	</div>
+</div>
+
+<br>
+
+<%= link_to "Add another grant", '#', id: 'add-grant-fields-button' %>
