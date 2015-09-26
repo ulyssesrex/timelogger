@@ -27,7 +27,7 @@
 		<div class="form-group">
 			<%= f.label "Your organization", class: "col-lg-2 control-label" %>
 			<div class="col-lg-10">
-				<%= f.collection_select(:organization_id, Organization.all, :id, :name, { prompt: true }, { class: 'form-control'} ) %>
+				<%= f.collection_select(:organization_id, @organizations, :id, :name, { prompt: true }, { class: 'form-control'} ) %>
 			</div>
 		</div>
 

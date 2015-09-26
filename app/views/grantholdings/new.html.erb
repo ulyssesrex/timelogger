@@ -4,7 +4,7 @@
 
 <% unless @grants.empty? %>
 
-	<%= form_tag user_grantholdings_path(@user), method: :post do %>
+	<%= form_tag user_grantholdings_path, method: :post do %>
 
 		<table class="table table-striped table-hover ">
 		  <thead>
@@ -24,6 +24,7 @@
 		    <% end %>
 		  </tbody>
 		</table>
+		<%= hidden_field_tag :user_id, @user.id %>
 
 		<br><br>
 
@@ -38,7 +39,7 @@
 <% else %>
 
 	<br>
-	<p><%= "#{@user.organization} has no grants yet." %></p>
+	<p><%= "No grants to select." %></p>
 	<br>
 	<p><%= link_to 'Back to Edit', edit_user_path(@user), class: "btn btn-default" %></p>
 

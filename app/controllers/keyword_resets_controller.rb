@@ -6,7 +6,6 @@ class KeywordResetsController < ApplicationController
 	before_action :check_expiration,   only:   [:edit, :update]
 
   def new
-  	# Form for admin's email address.
   end
 
   def create
@@ -15,8 +14,8 @@ class KeywordResetsController < ApplicationController
   	if @admin && @organization
   		@organization.create_reset_digest
   		@admin.send_keyword_reset_email(@organization)
-  		msg  = "Email sent with instructions on how "
-      msg += "to reset keyword for #{@organization.name}."
+  		msg  = "Email sent to #{@admin.email} with instructions on how "
+      msg += "to reset #{@organization.name}'s keyword."
       flash[:info] = msg
       redirect_to root_url and return
     else
@@ -26,7 +25,6 @@ class KeywordResetsController < ApplicationController
   end
 
   def edit
-  	# Form for new organization keyword, keyword confirmation.
   	@reset = params[:id]
   end
 
@@ -36,7 +34,7 @@ class KeywordResetsController < ApplicationController
       render 'edit' and return
     elsif @organization.update_attributes(keyword_params)
       log_in @admin
-      flash[:success] = "Keyword has been reset. Notify users accordingly."
+      flash[:success] = "Keyword has been reset for #{@organization.name}."
       redirect_to user_path(current_user) and return
     else
       render 'edit'

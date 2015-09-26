@@ -7,7 +7,7 @@
 %>
 
   <% if @timelog.errors.any? %>
-    <%= render partial: 'errors', object: @timelog %>
+    <%= render partial: 'shared/error_messages', object: @timelog %>
   <% end %>
 
   <fieldset>

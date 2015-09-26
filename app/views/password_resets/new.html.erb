@@ -1,11 +1,11 @@
-<% provide(:title, "Forgot password") %>
+<% provide(:title, "Send password reset email") %>
 
 <%= form_for :password_reset, 
 		url: password_resets_path, 
 		html: { class: 'form-horizontal' } do |f| 
 %>
 	<fieldset>
-	  <legend>Forgot password</legend>
+	  <legend>Send password reset email</legend>
 		<div class="form-group">
 			<%= f.label :email, class: "col-lg-2 control-label" %>
 			<div class="col-lg-10">
@@ -19,7 +19,7 @@
 		<div class="form-group">
 	    <div class="col-lg-10 col-lg-offset-2">
 	      <%= link_to "Cancel", root_path, class: "btn btn-default" %>
-	      <%= f.submit "Submit", class: "btn btn-primary" %>
+	      <%= f.submit "Send", class: "btn btn-primary" %>
 	    </div>
 	  </div>
 	</fieldset>

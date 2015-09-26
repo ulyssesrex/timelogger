@@ -18,16 +18,16 @@ module UsersHelper
 
   def concatenate_descriptions(grantholding, start_date, end_date, truncate=true)
     if grantholding
-      in_range = grantholding.user.timelogs_in_range(start_date, end_date)
+      logs_in_range = grantholding.user.timelogs_in_range(start_date, end_date)
       concat = concat_gen = ''      
-      in_range.each do |t|
-        t.time_allocations.each do |ta|
-          next unless ta.to_grant?(grantholding.grant)
-          concat += (ta.description + ' ')
+      logs_in_range.each do |timelog|
+        timelog.time_allocations.each do |allocation|
+          next unless allocation.to_grant?(grantholding.grant)
+          concat_allocations += (allocation.description + ' ')
         end
-        concat_gen += (t.comments + ' ')
+        concat_timelogs += (timelog.comments + ' ')
       end
-      if !concat_gen.empty?
+      if !concat_timelogs.empty?
         concat_gen = concat_gen.insert(0, "Overall: ")
       end
       concat += concat_gen
