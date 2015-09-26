@@ -1,0 +1,27 @@
+<% provide(:title, 'Admin help') %>
+
+<h2>Admin Help</h2><br>
+
+<p>
+	Please refer to the <%= link_to "user help page", help_path %> to see what you need to do for your personal profile once you're done with this admin section.
+</p>
+
+<p>
+	Before you do anything else, you'll need to <%= link_to "add all grants", grants_path %> that cover any of your organization's expenses. As the organization takes on or drops grants, you'll want to update this list as neccessary.
+</p>
+
+<p>
+	Also, make sure you distribute the keyword you created for your organization to any employees signing up for Timelogger. We strongly urge you to distribute the keyword confidentially and ask your employees to keep it confidential, as well. Upon signup, they'll be prompted for this keyword, and it will allow them to register under your organization.
+</p>
+
+<p>Now that that's out of the way, on to your special admin powers. <b>You have crazy site-wide access.</b></p>
+
+<ul>
+	<li><%= link_to "View anyone's timelogs.", users_path %></li>
+	<li><%= link_to "Delete any user.", delete_user_path %></li>
+	<li><%= link_to "Make any user an admin.", make_admin_path %></li>
+	<li><%= link_to "Remove any user's admin status.", make_admin_path %></li>
+	<li>Change your organization's <%= link_to "info", edit_organization_path(current_user.organization) %> and <%= link_to "grants", grants_path %>.</li>
+</ul>
+
+<p>Again, please refer to the <%= link_to "user help page", help_path %> for more user-specific instructions. Happy logging!</p>

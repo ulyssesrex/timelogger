@@ -6,7 +6,7 @@
 	<% end %>
 
 	<fieldset>
-    <legend><%= "#{@organization.name} info" %></legend>
+    <legend><%= "Edit #{@organization.name}'s' info" %></legend>
 
 		<div class="form-group">
 			<%= f.label :name, class: "col-lg-2 control-label" %>
@@ -43,8 +43,15 @@
 
 <br><br>
 
-<% if current_user.admin? %>
-	<%= link_to "Reset #{@organization.name}'s keyword", reset_keyword_form_path(@organization), class: "btn btn-warning" %>
-	<br>
-	<%= link_to "Delete organization", user_path(current_user), class: "btn btn-danger", prompt: "Are you absolutely sure? This will permanently delete ALL employees' info from the Timelogger system. Make sure you have copied all necessary records before completing this step." %>
-<% end %>
+<fieldset>
+	<legend>Other actions</legend>
+	<%= 
+		link_to "Reset #{@organization.name}'s keyword", new_keyword_reset_path, 
+		class: 'btn btn-default' 
+	%>
+	<%= 
+		link_to "Delete #{@organization.name}", @organization, method: :delete, 
+		class: 'btn btn-danger', 
+		data: { confirm: "Are you absolutely sure? This will permanently delete ALL employees' info from the Timelogger system. Make sure you have copied all necessary records before completing this step." }
+	%>
+</fieldset>

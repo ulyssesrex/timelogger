@@ -1,13 +1,27 @@
 <% provide(:title, "Reset organization keyword") %>
-<h1>Reset organization keyword</h1>
+<h2>Reset <%= "#{current_user.organization.name}'s" %> keyword</h2>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%= form_for(:keyword_reset, url: keyword_resets_path) do |f| %>
-      <%= f.label :email %>
-      <%= f.email_field :email, class: 'form-control' %>
+<br>
 
-      <%= f.submit "Submit", class: "btn btn-primary" %>
-    <% end %>
-  </div>
-</div>
+<%= form_for(:keyword_reset, url: keyword_resets_path) do |f| %>
+
+	<div class="form-group">
+		<%= f.label :email, class: "col-lg-2 control-label" %>
+		<div class="col-lg-10">
+			<%= 
+				f.email_field :email, 
+				class: 'form-control', placeholder: "Email"
+			%>
+		</div>
+	</div>
+
+	<br><br>
+
+	<div class="form-group">
+	  <div class="col-lg-10 col-lg-offset-2">
+	    <%= link_to "Cancel", organization_path(current_user.organization), class: "btn btn-default" %>
+	    <%= f.submit "Submit", class: "btn btn-primary" %>
+	  </div>
+	</div>
+
+<% end %>

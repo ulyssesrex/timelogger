@@ -10,14 +10,14 @@
 			</div>
 
 			<div class="against-image">
-				<p><b><%= full_name user %></b></p>
-				<p><%= user.position %><% if user.admin? %> (&#x2606; Admin) <% end %></p> 
-				<p><%= user.email %></p>
-				<p><%= user.organization.name unless index %></p>
+				<p class="user-blurb"><b><%= full_name user %></b></p>
+				<p class="user-blurb"><%= user.position %><% if user.admin? %> (&#x2606; Admin) <% end %></p> 
+				<p class="user-blurb"><%= user.email %></p>
+				<p class="user-blurb"><%= user.organization.name unless index %></p>
 				<% if supervision_status(user) == "Supervisor" %>
-					<p class="text-info">
+					<p class="user-blurb text-info">
 				<% elsif supervision_status(user) == "Supervisee" %>
-					<p class="text-success">
+					<p class="user-blurb text-success">
 				<% else %>
 					<p>
 				<% end %>
