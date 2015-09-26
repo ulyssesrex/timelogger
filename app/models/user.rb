@@ -80,7 +80,11 @@ class User < ActiveRecord::Base
   end
   
   def grants
-    grantholdings.grants
+    g = []
+    grantholdings.each do |gh|
+      g << gh.grant
+    end
+    g
   end
 
   def supervises?(user)

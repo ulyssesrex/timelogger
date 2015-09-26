@@ -1,5 +1,5 @@
 class AccountActivationsController < ApplicationController
-# possible bug here with acts_as_tenant -- 
+# TODO: possible bug here with acts_as_tenant -- 
 # can i set a tenant scope on this action, 
 # even though there might be no current user?
 

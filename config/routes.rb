@@ -2,12 +2,12 @@ Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 Rails.application.routes.draw do
 
   resources :users do
-    resources :supervisions, only: [:create, :destroy]   
-    resources :grantholdings
-    resources :timelogs do
+    resources :supervisions,  only:   [:create, :destroy]   
+    resources :grantholdings, only:   [:new, :create, :destroy]
+    resources :timelogs,      except: [:show] do
       post 'end_from_button', to: 'timelogs#end_from_button', on: :collection
-      post 'filter_index', to: 'timelogs#filter_index', on: :collection
-      post 'day_index', to: 'timelogs#day_index', on: :collection
+      post 'filter_index',    to: 'timelogs#filter_index',    on: :collection
+      post 'day_index',       to: 'timelogs#day_index',       on: :collection
     end
   end
   
@@ -22,9 +22,9 @@ Rails.application.routes.draw do
     put    'make_admin',  to: 'users#make_admin'
     get    'delete_user', to: 'users#delete_other_user_index'
     delete 'delete_user', to: 'users#delete_other_user'
-    resources :keyword_resets, only: [:new, :create, :edit, :update]
-    resources :grants, except: [:show]
-    resources :organizations, except: [:show, :index]
+    resources :keyword_resets, only:   [:new, :create, :edit, :update]
+    resources :grants,         except: [:show]
+    resources :organizations,  except: [:show, :index]
   end
   
   get    'login',  to: 'sessions#new'

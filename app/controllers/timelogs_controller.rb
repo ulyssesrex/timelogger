@@ -27,40 +27,36 @@ class TimelogsController < ApplicationController
   end
   
   def create
-    # # If user cancels form, redirect to home.
-    # unless params[:commit] == "Cancel"      
-      # Convert Timelog start, end params to DateTime
-      st = convert_to_datetime(params[:timelog][:start_time])
-      et = convert_to_datetime(params[:timelog][:end_time])
-      params[:timelog][:start_time] = st
-      params[:timelog][:end_time]   = et
-      # Convert each grant time allocation param to Float hours
-      ta_attrs = params[:timelog][:time_allocations_attributes]
-      ta_attrs.each do |k, v|
-        d = convert_to_duration(v['hours'])
-        params[:timelog][:time_allocations_attributes][k] = d
-      end
-      # Create new Timelog instance
-      @timelog = Timelog.new(timelog_params)
-      @timelog.user_id = current_user.id
-      # Redirect if creator doesn't have Timelog's user_id or isn't an admin.
-      unless current_user?(@timelog.user) || current_user.admin?
-        redirect_to user_path(current_user) and return
-      end
-      # If Timelog is successfully saved, 
-      if @timelog.save
-        flash[:success] = "Timelog was saved."
-        redirect_to user_path(current_user) and return
-      else
-        render 'new' and return
-      end
-    # else
-    #   redirect_to(user_path(current_user))
-    # end
+    # Convert Timelog start, end params to DateTime
+    st = convert_to_datetime(params[:timelog][:start_time])
+    et = convert_to_datetime(params[:timelog][:end_time])
+    params[:timelog][:start_time] = st
+    params[:timelog][:end_time]   = et
+    # Convert each grant time allocation param to Float hours
+    ta_attrs = params[:timelog][:time_allocations_attributes]
+    ta_attrs.each do |k, v|
+      d = convert_to_duration(v['hours'])
+      params[:timelog][:time_allocations_attributes][k] = d
+    end
+    # Create new Timelog instance
+    @timelog = Timelog.new(timelog_params)
+    @timelog.user_id = current_user.id
+    # Redirect if creator's id isn't Timelog's user_id 
+    # and creator also isn't an admin.
+    unless current_user?(@timelog.user) || current_user.admin?
+      redirect_to user_path(current_user) and return
+    end
+    # If Timelog is successfully saved, 
+    if @timelog.save
+      flash[:success] = "Timelog was saved."
+      redirect_to user_path(current_user) and return
+    else
+      render 'new' and return
+    end
   end
   
-  def show
-  end
+  # def show
+  # end
 
   def index
     @start_date_table = User.date_of_last('Monday', weeks=2).to_time
