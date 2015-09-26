@@ -5,17 +5,10 @@ class SupervisionsController < ApplicationController
   
   def create
     @user = User.find(params[:user_id])
-    @supervisor = User.find(params[:supervisor]) 
-    @user.add_supervisor(@supervisor)    
+    @supervisor = User.find(params[:supervisor_id]) 
+    @user.add_supervisor(@supervisor)
     flash[:success] = message_on_create @supervisor 
     redirect_to users_path
-  end
-  
-  def supervisees
-    @index = true
-    @user  = User.find(params[:user_id])
-    @supervisees  = @user.supervisees
-    @supervisions = Supervision.where(supervisor: @user)
   end
   
   def destroy
@@ -45,11 +38,11 @@ class SupervisionsController < ApplicationController
   private
 
   def message_on_create(user)
-    "#{user.first_name} is now your supervisor."  
+    "#{full_name(user, last_first=false)} is now your supervisor."  
   end
   
   def message_on_delete(relationship_to_user)
-    msg  = "#{full_name(@user, last_first=false)}"
+    msg  = "#{full_name(@other_user, last_first=false)}"
     msg += " is no longer your #{relationship_to_user}."
   end
 end

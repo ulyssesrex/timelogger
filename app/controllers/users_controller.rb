@@ -57,6 +57,15 @@ class UsersController < ApplicationController
     
   def edit
   end
+
+  def add_grantholding_field
+    @user  = User.find(params[:user_id])
+    @grant = Grant.find(params[:grant_id]) 
+    @user.grantholdings.build(user: @user, grant: @grant)
+    respond_to do |format|
+      format.js
+    end
+  end
   
   def update
     # if params[:commit] == "Cancel"
