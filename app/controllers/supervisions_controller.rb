@@ -38,12 +38,12 @@ class SupervisionsController < ApplicationController
   private
 
   def message_on_create(user)
-    "#{full_name(user, last_first=false)} is now your supervisor."  
+    "#{full_name(user, last_first=false)} is now listed as your supervisor."  
   end
   
   def message_on_delete(relationship_to_user)
     msg  = "#{full_name(@other_user, last_first=false)}"
-    msg += " is no longer your #{relationship_to_user}."
+    msg += " is no longer listed as your #{relationship_to_user}."
   end
 end
   

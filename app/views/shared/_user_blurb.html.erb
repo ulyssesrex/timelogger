@@ -51,11 +51,11 @@
     	<% if index %>
     		<div class="btn-group">
     			<% if !(current_user.supervises?(user) || user.supervises?(current_user)) || current_user?(user) %>
-    				<%= link_to "Add user as supervisor", user_supervisions_path(user_id: current_user.id, supervisor_id: user.id), method: :post, class: "btn btn-default", confirm: "Are you sure you want to add #{full_name(user, last_first=false)} as your supervisor?" %>
+    				<%= link_to "Add user as supervisor", user_supervisions_path(user_id: current_user.id, supervisor_id: user.id), method: :post, class: "btn btn-default", data: {confirm: "Are you sure you want to add #{full_name(user, last_first=false)} as your supervisor?"} %>
     			<% elsif user.supervises?(current_user) %>
-    				<%= link_to "Remove user as supervisor", user_supervision_path(user_id: current_user.id, id: user.id), method: :delete, class: "btn btn-default", confirm: "Are you sure you want to remove #{full_name(user, last_first=false)} as your supervisor?" %>
+    				<%= link_to "Remove user as supervisor", user_supervision_path(user_id: current_user.id, id: user.id), method: :delete, class: "btn btn-default", data: {confirm: "Are you sure you want to remove #{full_name(user, last_first=false)} as your supervisor?"} %>
     			<% elsif current_user.supervises?(user) %>
-    				<%= link_to "Stop supervising user", user_supervision_path(user_id: current_user.id, id: user.id), class: "btn btn-default", method: :delete, confirm: "Are you sure you want to remove #{full_name(user, last_first=false)} as your supervisee?" %>
+    				<%= link_to "Stop supervising user", user_supervision_path(user_id: current_user.id, id: user.id), class: "btn btn-default", method: :delete, data: {confirm: "Are you sure you want to remove #{full_name(user, last_first=false)} as your supervisee?"} %>
     			<% end %>
     		</div>
     	<% end %>
