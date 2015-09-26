@@ -5,9 +5,9 @@
 <p>Welcome to Timelogger. Here's what you'll need to do first:</p>
 
 <ol>
-	<li>Add any grants for your position before you start logging your time.</li>
-	<li>Add your supervisor.</li>
-	<li>If applicable, ask your supervisees to add you as their supervisor.</li>
+	<li><%= link_to "Add any grants for your position", new_user_grantholding_path(current_user) %> before you start logging your time.</li>
+	<li><%= link_to "Add your supervisor(s)", users_path %>.</li>
+	<li>If you have supervisees, have them add you as their supervisor.</li>
 </ol>
 
 <p>Some basic pointers:</p>
@@ -15,23 +15,31 @@
 <ul>
 	<li><b>Visibility.</b> 
 
-		The only info of yours that's visible to all your co-workers is:
+		You can view:
+		<ul>your own information, and</ul>
+		<ul>your supervisees's information (if that applies to you).</ul>
+
+		Only this info of yours is visible to your co-workers:
 		<ul>
 			<li>your name,</li>
 			<li>your position, and</li>
 			<li>whether or not you're a site admin.</li>
 		</ul>
 
-		The only people who may view your Timelog information are:
+		Only these people may view your Timelogger information:
 		<ul>
 			<li>you,</li>
 			<li>your supervisor(s), and</li>
 			<li>Timelogger site admins.</li>
 		</ul>
+
+		You can add another user as your supervisor, but you can't add them as your supervisee. This is for privacy reasons.
 	</li>
 
+	<br>
+
 	<li><b>Creating Timelogs.</b>
-		Timelogs are just timecards that we've rebranded and made cooler(?). 
+		Timelogs are basically just timecards that we've rebranded and made cooler (we hope). 
 		<ul>
 			<li>
 				To create a Timelog as you work, click on the "Start Timelog" button on the left sidebar.
@@ -46,4 +54,4 @@
 	</li>
 </ul>
 
-<p>Happy logging!</p>
+<p><b>Happy logging!</b></p>
