@@ -25,6 +25,7 @@
         <th><b>Req's</b></th>
 
         <!-- Each grantholding's requirements -->
+
         <% for grantholding in grantholdings %>
           <% req = grantholding.required_hours %>
           <% worked_hours = grantholding.hours_worked_from(
@@ -44,6 +45,7 @@
           </td>
         <% end %>
 
+
         <td colspan="5"></td>
       </tr>
 
@@ -54,7 +56,7 @@
         <!-- User grant totals -->
     		<% for grantholding in grantholdings %>
     			<td>
-    				<%= grantholding.hours_worked_from(start_date_table, end_date_table) %>
+    				<%= format_duration(grantholding.hours_worked_from(start_date_table, end_date_table)) %>
     			</td>
     		<% end %>
 

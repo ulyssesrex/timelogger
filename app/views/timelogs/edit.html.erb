@@ -1,0 +1,53 @@
+<% provide(:title, 'Edit Timelog') %>
+
+<%= 
+  form_for @timelog, 
+  url: { action: 'update', controller: 'timelogs' }, 
+  html: { class: 'form-horizontal' } do |f| 
+%>
+
+  <% if @timelog.errors.any? %>
+    <%= render partial: 'shared/error_messages', object: @timelog %>
+  <% end %>
+
+  <fieldset>
+    <legend>Edit Timelog</legend>
+
+    <%= render partial: 'timelog_form_fields', locals: { f: f, timelog: @timelog, start: @start, endd: @end } %>
+  </fieldset>
+  <br>
+
+  <fieldset>
+    <legend>Time to grants</legend>
+
+    <%= f.fields_for :time_allocations, html: { class: 'form-horizontal' } do |t| %>
+
+      <%= t.hidden_field :id %>
+
+      <div class="form-group">
+        <%= t.label :hours, "#{t.object.grantholding.grant.name}", class: "col-lg-2 control-label" %>
+        <div class="col-lg-10">
+          <%= t.text_field :hours, class: 'form-control', placeholder: "HHH:MM:SS" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= t.label :comments, "Work description", class: "col-lg-2 control-label" %>
+        <div class="col-lg-10">
+          <%= t.text_area :comments, class: 'form-control', rows: 3, placeholder: "Description" %>
+        </div>
+      </div>   
+         
+    <% end %>
+
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <%= link_to "Cancel", user_path(@user), class: "btn btn-default" %>
+        <%= f.submit "Save changes", class: "btn btn-primary" %>
+      </div>
+    </div>
+  </fieldset>
+
+<% end %>
+
+<br><br>
