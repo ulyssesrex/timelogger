@@ -79,7 +79,7 @@ module ApplicationHelper
     Time.zone.today.beginning_of_month
   end
 
-    # Converts a UNIX timestamp string to H:MM:SS AM/PM, M-D-YYYY
+  # Converts a UNIX timestamp string to H:MM:SS AM/PM, M-D-YYYY
   def parse_timestamp(unix_timestamp)
     d = Time.at(unix_timestamp.to_i)
     d.strftime("%l:%M:%S %p, %-m-%e-%Y")

@@ -5,14 +5,14 @@ class TimelogsController < ApplicationController
   before_action :find_timelog_by_id, 
     only: [:show, :edit, :update, :destroy]   
   before_action :find_timelogs_owner, 
-    only: [:show, :index, :filter_index, :edit, :update, :destroy]  
+    except: [:new]
   before_action :current_user_or_admin,
     only: [:edit, :update, :destroy]
   before_action :user_supervisor_or_admin,
-    only: [:show, :index]
+    only: [:show, :index, :day_index]
 
   def new
-    set_up_new_timelog_variables
+    set_up_timelog_variables
   end
 
   def end_from_button
@@ -20,7 +20,7 @@ class TimelogsController < ApplicationController
       start_time:  params[:start_time], 
       end_time:    params[:end_time] 
     }.to_query
-    set_up_new_timelog_variables
+    set_up_timelog_variables
     goto_new_timelog  = "window.location.href="
     goto_new_timelog += "'#{new_user_timelog_path(@user)}?#{query_string}'" 
     render js: goto_new_timelog
@@ -33,10 +33,12 @@ class TimelogsController < ApplicationController
     params[:timelog][:start_time] = st
     params[:timelog][:end_time]   = et
     # Convert each grant time allocation param to Float hours
-    ta_attrs = params[:timelog][:time_allocations_attributes]
-    ta_attrs.each do |k, v|
-      d = convert_to_duration(v['hours'])
-      params[:timelog][:time_allocations_attributes][k] = d
+    allocations_attributes = params[:timelog][:time_allocations_attributes].values
+    if allocations_attributes
+      allocations_attributes.each do |hash|
+        hash['hours'] = convert_to_duration(hash['hours'])
+      end
+      params[:timelog][:time_allocations_attributes] = allocations_attributes
     end
     # Create new Timelog instance
     @timelog = Timelog.new(timelog_params)
@@ -55,12 +57,9 @@ class TimelogsController < ApplicationController
     end
   end
   
-  # def show
-  # end
-
   def index
     @start_date_table = User.date_of_last('Monday', weeks=2).to_time
-    @end_date_table = Time.zone.now.to_time
+    @end_date_table   = Time.zone.now.to_time
     set_up_index_variables
   end
 
@@ -93,22 +92,32 @@ class TimelogsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  # def edit
+  #   @timelog = Timelog.find(params[:id])
+  #   @user.grantholdings.each do |gh|
+  #     @timelog.time_allocations.build(grantholding_id: gh.id)
+  #   end
+  #   @start   = @timelog.start_time
+  #   @end     = @timelog.end_time
+  # end
   
-  def update
-    if @timelog.update_attributes(timelog_params)
-      flash[:success] = "Timelog was updated."
-      redirect_to user_path(current_user) and return
-    else
-      render 'edit'
-    end    
-  end
+  # def update
+  #   if @timelog.update(timelog_update_params) &&
+  #     allocation_update_params.map do |i, allocation_hash|
+  #       time_allocation = TimeAllocation.find(allocation_hash[:id])
+  #       time_allocation.update(allocation_hash)
+  #     end
+  #     flash[:success] = "Timelog was updated."
+  #     redirect_to user_timelogs_path(user: @user) and return
+  #   else
+  #     render 'edit'
+  #   end    
+  # end
   
   def destroy
     @timelog.destroy
     flash[:success] = "Timelog deleted."
-    redirect_to user_path(current_user)
+    redirect_to user_timelogs_path(user: @user)
   end
   
   private
@@ -121,7 +130,7 @@ class TimelogsController < ApplicationController
           :start_time, 
           :end_time,
           time_allocations_attributes: 
-            [:id, :hours, :comments, :_destroy]
+            [:id, :hours, :comments, :grantholding_id, :_destroy]
         )
     end
 
@@ -170,7 +179,7 @@ class TimelogsController < ApplicationController
       end
     end
 
-    def set_up_new_timelog_variables
+    def set_up_timelog_variables
       find_timelogs_owner
       @timelog = Timelog.new
       @user.grantholdings.each do |gh|
