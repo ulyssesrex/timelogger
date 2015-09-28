@@ -13,6 +13,7 @@ Notable features:
 * Many others.
 
 To be developed before deployment:
+
  * Export CSV/Excel spreadsheets capability;
  * Supervisors should be able to approve supervisees's Timelogs;
  * Should support grants that take percentage of employee's time.
