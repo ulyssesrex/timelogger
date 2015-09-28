@@ -43,8 +43,4 @@ class SessionsController < ApplicationController
         redirect_to root_url
       end
     end
-
-    # def check_cancel_create
-    #   redirect_to root_path if params[:commit] == "Cancel"
-    # end
 end
