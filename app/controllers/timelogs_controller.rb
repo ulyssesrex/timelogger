@@ -34,7 +34,7 @@ class TimelogsController < ApplicationController
     params[:timelog][:end_time]   = et
     # Convert each grant time allocation param to Float hours
     allocations_attributes = params[:timelog][:time_allocations_attributes].values
-    if allocations_attributes
+    if !allocations_attributes.empty?
       allocations_attributes.each do |hash|
         hash['hours'] = convert_to_duration(hash['hours'])
       end

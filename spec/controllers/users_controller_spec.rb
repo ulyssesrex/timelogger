@@ -198,19 +198,6 @@ describe UsersController do
           expect(response).to redirect_to(root_url)
         end
       end
-    
-      context "user cancels registration form" do
-        it "redirects to root" do   
-          post :create, commit: "Cancel"       
-          expect(response).to redirect_to(root_path)
-        end
-
-        it "does not create a user record" do
-          expect { 
-            post :create, commit: "Cancel" 
-          }.not_to change(User, :count)
-        end
-      end
 
       context "unsuccessful user creation" do              
         it "renders the :new template" do
@@ -328,10 +315,6 @@ describe UsersController do
         expect(assigns(:user)).to eq(user)
       end
 
-      it "assigns @grantholdings from user's grantholdings" do
-        expect(assigns(:grantholdings)).to eq(user.grantholdings)
-      end
-    
       it "renders the :show template" do
         expect(response).to render_template :show
       end
@@ -467,7 +450,7 @@ describe UsersController do
         end
         
         it "assigns all activated users to @users" do
-          expect(assigns(:non_admins)).not_to include(non)
+          expect(assigns(:users)).not_to include(non)
         end
         
         it "renders the :make_admin_index template" do

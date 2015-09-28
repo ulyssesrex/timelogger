@@ -7,7 +7,8 @@ describe Timelog do
   describe 'factory' do
     it { expect(build(:timelog)).to be_valid }
     it { expect(build(:timelog_with_comments)).to be_valid }
-    it { expect(build(:timelog, time_allocations_count: 2)).to be_valid }
+    it { expect(build(:timelog_yesterday)).to be_valid }
+    it { expect(build(:timelog_with_time_allocations, time_allocations_count: 2)).to be_valid }
   end
   
   describe 'associations' do

@@ -2,12 +2,36 @@ require 'rails_helper'
 
 describe TimelogsController do
   
-  let(:organization) { create(:organization) }
-  let(:user)       { create(:user, organization: organization) }
-  let(:other_user) { create(:user, organization: organization) }
-  let(:admin)      { create(:user, organization: organization, admin: true) }
-  let(:timelog)    { create(:timelog, user: user) }
-  let(:timelog_attr) { attributes_for(:timelog, user: user) }
+  let(:organization)   { create(:organization) }
+  let(:grant_1)        { create(:grant, organization: organization) }
+  let(:grant_2)        { create(:grant, organization: organization) }
+  let(:user)           { create(:user,  organization: organization) }
+  let(:other_user)     { create(:user,  organization: organization) }
+  let(:admin)          { create(:user,  organization: organization, admin: true) }
+  let(:timelog)        { create(:timelog, user: user) }
+  let(:timelog_yesterday) { create(:timelog_yesterday, user: user) }
+  let(:grantholding_1) { create(:grantholding, user: user, grant: grant_1) }
+  let(:grantholding_2) { create(:grantholding, user: user, grant: grant_2)}
+  let(:timelog_attributes) do
+    {
+      :user_id    => user.id,
+      :start_time => '2014-02-05 09:00:00 -0500',
+      :end_time   => '2014-02-05 17:00:00 -0500',
+      :comments   => 'This is a timelog.',
+      :time_allocations_attributes => {
+        '0' => {
+          hours: 1.0,
+          comments: 'Worked one hour.',
+          grantholding_id: grantholding_1.id
+        },
+        '1' => {
+          hours: 2.0,
+          comments: 'Worked two hours.',
+          grantholding_id: grantholding_2.id
+        }
+      }
+    }
+  end
   let(:grant)      { create(:grant, organization: organization) }
   let(:grantholding) { create(:grantholding, grant: grant, user: user) }
   
@@ -80,7 +104,7 @@ describe TimelogsController do
       let(:timelog) { build(:timelog) }
       
       def create_timelog_for(user)
-        post :create, user_id: user.id, timelog: timelog_attr
+        post :create, user_id: user.id, timelog: timelog_attributes
       end
       
       before(:each) { log_in user }
@@ -99,11 +123,6 @@ describe TimelogsController do
         log_in other_user
         create_timelog_for(user)
         expect(response).to redirect_to(user_path(other_user))        
-      end
-
-      it "redirects if user cancels new timelog form" do
-        post :create, user_id: user.id, commit: "Cancel"
-        expect(response).to redirect_to(user_path(current_user))
       end
       
       it "passes if current user is the timelog's user or an admin" do
@@ -137,187 +156,107 @@ describe TimelogsController do
         it "renders the :new template" do
           # Attempt to save timelog where end is earlier than start.
           # Raises validation error on Timelog.
-          post :create, user_id: user.id,
-            timelog: {  
-              start_time: Time.zone.now, 
-              end_time:   Time.zone.now - 2.hours 
-            }
+          timelog_attributes[:start_time] = Time.zone.now
+          timelog_attributes[:end_time]   = Time.zone.now - 2.hours
+          post :create, user_id: user.id, timelog: timelog_attributes
           expect(response).to render_template(:new)
         end
       end      
     end
-    
-    describe 'GET #show' do      
-      let(:supervisor) { create(:supervisor, organization: organization) }
-      let(:supervisee) { supervisor.supervisees.first }
-      let(:supervisee_timelog) { create(:timelog, user: supervisee) }
-      let(:supervisor_timelog) { create(:timelog, user: supervisor) }
-      
-      def show_supervisee_timelog
-        get :show, user_id: supervisee.id, id: supervisee_timelog.id
+
+    describe "GET #index" do
+      def get_index
+        get :index, user_id: user.id
       end
 
-      def show_supervisor_timelog
-        get :show, user_id: supervisor.id, id: supervisor_timelog.id
-      end
-      
-      it "creates an instance of Timelog" do
-        log_in(supervisee)
-        show_supervisee_timelog
-        expect(assigns(:timelog)).to be_an_instance_of(Timelog)
-      end
-      
-      it "passes if current user is user" do
-        log_in(supervisee_timelog.user)
-        show_supervisee_timelog
-        expect(response).not_to redirect_to(user_path(current_user))
-      end      
-
-      it "passes if current user is user's supervisor" do
-        log_in(supervisor)        
-        show_supervisee_timelog
-        expect(response).not_to redirect_to(user_path(supervisor))
-      end
-      
-      it "passes if current user is admin" do
-        log_in(admin)
-        show_supervisee_timelog
-        expect(response).not_to redirect_to(user_path(admin))
+      before(:each) do 
+        timelog; timelog_yesterday
+        log_in user
+        get_index
       end
 
-      it "redirects if current user is timelog user's supervisee" do
-        log_in(supervisee)
-        show_supervisor_timelog
-        expect(response).to redirect_to(user_path(supervisee))
+      it "sets @start_date_table to a Time object" do
+        expect(assigns(:start_date_table)).to be_an_instance_of(Time)
       end
-      
-      it "redirects if current user is not user, 
-        user's supervisor, or admin" do
-        log_in(other_user)
-        show_supervisor_timelog
-        expect(response).to redirect_to(user_path(other_user))
+
+      it "sets @start_date_table to two Mondays ago" do
+        expect(assigns(:start_date_table).strftime("%A")).to eq('Monday')
       end
-      
-      it "renders the :show template" do
-        log_in(supervisee)
-        show_supervisee_timelog
-        expect(response).to render_template(:show)
+
+      it "sets @end_date_table to a Time object" do
+        expect(assigns(:end_date_table)).to be_an_instance_of(Time)
       end
-    end
-    
-    describe 'GET #edit' do      
-      def edit_timelog
-        get :edit, user_id: user.id, id: timelog.id
+
+      it "sets @end_date_table to now" do
+        expect(assigns(:end_date_table).strftime("%R")).to eq(Time.now.strftime("%R"))
       end
-      
+
       it "creates an instance of Timelog" do
-        log_in user
-        edit_timelog
-        expect(assigns(:timelog)).to be_an_instance_of(Timelog)
+        expect(assigns(:timelogs).take).to be_an_instance_of(Timelog)
       end
-      
-      it "passes if current_user is user" do
-        log_in user
-        edit_timelog
-        expect(response).not_to redirect_to(user_path(user))
-      end
-      
-      it "passes if current_user is admin" do
-        log_in admin
-        edit_timelog
-        expect(response).not_to redirect_to(user_path(admin))
-      end
-      
-      it "redirects to user page if current_user is not user or admin" do
-        log_in other_user
-        edit_timelog
-        expect(response).to redirect_to(users_path)
-      end
-      
-      it "renders the :edit template" do
-        log_in user
-        edit_timelog
-        expect(response).to render_template(:edit)
+
+      it { expect(assigns(:timelogs).take.user_id).to eq(user.id) }
+
+      it { expect(assigns(:grantholdings).count).to eq(user.grantholdings.count) }
+
+      it "renders :index template" do
+        expect(response).to render_template(:index)
       end
     end
-    
-    describe 'PUT #update' do      
-      def update_timelog
-        put :update, user_id: user.id,
-          id: timelog.id, 
-          timelog: { start_time: Time.new(2014, 2, 4) }
+
+    describe "POST #filter_index" do
+      def index_ordered_old_first
+        post :filter_index, 
+          user_id: user.id, 
+          order: 'oldfirst',
+          format: :js
       end
-      
-      it "passes if current_user is user" do
+
+      def index_filtered_by_date
+        post :filter_index, 
+          user_id: user.id, 
+          start_date_table: '2/1/2014', 
+          end_date_table: '2/10/2014',
+          format: :js
+      end
+
+      it "converts start date param to a Time object" do
         log_in user
-        expect do 
-          update_timelog
-          timelog.reload
-        end.to change(timelog, :start_time)
+        index_ordered_old_first
+        expect(assigns(:start_date_table)).to be_an_instance_of(Time)
       end
-      
-      it "passes if current_user is admin" do
-        log_in admin
-        expect do
-          update_timelog
-          timelog.reload
-        end.to change(timelog, :start_time)
-      end
-      
-      it "redirects if current_user is not user or admin" do
-        log_in other_user
-        expect do
-          update_timelog
-          timelog.reload
-        end.not_to change(timelog, :start_time)
-      end
-      
-      it "creates an instance of Timelog" do
+
+      it "converts end date param to a Time object" do
         log_in user
-        update_timelog
-        expect(assigns(:timelog)).to be_an_instance_of(Timelog)
+        index_filtered_by_date
+        expect(assigns(:end_date_table)).to be_an_instance_of(Time)
       end
-      
-      context "successful update and save" do        
-        it "updates the record in the database" do
-          # Already tested in previous block.
-        end
-        
-        before(:each) do
-          log_in user
-          update_timelog
-        end
-        
-        it "displays a success flash" do
-          expect(flash[:success]).to be_present          
-        end
-        
-        it "redirects to user page" do
-          expect(response).to redirect_to(user_path(user))
-        end        
-      end
-      
-      context "unsuccessful save" do        
-        # Update raises validation error on Timelog (well_ordered_times)
-        def invalid_update
-          put :update, user_id: user.id,
-            id: timelog.id, 
-            timelog: { start_time: Time.zone.now }
-        end
-        
-        before(:each) { log_in user }
-        
-        it "does not update the record" do
-          expect { invalid_update }.not_to change(timelog, :start_time)
-        end
-        
-        it "renders the :edit template" do
-          invalid_update
-          expect(response).to render_template(:edit)
-        end
-      end      
     end
-    
+
+    describe "POST #day_index" do
+      def post_day_index
+        post :day_index, user_id: user.id, date: '2014-2-5', format: :js
+      end
+
+      before(:each) do
+        timelog; timelog_yesterday
+        log_in user
+        post_day_index
+      end
+
+      it "assigns a User" do
+        expect(assigns(:user)).to eq(user)
+      end
+
+      it "assigns the correct Date" do
+        expect(assigns(:date)).to eq(Date.parse('2014-2-5'))
+      end
+
+      it "displays the correct Timelogs" do
+        expect(assigns(:timelogs_on_day).count).to eq(1)
+      end
+    end
+        
     describe 'DELETE #destroy' do        
       def destroy_timelog
         delete :destroy, user_id: user.id, id: timelog.id
@@ -361,7 +300,7 @@ describe TimelogsController do
       end
       
       it "redirects to user page" do
-        expect(response).to redirect_to(user_path(user))
+        expect(response).to redirect_to(user_timelogs_path(user: user))
       end
     end    
   end

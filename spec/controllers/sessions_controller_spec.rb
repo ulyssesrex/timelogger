@@ -99,7 +99,7 @@ describe SessionsController do
             { 
               email: user.email, 
               password: 'password', 
-              remember_me: '1' 
+              remember: '1' 
             }
           expect(cookies[:remember_token]).not_to be_nil
         end          
@@ -146,21 +146,6 @@ describe SessionsController do
       it "redirects to the root url" do
         expect(response).to redirect_to(root_url)
       end    
-    end
-
-    describe 'GET #get_current_user_id' do
-      before(:each) do
-        create_session(user)
-        xhr :get, :get_current_user_id, format: :js
-      end
-
-      it "assigns @id based on current_user's id" do
-        expect(assigns(:id)).to eq(user.id)
-      end
-
-      it "renders js template" do
-        expect(response).to render_template('sessions/get_current_user_id')
-      end
     end
   end
 end

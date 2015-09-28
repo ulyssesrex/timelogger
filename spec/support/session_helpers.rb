@@ -11,7 +11,7 @@ module SessionHelpers
     fill_in("user_password_confirmation", with: "password")
     select(Organization.first.name, from: 'user_organization_id')
     fill_in("user_organization_password", with: "password")
-    click_button 'Submit'
+    click_button 'Sign up'
     open_email("example@test.com")
     current_email.click_link "Activate Timelogger account"
   end
@@ -29,7 +29,7 @@ module SessionHelpers
     fill_in("organization_users_attributes_0_email", with: "example@test.com")
     fill_in("organization_users_attributes_0_password", with: "password")
     fill_in("organization_users_attributes_0_password_confirmation", with: "password")
-    click_button "Submit"
+    click_button "Enroll"
     open_email("example@test.com")
     current_email.click_link "Click here to activate your Timelogger account and log in."
   end

@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 feature "Register user" do
-  before(:each) { create(:organization) }
+  let(:organization) { create(:organization) }
+  before(:each)      { organization }
   
   def correct_user_registration
     visit root_path
@@ -12,20 +13,20 @@ feature "Register user" do
     fill_in("user_email", with: "example@test.com")
     fill_in("user_password", with: "password")
     fill_in("user_password_confirmation", with: "password")
-    select(Organization.first.name, from: 'user_organization_id')
+    select(organization.name, from: 'user_organization_id')
     fill_in("user_organization_password", with: "password")
-    click_button 'Submit'
+    click_button 'Sign up'
   end
   
   def incorrect_user_registration
     visit root_path
     click_link 'Sign up'
-    click_button 'Submit'
+    click_button 'Sign up'
   end
   
   def cancel_user_registration
     visit signup_path
-    click_button "Cancel"
+    click_link "Cancel"
   end
   
   def activate_user
@@ -71,7 +72,7 @@ feature "Register user" do
     end
     
     it "displays a logged-in navigation bar" do
-      expect(page.find('.nav')).to have_content(/Logout/)
+      expect(page).to have_content(/Log out/)
     end
   end
   
@@ -79,7 +80,7 @@ feature "Register user" do
     before(:each) { admin_signup }
     
     it "redirects to the help page" do
-      expect(page.title).to have_content(/Help/)
+      expect(page.title).to have_content(/Admin help/)
     end
   end  
 end

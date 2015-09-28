@@ -16,30 +16,42 @@ describe TimeAllocation do
  				create(:organization) 
  			}
  			let(:grant) 			    { 
- 				create(:grant, organization: organization) 
+ 				create(:grant, organization_id: organization.id) 
  			}
  			let(:other_gr) 		    { 
- 				create(:grant, name: "Other Grant", organization: organization) 
+ 				create(:grant, name: "Other Grant", organization_id: organization.id) 
  			}
  			let(:user) 				    { 
- 				create(:user, organization: organization)  
+ 				create(:user, organization_id: organization.id)  
  			}
  			let(:grantholding)    { 
- 				create(:grantholding, user: user) 
+ 				create(:grantholding, user: user, grant: grant) 
  			}
  			let(:other_g) 		    { 
  				create(:grantholding, user: user, grant: other_gr)   
  			}
+ 			let(:timelog) {
+ 				create(:timelog, user: user)
+ 			}
  			let(:time_allocation) { 
- 				create(:time_allocation, grantholding: grantholding) 
+ 				create(:time_allocation, grantholding: grantholding, timelog: timelog) 
  			}
  			let(:other_ta) 		    { 
- 				create(:time_allocation, grantholding: other_g) 
+ 				create(:time_allocation, grantholding: other_g, timelog: timelog) 
  			}
 
- 			it "returns true if its user's grant matches specified grant" do
- 				expect(time_allocation.to_grant?(grant.name)).to be true
+ 			before(:each) do
+ 				organization; user
+ 				grant; other_gr
+ 				grantholding; other_g
+ 				time_allocation; other_ta
  			end
+
+ 			it "returns true if its user's grant matches specified grant" do
+ 				expect(time_allocation.to_grant?(grant)).to be true
+ 			end
+
+ 			it { expect(other_ta.to_grant?(other_gr)).to be true }
 
  			it "returns false if its user's grant doesn't match specified grant" do
  				expect(other_ta.to_grant?(grant.name)).to be false

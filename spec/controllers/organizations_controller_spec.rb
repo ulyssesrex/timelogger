@@ -120,7 +120,7 @@ describe OrganizationsController do
         end
 
         it "displays a success flash", :create_before do
-          expect(flash[:success]).to be_present
+          expect(flash[:info]).to be_present
         end
 
         it "redirects to root", :create_before do
@@ -140,21 +140,6 @@ describe OrganizationsController do
         it "renders the :new template" do
           invalid_create
           expect(response).to render_template(:new)
-        end
-      end
-
-      context "canceled new form" do
-        def cancel_new_form
-          post :create, commit: 'Cancel'
-        end
-
-        it "does not save a new Organization record" do
-          expect { cancel_new_form }.not_to change(Organization, :count)
-        end
-
-        it "redirects to root page" do
-          cancel_new_form
-          expect(response).to redirect_to(root_path)
         end
       end
     end
@@ -221,22 +206,6 @@ describe OrganizationsController do
         it "renders the :edit template", :skip_update do
           unsuccessful_update
           expect(response).to render_template(:edit)
-        end
-      end
-
-      context "canceled edit form" do
-        before(:each) do |spec|
-          organization.name = "Organization"
-          put :update, id: organization.id, commit: 'Cancel'
-          organization.reload
-        end
-
-        it "does not update the record", :skip_update do
-          expect(organization.name).not_to eq("Different Name")
-        end
-
-        it "redirects to :show", :skip_update do
-          expect(response).to redirect_to(organization_path(organization))
         end
       end
     end

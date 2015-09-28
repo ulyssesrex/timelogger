@@ -6,11 +6,10 @@ class Grantholding < ActiveRecord::Base
   belongs_to :user
   has_many   :time_allocations
     
-  validates :grant_id, presence: true
+  validates :grant_id, presence: true, uniqueness: { scope: :user_id }
   validates :user_id,  presence: true
 
-  # A grant can't be associated with a user more than once.
-  validates :grant_id, uniqueness: { scope: :user_id }
+  # A grant can't be associated with a user more than once. 
 
   # Returns '0:00' format of total hours user has worked on grant 
   # from since_date to end_date (type=Time).

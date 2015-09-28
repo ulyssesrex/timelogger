@@ -1,7 +1,6 @@
 class SessionsController < ApplicationController  
   
   before_action :set_organization, except: [:new, :create]
-  # before_action :check_cancel_create, only: [:create]
   before_action :find_user,        only:   [:create]
   before_action :valid_user,       only:   [:create]
   before_action :activated_user,   only:   [:create]
