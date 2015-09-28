@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :set_organization, 
     except: [:new, :create]
   before_action :find_user_by_id,  
-    only: [:show, :edit, :update, :destroy, :delete_other_user, :make_admin]
+    only: [:edit, :update, :destroy, :delete_other_user, :make_admin]
   before_action :is_supervisor_or_current_user_or_admin, 
     only: [:show]
   before_action :is_current_user_or_admin, 
@@ -41,6 +41,7 @@ class UsersController < ApplicationController
   end
   
   def show
+    @user = current_user
     redirect_to users_path unless @user.activated?
   end
     
@@ -139,7 +140,7 @@ class UsersController < ApplicationController
     end
     
     def find_user_by_id
-      @user = User.find_by(id: params[:id])
+      @user = User.find(params[:id])
     end
 
     # Before filters with 'or' conditions:
