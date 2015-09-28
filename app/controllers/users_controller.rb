@@ -17,68 +17,43 @@ class UsersController < ApplicationController
   
   def new
     @user = User.new
-    @organizations = Organization.all # not scoped to tenant
+    @organizations = Organization.all || [] # not scoped to tenant
   end
   
   def create
-    # if params[:commit] == "Cancel"
-    #   redirect_to root_url and return
-    # else 
-      @user = User.new(user_params)
-      organization = Organization.find_by(id: params[:user][:organization_id])
-      if organization && 
-        organization.authenticated?(:password, params[:user][:organization_password])
-        @user.organization_id = organization.id
-      else
-        render 'new' and return
-        # TODO: does 'authenticated?' failure produce errors on object?
-      end
-      if @user.save
-        UserMailer.account_activation(@user).deliver_now
-        flash[:info] = "Please check your email to activate your account."
-        redirect_to root_url and return
-      else
-        render 'new'
-      end
-    # end
+    @user = User.new(user_params)
+    @organizations = Organization.all || []
+    organization = Organization.find_by(id: params[:user][:organization_id])
+    if organization && 
+      organization.authenticated?(:password, params[:user][:organization_password])
+      @user.organization_id = organization.id
+    else
+      render 'new' and return
+      # TODO: does 'authenticated?' failure produce errors on object?
+    end
+    if @user.save
+      UserMailer.account_activation(@user).deliver_now
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url and return
+    else
+      render 'new'
+    end
   end
   
   def show
     redirect_to users_path unless @user.activated?
   end
-  
-  # def grants_fulfillments_table
-  #   @user = User.find(session[:user_id])
-  #   @grantholdings = @user.grantholdings
-  #   @since_date = User.convert_to_datetime(params[:since_date], time=false)
-  #   respond_to do |format| 
-  #     format.js
-  #   end
-  # end
     
   def edit
   end
-
-  # def add_grantholding_field
-  #   @user  = User.find(params[:user_id])
-  #   @grant = Grant.find(params[:grant_id]) 
-  #   @user.grantholdings.build(user: @user, grant: @grant)
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
   
   def update
-    # if params[:commit] == "Cancel"
-    #   redirect_to user_path(current_user) and return
-    # else
-      if @user.update(user_params)
-        flash[:success] = "Profile updated."
-        redirect_to user_path(current_user) and return
-      else
-        render 'edit' and return
-      end
-    # end
+    if @user.update(user_params)
+      flash[:success] = "Profile updated."
+      redirect_to user_path(current_user) and return
+    else
+      render 'edit' and return
+    end
   end
   
   def index
@@ -124,8 +99,8 @@ class UsersController < ApplicationController
       reg_user.update admin: true
       demoted += 1
     end
-    message  = "Admin status granted to #{pluralize @to_admins.count, 'user' }. "
-    message += "Admin status removed from #{pluralize demoted, 'user' }." 
+    message  = "Admin status granted to #{help.pluralize(@to_admins.count, 'user')}. "
+    message += "Admin status removed from #{help.pluralize(demoted, 'user')}."
     flash[:success] = message
     redirect_to users_path
   end

@@ -11,7 +11,7 @@ describe SupervisionsController do
     before(:each) do |spec|
       unless spec.metadata[:skip_before]
         log_in supervisee
-        post :create, user_id: current_user.id, supervisor: supervisor.id
+        post :create, user_id: current_user.id, supervisor_id: supervisor.id
       end
     end        
     
@@ -30,7 +30,7 @@ describe SupervisionsController do
     it "creates a supervision", :skip_before do
       log_in supervisee
       expect { 
-        post :create, user_id: current_user.id, supervisor: supervisor.id
+        post :create, user_id: current_user.id, supervisor_id: supervisor.id
       }.to change(Supervision, :count).by(1)
     end
     
@@ -48,29 +48,6 @@ describe SupervisionsController do
     
     it "redirects to users#index" do
       expect(response).to redirect_to(users_path)
-    end
-  end
-  
-  describe '#supervisees' do
-    let(:unsupervised) { create(:user) }
-    
-    before(:each) do
-      unsupervised
-      log_in supervisor
-      supervisor.supervisees << supervisee
-      get :supervisees, user_id: current_user.id
-    end
-    
-    it "assigns all current user's supervisees to @supervisees" do
-      expect(assigns(:supervisees)).to include(supervisee)
-    end
-    
-    it "does not include other users in @supervisees" do
-      expect(assigns(:supervisees)).not_to include(unsupervised)
-    end
-    
-    it "renders the :supervisees template" do
-      expect(response).to render_template(:supervisees)
     end
   end
   

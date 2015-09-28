@@ -25,8 +25,8 @@ $(document).ready(function() {
 		}
 
 		// Start time was when user first clicked button. 
-		this.continueTimer = function() {
-			$start_time = parseInt(getCookie('start_time'), 10);
+		this.continueTimer = function(startTime) {
+			$start_time = startTime;
 		}
 		
 		// end time is now.
@@ -89,35 +89,28 @@ $(document).ready(function() {
 		});
 	}
 
-	// Updates clock test to current time, formatted nicely.
-	function updateRegularClock() {
-		$clockText.html(function() {
-			return formatClock;
-		});
-	}
-
-	// Sets clock running, updated every second.
-	function runClock() {
-		currenttime = setInterval(updateRegularClock, 1000);
-	}
-
 	// Sets timer running, updated every second.
 	// Start is when user first clicked 'start' button.
 	function activateTimer() {
 		if(isCookie('start_time')) {
-			x.continueTimer();
+			x.continueTimer(parseInt(getCookie('start_time'), 10));
 		}
 		else {
 			x.start();
+			setCookie('start_time', $start_time);
 		}
 		clocktimer = setInterval(update, 1000);
 	}
 
 	// Sets end time to now.
 	// Stops timer running.
-	function end() {
+	function endTimer() {
 		x.end();
 		clearInterval(clocktimer);
+		if((typeof $start_time === 'undefined') || $start_time === null) {
+			$start_time = getCookie('start_time');
+		}
+		deleteCookie('start_time', $start_time);
 	}
 
 	var runningButtons = $('.timelog-button-running');
@@ -132,6 +125,18 @@ $(document).ready(function() {
 	function timerRestingDisplay() {
 		restingButtons.removeClass('hidden');
     runningButtons.addClass('hidden');
+	}
+
+	// Updates clock test to current time, fomatted nicely.
+	function updateRegularClock() {
+		$clockText.html(function() {
+			return formatClock;
+		});
+	}
+
+	// Sets clock running, updated every second.
+	function runClock() {
+		currenttime = setInterval(updateRegularClock, 1000);
 	}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -177,39 +182,8 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////
 // Listeners
 
-
-
 	// Run current time clock on page load.
 	runClock();
-
-	// // Handles grants fulfillments menu selections.
-	// $(document).on("change", "#since_date", function(e) {
-	// 	e.preventDefault();
-	// 	var select_val  = $('#since_date option:selected').val();
-	// 	var date_inputs = $('.date-input');
-	// 	// When "other date" option is selected,
-	// 	if(select_val === "other") {
-	// 		// show manual date entry field.
-	// 		date_inputs.removeClass('hidden');
-	// 	}
-	// 	// When a selection other than "other date" is made,
-	// 	else {
-	// 		if(!(date_inputs.hasClass('hidden'))) {
-	// 			// hide manual date entry fields if they're shown.
-	// 			date_inputs.addClass('hidden');
-	// 		}
-	// 		$.get("http://localhost:3000/get_current_user_id", function() {
-	// 			$.ajax({
-	// 				type: "POST",
-	// 				url: "http://localhost:3000/users/" + $('#user-id-catch').val() + "/grants_fulfillments_table",
-	// 				data: { since_date: select_val }
-	// 			});
-	// 		});
-	// 	}
-	// 	if($('#user-id-catch').val() !== null) {
-	// 		$('#user-id-catch').val(null);
-	// 	}
-	// });
 
 	// Finds current url.
 	var currentUrl = window.location.href;
@@ -272,7 +246,7 @@ $(document).ready(function() {
 	// timelog end button.
 	// If so, start the timer from when the user first
 	// clicked the button.
-	if(isCookie('start_time') || $start_time) {
+	if(isCookie('start_time')) {
 		timerRunningDisplay();
 		activateTimer();			
 	}
@@ -283,7 +257,6 @@ $(document).ready(function() {
   	e.preventDefault();
   	timerRunningDisplay();
   	activateTimer();
-  	setCookie('start_time', $start_time, 7);
 	});
 
   // When user clicks timelog end button, stop timer.
@@ -291,11 +264,8 @@ $(document).ready(function() {
   // to controller. Finally, delete the start time cookie if it exists.
 	$(document).on("click", '#end-timelog', function(e) {
 		e.preventDefault();
-		end();
-		timerRestingDisplay();		
-		if ((typeof $start_time === 'undefined') || $start_time === null) {
-			$start_time = getCookie('start_time');
-		}
+		endTimer();
+		timerRestingDisplay();
 		$.ajax({
 			type: "POST",
 			url: hostUrl + "users/" + userId + "/timelogs/end_from_button",
@@ -304,19 +274,18 @@ $(document).ready(function() {
 				end_time: $end_time
 			}
 		});		
-		deleteCookie('start_time', $start_time);
 	});		
 
 	// Triggered by clicking on 'Cancel Timelog', below.
-	$(document).on("defaultClick", '#cancel-timelog', function() {}
-	);
+	// $(document).on("defaultClick", '#cancel-timelog', function() {}
+	// );
 
 	// When user clicks cancel timelog button, delete the start time
 	// cookie if it exists and toggle the start button options.
 	$(document).on("click", '#cancel-timelog', function(e) {
 		e.preventDefault();
-		deleteCookie('start_time', $start_time);
+		endTimer();
 		timerRestingDisplay();
-		$('#cancel-timelog').trigger("defaultClick");
+		// $('#cancel-timelog').trigger("defaultClick");		
 	});
 });

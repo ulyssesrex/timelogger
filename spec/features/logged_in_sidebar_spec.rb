@@ -1,189 +1,162 @@
 require 'rails_helper'
 require 'support/session_helpers'
+require 'support/wait_for_ajax'
 include SessionHelpers
+include WaitForAjax
 
-describe "Logged-in sidebar"do
+describe "Logged-in sidebar", js: true do
 	let(:user) { create(:user) }
   before(:each) { spec_login(user) }
     
   describe "Start timelog button" do
-    it "initially displays", js: true do
+    it "initially displays" do
       expect(find('#start-timelog')).not_to have_css('.hidden')
     end
 
     describe "On click" do
-      before(:each) { click_link("Start Timelog") }
+      before(:each) do 
+        click_link("Start Timelog")
+      end
 
-      it "creates a cancel link", js: true do
-    		using_wait_time 10 do
-          expect(page.to have_content("Cancel Timelog"))
-        end
-        #expect(find('#cancel-timelog')).not_to have_css('.hidden')
+      it "creates a cancel link" do
+        expect(page).to have_content("CANCEL TIMELOG")
     	end
 
-      it "creates a end timelog link", js: true do
-        using_wait_time 10 do
-          expect(page.to have_content("Finish Timelog"))
-        end
-        #expect(find('#end-timelog')).not_to have_css('.hidden')
+      it "creates a end timelog link" do
+        expect(page).to have_content("FINISH TIMELOG")
       end
 
-      it "displays the timelog timer", js: true do
-        using_wait_time 10 do
-          expect(find("Cancel Timelog").to be_present)
-        end
-        #expect(find('#timelog-timer')).not_to have_css('.hidden')
+      it "displays the timelog timer" do
+        expect(find('#timelog-timer')).to be_visible
       end
 
-      it "becomes invisible", js: true do
-        using_wait_time 10 do
-          expect(page.not_to have_content("Start Timelog"))
-        end
-        #expect(find('#start-timelog')).to have_css('.hidden', :visible => false)
+      it "becomes invisible" do
+        expect(page).not_to have_content("START TIMELOG")
       end
     end
   end
 
   describe "Finish timelog button" do
-    it "does not initially display", js: true do
-      using_wait_time 10 do
-          expect(page.not_to have_content("Finish Timelog"))
-        end
-      #expect(find('#end-timelog')).to have_css('.hidden', :visible => false)
+    it "does not initially display" do
+      expect(page).not_to have_content("FINISH TIMELOG")
     end
 
-    it "displays after user clicks start timelog button", js: true do
+    it "displays after user clicks start timelog button" do
       click_link("Start Timelog")
-      using_wait_time 10 do
-          expect(page.to have_content("Finish Timelog"))
-        end
-      #expect(find('#end-timelog')).not_to have_css('.hidden')
+      expect(page).to have_content("FINISH TIMELOG")
     end
 
     describe "On click" do
-      before(:each)  do
+      before(:each) do
         click_link("Start Timelog")
-        click_link("Finish Timelog")
+        click_link("end-timelog")
       end
 
-      it "redirects to new timelog form", js: true do
-        using_wait_time 10 do
-          expect(page.title.to have_content("New"))
-        end
-        #expect(page.title).to have_content(/New Timelog/)
+      before(:each) do |spec|
+        wait_for_ajax unless spec.metadata[:skip_wait]
       end
 
-      it "becomes invisible", js: true do
-        using_wait_time 10 do
-          expect(page.not_to have_content("Finish Timelog"))
-        end
-        #expect(find('#end-timelog')).to have_css('.hidden', :visible => false)
+      it "becomes invisible" do
+        expect(page).not_to have_content("FINISH TIMELOG")
       end
 
-      it "makes cancel timelog button invisible", js: true do
-        using_wait_time 10 do
-          expect(page.not_to have_content("Cancel Timelog"))
-        end
-        #expect(find('#cancel-timelog')).to have_css('.hidden', :visible => false)
+      it "makes cancel timelog button invisible" do
+        expect(page).not_to have_content("CANCEL TIMELOG")
       end
 
-      it "makes the timer invisible", js: true do
-        using_wait_time 10 do
-          expect(page.not_to have_css("#timelog-timer"))
-        end
-        #expect(find('#timelog-timer')).to have_css('.hidden', :visible => false)
+      it "makes the timer invisible" do
+        expect(find("#timelog-timer", visible: false)).not_to be_visible
       end
 
-      it "displays start timelog button", js: true do
-        using_wait_time 10 do
-          expect(page.to have_content("Start Timelog"))
-        end
-        #expect(find('#start-timelog')).not_to have_css('.hidden')
+      it "displays start timelog button" do
+        expect(page).to have_content("START TIMELOG")
       end
 
-      it "does not hide timelog from scratch button", js: true do
-        using_wait_time 10 do
-          expect(page.to have_content("Timelog from scratch"))
-        end
-        #expect(find('Timelog from scratch')).not_to have_css('.hidden')
+      it "does not hide Create New Timelog button" do
+        expect(page).to have_content("CREATE NEW TIMELOG")
       end
-
-      it "prefills new timelog start time field"
-      it "prefills new timelog end time field"
     end
   end
 
   describe "Cancel Timelog button" do
-    it "does not display initially", js: true do
-      using_wait_time 10 do
-        expect(page.not_to have_content("Cancel Timelog"))
-      end
-      #expect(find('#cancel-timelog')).to have_css('.hidden', :visible => false)
+    it "does not display initially" do
+      expect(page).not_to have_content("CANCEL TIMELOG")
     end
 
-    it "displays when timelog timer is active", js: true do
+    it "displays when timelog timer is active" do
       click_link("Start Timelog")
-      using_wait_time 10 do
-        expect(page.to have_content("Cancel Timelog"))
-      end
-      #expect(find('#cancel-timelog')).not_to have_css('.hidden')
+      expect(page).to have_content("CANCEL TIMELOG")
     end
 
     describe "On click" do
-      it "redirects to the logged in home page"
-      it "hides end timelog button"
-      it "hides timelog timer"
-      it "displays start timelog button"
+      before(:each) do 
+        click_link "Start Timelog"
+        click_link "Cancel Timelog"
+      end
+
+      it "hides finish timelog button" do
+        expect(page).not_to have_content("FINISH TIMELOG")
+      end
+
+      it "hides timelog timer" do
+        expect(find('#timelog-timer', visible: false)).not_to be_visible
+      end
+
+      it "displays start timelog button" do
+        expect(find(:css, '#start-timelog')).to be_visible
+      end
     end
   end
 
-	describe "Timelog from scratch button" do
+	describe "Create New Timelog button" do
 	  it "displays initially" do
-	  	using_wait_time 10 do
-        expect(page.to have_content("Timelog from scratch"))
-      end
-      #expect(find('Timelog from scratch')).not_to have_css('.hidden')
+      expect(page).to have_content("CREATE NEW TIMELOG")
 	  end
 
-	  it "redirects to form for new Timelog when clicked" do
-	  	click_link("Timelog from scratch")
+	  it "redirects to form for new Timelog when clicked", js: false do
+	  	click_link("Create New Timelog")
 	  	expect(page.title).to have_content(/New Timelog/)
 	  end
 
-    it "does not hide end timelog button if clicked while timer is active", js: true do
-      click_link("Timelog from scratch")
-      using_wait_time 10 do
-        expect(page.to have_content("Finish Timelog"))
-      end
-      #expect(find('#end-timelog')).not_to have_css('.hidden')
+    it "does not hide finish timelog button if clicked while timer is active" do
+      click_link("Start Timelog")
+      click_link("Create New Timelog")
+      expect(page).to have_content("FINISH TIMELOG")
     end
 	end
 
   describe "Current time clock" do
-  	it "displays the current time", js: true do
-  		using_wait_time 10 do
-        expect(page.to have_css("#current-time"))
-      end
-      #expect(find('#current-time')).not_to have_css('.hidden')
+  	it "displays the current time" do
+      expect(page).to have_css("#current-time")
   	end
 
-  	it "changes every second", js: true do
+  	it "changes every second" do
   		time_1 = page.find('#current-time').text
   		sleep 2
   		expect(page.find('#current-time').text).not_to eq(time_1)
   	end
 
-    it "displays on subsequent page loads", js: true do
+    it "displays on subsequent page loads" do
       click_link("Home")
-      using_wait_time 10 do
-        expect(page.to have_css("#current-time"))
-      end
+      expect(page.find(:css, "#current-time")).to be_visible
     end
   end
 
   describe "Timelog timer" do
-    it "does not display intially"
-    it "displays after start timelog button has been clicked"
-    it "changes every second"
+    it "does not display intially" do
+      expect(find("#timelog-timer", visible: false)).not_to be_visible
+    end
+
+    it "displays after start timelog button has been clicked" do
+      click_link("Start Timelog")
+      expect(find("#timelog-timer")).to be_visible
+    end
+
+    it "changes every second" do
+      click_link("Start Timelog")
+      timelog_timer_text_1 = find("#timelog-timer").text
+      sleep 2
+      expect(find("#timelog-timer").text).not_to eq(timelog_timer_text_1)
+    end
   end
 end

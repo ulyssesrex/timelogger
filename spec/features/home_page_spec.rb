@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 feature "Home page", logins: :available do
-  let(:user_info) { page.find('#user-info-blurb') }
+  let(:user_info) { page.find('#user-blurb') }
   
   feature "User info blurb" do
     before(:each) { general_signup }    
     it { expect(user_info).to have_css("img[src*='gravatar']") }
-    it { expect(user_info).to have_link("Van User, User") }
+    it { expect(user_info).to have_content(/Van User/) }
     it { expect(user_info).to have_content(/Worker/) }
     it { expect(user_info).to have_content(/Organization/) }
   end

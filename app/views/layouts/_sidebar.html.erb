@@ -16,13 +16,13 @@
 			</li>
 			<li class="center-justify">
 				<%= 
-					link_to "Finish Timelog", new_user_timelog_path(current_user), 
+					link_to "Finish Timelog", '#', 
 					class: 'btn btn-default timelog-button-running hidden', id: 'end-timelog' 
 				%>
 			</li>
 			<li class="center-justify">
 				<%= 
-					link_to "Cancel Timelog", user_path(current_user), 
+					link_to "Cancel Timelog", '#',
 					class: 'btn btn-default timelog-button-running hidden', id: 'cancel-timelog' 
 				%>
 			</li>

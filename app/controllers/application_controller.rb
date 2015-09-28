@@ -4,6 +4,16 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   include SessionsHelper
+
+  # Allows use of 'help.pluralize' in controllers.
+  class Helper
+    include Singleton
+    include ActionView::Helpers::TextHelper
+  end 
+
+  def help
+    Helper.instance
+  end 
     
   # Through 'acts_as_tenant' gem,
   # limits all SQL queries to current_user's organization.

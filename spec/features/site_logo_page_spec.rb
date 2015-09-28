@@ -5,11 +5,11 @@ describe "Site Logo Page" do
     before(:each) { visit(root_path) }
     
     it "has a nav bar with login button" do
-      expect(find('.nav')).to have_content("Login")
+      expect(find('#bs-example-navbar-collapse-2')).to have_content("Log in")
     end
     
     it "has a nav bar with no other options besides login" do
-      expect(find('.nav')).not_to have_content("Help")
+      expect(find('#bs-example-navbar-collapse-2')).not_to have_content("Help")
     end
     
     it "has a jumbotron image" do
@@ -30,11 +30,6 @@ describe "Site Logo Page" do
     
     it "has an enroll organization button" do
       expect(page).to have_selector(:link_or_button, "Enroll organization")
-    end
-    
-    it "has a footer with link to creator page" do
-      expect(find('footer'))
-      .to have_selector(:link_or_button, "Dan Wichman-Buescher")
     end
   end 
 end

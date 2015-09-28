@@ -3,7 +3,7 @@ class TimeAllocation < ActiveRecord::Base
   belongs_to :grantholding
   belongs_to :timelog
 
-  def to_grant?(grant)
-  	grantholding.grant == grant
+  def to_grant?(grant_object)
+  	grantholding.grant == grant_object
   end
 end

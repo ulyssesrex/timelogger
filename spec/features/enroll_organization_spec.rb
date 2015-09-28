@@ -16,19 +16,19 @@ feature "Enrolling organization" do
     fill_in("organization_users_attributes_0_email", with: "example@test.com")
     fill_in("organization_users_attributes_0_password", with: "password")
     fill_in("organization_users_attributes_0_password_confirmation", with: "password")
-    click_button "Submit"
+    click_button "Enroll"
   end
   
   def incorrect_enroll_organization_steps
     visit root_path
     click_link 'Enroll organization'
-    click_button "Submit"
+    click_button "Enroll"
   end
   
   def cancel_enroll_organization
     visit root_path
     click_link 'Enroll organization'
-    click_button "Cancel"
+    click_link "Cancel"
   end
   
   feature "Enrolling with correct credentials" do

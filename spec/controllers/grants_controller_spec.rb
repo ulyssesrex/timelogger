@@ -168,7 +168,7 @@ describe GrantsController do
         end
         
         it "redirects to organization page" do
-          expect(response).to redirect_to(organization_path(organization))
+          expect(response).to redirect_to(grants_path)
         end
       end
       
@@ -200,7 +200,7 @@ describe GrantsController do
       end
       
       it "redirects to organization page" do
-        expect(response).to redirect_to(organization_path(organization))
+        expect(response).to redirect_to(grants_path)
       end
     end    
   end
