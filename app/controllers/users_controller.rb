@@ -7,8 +7,6 @@ class UsersController < ApplicationController
     except: [:new, :create]
   before_action :find_user_by_id,  
     only: [:edit, :update, :destroy]
-  # before_action :is_supervisor_or_current_user_or_admin, 
-  #   only: [:show]
   before_action :is_current_user_or_admin, 
     only: [:edit, :update, :destroy]
   before_action :admin,            
@@ -42,7 +40,6 @@ class UsersController < ApplicationController
   
   def show
     @user = current_user    
-    # redirect_to users_path unless @user.activated?
   end
     
   def edit
@@ -146,17 +143,6 @@ class UsersController < ApplicationController
     def find_user_by_email
       @user = User.find_by(email: params[:session][:email]) || current_user
     end
-
-    # def is_supervisor_or_current_user_or_admin
-    #   unless
-    #     current_user.supervisees.include?(@user) ||
-    #     current_user?(@user) ||
-    #     current_user.admin? 
-    #     #...
-    #     flash_error_msg
-    #     redirect_to users_path
-    #   end
-    # end
     
     def is_current_user_or_admin
       unless 
