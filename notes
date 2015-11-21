@@ -1,0 +1,10 @@
+* keyword => one-time key based on employee's email
+* datetime checker
+* homepage, you don't need to know what your own name.
+* make what you did on grants more visible on column display.
+* make calendar input options instead of string regexes
+* 'what i said i'd do the next day' on home page
+* is timer start - timer end cycle just for one grant, typically?
+* if 'finish timelog' is pressed, but timelog isn't filled out, the user needs to have the timelog presented to them the next time they log in (with incomplete fields highlighted) so that that info isn't lost
+* edit info, logout to the right, help down to footer (popup help?)
+* "demo point"
