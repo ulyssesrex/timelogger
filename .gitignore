@@ -12,9 +12,11 @@
 /db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
-log/
+log/development.log
+log/test.log
 !log/.keep
-tmp/
+tmp/cache/assets/
+temp/capybara/
 
 # Ignore secrets.
 /config/secrets.yml
