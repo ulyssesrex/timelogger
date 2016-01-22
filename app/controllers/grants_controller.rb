@@ -29,6 +29,9 @@ class GrantsController < ApplicationController
   
   def update
     @grant = Grant.find_by(params[:id])
+  end
+  
+  def update
     # unless params[:commit] == "Cancel"
       if @grant.update(grant_params)
         flash[:success] = "Grant updated."
