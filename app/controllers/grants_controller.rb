@@ -2,7 +2,6 @@ class GrantsController < ApplicationController
   
   before_action :logged_in
   before_action :set_organization
-  before_action :set_grant, only: [:edit, :update, :destroy]
   before_action :admin
     
   def new
@@ -25,9 +24,11 @@ class GrantsController < ApplicationController
   end
   
   def edit
+    @grant = Grant.find_by(params[:id])
   end
   
   def update
+    @grant = Grant.find_by(params[:id])
     # unless params[:commit] == "Cancel"
       if @grant.update(grant_params)
         flash[:success] = "Grant updated."
@@ -41,6 +42,7 @@ class GrantsController < ApplicationController
   end
   
   def destroy
+    @grant = Grant.find_by(params[:id])
     @organization = Organization.find(@grant.organization_id)
     @grant.destroy
     flash[:success] = "Grant deleted."
@@ -51,10 +53,6 @@ class GrantsController < ApplicationController
   
   def grant_params
     params.require(:grant).permit(:name, :comments, :organization_id)
-  end
-  
-  def set_grant
-    @grant = Grant.find_by(params[:id])
   end
   
   def current_organization
