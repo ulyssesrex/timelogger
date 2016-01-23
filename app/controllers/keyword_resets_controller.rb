@@ -1,9 +1,6 @@
 class KeywordResetsController < ApplicationController
 
   before_action :set_organization,   except: [:new,  :create]
-	before_action :find_organization,  only:   [:edit, :update]
-	before_action :valid_org_scenario, only:   [:edit, :update]
-	before_action :check_expiration,   only:   [:edit, :update]
 
   def new
   end
@@ -25,10 +22,28 @@ class KeywordResetsController < ApplicationController
   end
 
   def edit
+    @admin = User.find_by(email: params[:email])
+    @organization = @admin.organization if @admin
+    unless @organization && @organization.authenticated?(:reset, params[:id])
+      redirect_to root_url
+    end
+    if @organization && @organization.keyword_reset_expired?
+      flash[:danger] = "Password reset has expired."
+      redirect_to new_keyword_reset_url
+    end
   	@reset = params[:id]
   end
 
   def update
+    @admin = User.find_by(email: params[:email])
+    @organization = @admin.organization if @admin
+    unless @organization && @organization.authenticated?(:reset, params[:id])
+      redirect_to root_url
+    end
+    if @organization.keyword_reset_expired?
+      flash[:danger] = "Password reset has expired."
+      redirect_to new_keyword_reset_url
+    end  
     if params[:organization][:password].blank?
       flash.now[:danger] = "Keyword can't be blank."
       render 'edit' and return
@@ -42,25 +57,6 @@ class KeywordResetsController < ApplicationController
   end
 
   private
-
-  	def find_organization
-      @admin = User.find_by(email: params[:email])
-  		@organization = @admin.organization if @admin
-  	end
-
-  	def valid_org_scenario
-  		unless
-  			@organization && @organization.authenticated?(:reset, params[:id])
-  			redirect_to root_url
-  		end
-  	end
-
-    def check_expiration
-      if @organization.keyword_reset_expired?
-        flash[:danger] = "Password reset has expired."
-        redirect_to new_keyword_reset_url
-      end
-    end
 
   	def keyword_params
   		params.require(:organization).permit(:password, :password_confirmation)
