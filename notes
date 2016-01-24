@@ -1,6 +1,8 @@
+* Don't call class methods from views. Move User class methods (and possibly application_helper methods), especially those related to dates and times, into the helper methods. 
+
 * keyword => one-time key based on employee's email
 * datetime checker
-* homepage, you don't need to know what your own name.
+* homepage, you don't need to know what your own name is.
 * make what you did on grants more visible on column display.
 * make calendar input options instead of string regexes
 * 'what i said i'd do the next day' on home page
