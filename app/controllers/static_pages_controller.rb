@@ -1,5 +1,6 @@
 class StaticPagesController < ApplicationController  
   
+  # Found in application_controller.rb
   before_action :logged_in, only: [:help, :admin_help]
   before_action :set_organization, except: [:home]
   
