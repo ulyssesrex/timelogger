@@ -21,7 +21,7 @@ class SupervisionsController < ApplicationController
       @supervision = @user.initiated_supervisions
                        .find_by(supervisor_id: @other_user.id)
 
-    # If you're ending supervising your employee:                   
+    # If you're ending your supervision of your employee:                   
     elsif @other_user.is_supervisee_of?(@user)
       flash[:success] = message_on_delete(:supervisee)
       @supervision = @user.non_initiated_supervisions

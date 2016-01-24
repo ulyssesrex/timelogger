@@ -91,28 +91,6 @@ class TimelogsController < ApplicationController
       format.js
     end
   end
-
-  # def edit
-  #   @timelog = Timelog.find(params[:id])
-  #   @user.grantholdings.each do |gh|
-  #     @timelog.time_allocations.build(grantholding_id: gh.id)
-  #   end
-  #   @start   = @timelog.start_time
-  #   @end     = @timelog.end_time
-  # end
-  
-  # def update
-  #   if @timelog.update(timelog_update_params) &&
-  #     allocation_update_params.map do |i, allocation_hash|
-  #       time_allocation = TimeAllocation.find(allocation_hash[:id])
-  #       time_allocation.update(allocation_hash)
-  #     end
-  #     flash[:success] = "Timelog was updated."
-  #     redirect_to user_timelogs_path(user: @user) and return
-  #   else
-  #     render 'edit'
-  #   end    
-  # end
   
   def destroy
     @timelog.destroy
