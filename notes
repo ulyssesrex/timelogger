@@ -2,6 +2,7 @@
 
 * keyword => one-time key based on employee's email
 * datetime checker
+* export CSVs
 * homepage, you don't need to know what your own name is.
 * make what you did on grants more visible on column display.
 * make calendar input options instead of string regexes

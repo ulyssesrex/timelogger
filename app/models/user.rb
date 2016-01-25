@@ -145,13 +145,11 @@ class User < ActiveRecord::Base
   def total_hours_worked(start, stop)
     start = start.to_time; stop = stop.to_time
     total_seconds = 0
-    timelogs.where(start_time: start..stop,
-                     end_time:   start..stop
-               )
+    timelogs.where(start_time: start..stop, end_time: start..stop)
     .each do |timelog|
       total_seconds += (timelog.end_time.to_i - timelog.start_time.to_i)
     end
-    total_seconds / 3600.0 # Gives time in hours.
+    total_hours = total_seconds / 3600.0
   end
 
   def allocated_time_from(start, stop)
