@@ -13,7 +13,7 @@ describe "Site Logo Page" do
     end
     
     it "has a jumbotron image" do
-      expect(page).to have_xpath("//img[contains(@src,'tree-trunk-rings.jpg')]")
+      expect(page).to have_css("img[src*='tree-trunk-rings']")
     end
     
     it "has catchphrase text" do
