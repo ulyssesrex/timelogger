@@ -1,18 +1,18 @@
 source 'https://rubygems.org'
 
-gem 'rails',                   '4.2.0'
-gem 'sass-rails',             '~> 5.0'
-gem 'uglifier',             '>= 1.3.0'
-gem 'coffee-rails',         '~> 4.1.0'
+gem 'rails'                
+gem 'sass-rails'           
+gem 'uglifier'             
+gem 'coffee-rails'         
 gem 'jquery-rails'          
 gem 'turbolinks'            
-gem 'jbuilder',               '~> 2.0'
-gem 'sdoc',                 '~> 0.4.0', group: :doc
-gem 'bcrypt',               '~> 3.1.7'
-gem 'faker',                   '1.4.2'
+gem 'jbuilder'             
+gem 'sdoc'                 
+gem 'bcrypt'               
+gem 'faker'                
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
-gem 'bootstrap-switch-rails', '~> 3.3.2'
+gem 'bootstrap-switch-rails'
 gem 'kaminari'
 gem 'activesupport'
 gem 'acts_as_tenant'
@@ -20,20 +20,23 @@ gem 'nested_form'
 gem 'jquery-turbolinks'
 gem 'browser-timezone-rails'
 gem 'cocoon'
-gem 'bootstrap-sass', '~> 3.2.0'
+gem 'bootstrap-sass'
 gem 'bootswatch-rails'
 gem 'autoprefixer-rails'
 
 group :development, :test do
   gem 'sqlite3'
   gem 'byebug'
-  gem 'web-console', '~> 2.0'
-  gem 'spring', '~> 1.5.0'
+  gem 'spring'
   gem "rspec-rails"  
   gem "factory_girl_rails"
   gem "capybara"
   gem "selenium-webdriver"
   gem "capybara-email"
+end
+
+group :development do 
+  gem 'web-console'
 end
 
 group :test do  
@@ -44,7 +47,7 @@ group :test do
 end
 
 group :production do
-  gem 'pg',             '0.17.1'
-  gem 'rails_12factor', '0.0.2'
-  gem 'unicorn',        '4.8.3'
+  gem 'pg'       
+  gem 'rails_12factor'
+  gem 'unicorn'      
 end
