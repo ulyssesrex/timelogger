@@ -88,15 +88,15 @@ class User < ActiveRecord::Base
   end
 
   def supervises?(user)
-    self.supervisees.include?(user)
+    supervisees.include?(user)
   end
   
   def has_supervisees?
-    !self.supervisees.empty?
+    !(self.supervisees.empty?)
   end
   
   def is_supervisee_of?(user)
-    self.supervisors.include?(user)
+    supervisors.include?(user)
   end
   
   def add_supervisor(desired_supervisor)

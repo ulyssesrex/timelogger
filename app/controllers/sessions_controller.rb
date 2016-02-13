@@ -6,9 +6,9 @@ class SessionsController < ApplicationController
   # tests for a separate condition, and if that condition is met, a unique
   # redirect happens. Only one redirect or render is allowed per controller
   # action, so the redirects have to 'hide' in separate private methods.
-  before_action :find_user,        only:   [:create]
-  before_action :valid_user,       only:   [:create]
-  before_action :activated_user,   only:   [:create]
+  before_action :find_user,      only: [:create]
+  before_action :valid_user,     only: [:create]
+  before_action :activated_user, only: [:create]
   
   def new
   end
