@@ -1,5 +1,7 @@
 class TimelogsController < ApplicationController
 
+  attr_accessor :start_at, :end_at
+
   before_action :logged_in
   before_action :set_organization
   before_action :find_timelog_by_id, 
@@ -21,7 +23,7 @@ class TimelogsController < ApplicationController
       end_time:    params[:end_time] 
     }.to_query
     set_up_timelog_variables
-    js_redirect_to(new_user_timelog_path(@user) + "?#{query_string}")
+    js_redirect_to(new_user_timelog_path(@user) + "?" + query_string)
   end
   
   def create
@@ -161,9 +163,6 @@ class TimelogsController < ApplicationController
       @user.grantholdings.each do |gh|
         @timelog.time_allocations.build(grantholding_id: gh.id)
       end
-      if params[:start_time] && params[:end_time]
-        @start = parse_timestamp(params[:start_time])
-        @end   = parse_timestamp(params[:end_time])
-      end
+      @timelog.start_at, @timelog.end_at = params[:start_time], params[:end_time]
     end
 end
