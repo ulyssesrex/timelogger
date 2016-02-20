@@ -21,9 +21,7 @@ class TimelogsController < ApplicationController
       end_time:    params[:end_time] 
     }.to_query
     set_up_timelog_variables
-    goto_new_timelog  = "window.location.href="
-    goto_new_timelog += "'#{new_user_timelog_path(@user)}?#{query_string}'" 
-    render js: goto_new_timelog
+    js_redirect_to(new_user_timelog_path(@user) + "?#{query_string}")
   end
   
   def create

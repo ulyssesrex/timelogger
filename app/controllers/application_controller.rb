@@ -41,6 +41,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Redirects user with JS.
+  def js_redirect_to(path)
+    render js: %(window.location.href='#{path}') and return
+  end
+
   # Converts a UNIX timestamp string to H:MM:SS AM/PM, M-D-YYYY
   def parse_timestamp(unix_timestamp)
     d = Time.at(unix_timestamp.to_i)

@@ -176,9 +176,11 @@ class User < ActiveRecord::Base
   end
 
   def timelogs_in_range(start_time, end_time)
-    timelogs
-      .where('start_time >= ?', start_time)
-      .where('end_time <= ?', end_time)
+    timelogs.where(
+      'start_time >= ?', start_time
+    ).where(
+      'end_time <= ?', end_time
+    )
   end
   
 ##### Class Methods 
