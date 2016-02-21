@@ -1,7 +1,5 @@
 class TimelogsController < ApplicationController
 
-  attr_accessor :start_at, :end_at
-
   before_action :logged_in
   before_action :set_organization
   before_action :find_timelog_by_id, 
@@ -163,6 +161,6 @@ class TimelogsController < ApplicationController
       @user.grantholdings.each do |gh|
         @timelog.time_allocations.build(grantholding_id: gh.id)
       end
-      @timelog.start_at, @timelog.end_at = params[:start_time], params[:end_time]
+      @timelog.start_time, @timelog.end_time = params[:start_time], params[:end_time]
     end
 end
