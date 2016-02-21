@@ -3,6 +3,8 @@
 //= require jquery.cookie
 //= require jquery_ujs
 //= require bootstrap-sprockets
+//= require moment
+//= require bootstrap-datetimepicker
 //= require jstz
 //= require turbolinks
 //= require browser_timezone_rails/set_time_zone

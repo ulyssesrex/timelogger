@@ -58,6 +58,8 @@ GEM
     bootstrap-switch-rails (3.3.3)
     bootstrap-will_paginate (0.0.10)
       will_paginate
+    bootstrap3-datetimepicker-rails (4.14.30)
+      momentjs-rails (>= 2.8.1)
     bootswatch-rails (3.3.5)
       railties (>= 3.1)
     browser-timezone-rails (0.0.8)
@@ -147,6 +149,8 @@ GEM
     mime-types (2.99)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
+    momentjs-rails (2.11.0)
+      railties (>= 3.1)
     multi_json (1.11.2)
     nenv (0.2.0)
     nested_form (0.3.2)
@@ -282,6 +286,7 @@ DEPENDENCIES
   bootstrap-sass
   bootstrap-switch-rails
   bootstrap-will_paginate
+  bootstrap3-datetimepicker-rails (~> 4.14.30)
   bootswatch-rails
   browser-timezone-rails
   byebug
@@ -298,6 +303,7 @@ DEPENDENCIES
   jquery-turbolinks
   kaminari
   launchy
+  momentjs-rails (>= 2.9.0)
   nested_form
   pg
   rails
