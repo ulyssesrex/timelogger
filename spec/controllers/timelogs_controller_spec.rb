@@ -69,12 +69,12 @@ describe TimelogsController do
 
       it "sets start_time field value from params" do
         new_timelog_with_params
-        expect(assigns(:start)).not_to be_nil
+        expect(assigns(:timelog).start_time).not_to be_nil
       end
 
       it "sets end_time field value from params" do
         new_timelog_with_params
-        expect(assigns(:end)).not_to be_nil
+        expect(assigns(:timelog).end_time).not_to be_nil
       end
 
       it "doesn't set @timelog attributes when no params" do
