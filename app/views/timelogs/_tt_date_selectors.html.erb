@@ -7,15 +7,8 @@
           label_tag "From", nil, class: "col-lg-2 control-label"
         %>
         <div class="col-lg-10">
-          <%= datetime_select_tag "timelogs_index_from" %>
+          <%= datetime_select "timelogs_index_from" %>
         </div>
-
-<!--           <% two_mondays_ago = User.date_of_last('Monday', weeks=2) %>
-          <%= 
-            text_field_tag "View from", nil, 
-            placeholder: "#{two_mondays_ago.strftime("%m/%d/%Y")}", 
-            class: "form-control", id: 'date-selector-from' 
-          %> -->
       </div>
 
       <div class="form-group col-xs-6">
@@ -23,14 +16,8 @@
           label_tag "Until", nil, class: "col-lg-2 control-label"
         %>
         <div class="col-lg-10">
-          <%= datetime_select_tag "timelogs_index_until" %>
+          <%= datetime_select "timelogs_index_until" %>
         </div>
-<!--           <% today = Time.zone.now %>
-          <%= 
-            text_field_tag "View until", nil, 
-            placeholder: "#{today.strftime("%m/%d/%Y")}", 
-            class: "form-control", id: 'date-selector-until' 
-          %> -->
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController  
   
-  before_action :set_organization, except: [:new, :create]
+  skip_before_action :set_organization, only: [:new, :create]
 
   # The #create action is split into separate before_actions because each
   # tests for a separate condition, and if that condition is met, a unique

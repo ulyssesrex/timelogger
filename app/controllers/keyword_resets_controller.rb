@@ -1,6 +1,7 @@
 class KeywordResetsController < ApplicationController
 
-  before_action :set_organization,   except: [:new,  :create]
+  skip_before_action :set_organization, only: [:new, :create]
+  #before_action :set_organization,   except: [:new,  :create]
 
   def new
   end

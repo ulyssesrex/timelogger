@@ -1,7 +1,7 @@
 class TimelogsController < ApplicationController
 
   before_action :logged_in
-  before_action :set_organization
+  #before_action :set_organization
   before_action :find_timelog_by_id, 
     only: [:show, :edit, :update, :destroy]   
   before_action :find_timelogs_owner, 

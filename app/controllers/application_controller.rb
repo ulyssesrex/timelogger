@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   set_current_tenant_through_filter
+  before_action :set_organization
   protect_from_forgery with: :exception  
 
   include ApplicationHelper

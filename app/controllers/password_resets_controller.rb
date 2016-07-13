@@ -1,5 +1,6 @@
 class PasswordResetsController < ApplicationController
 
+  skip_before_action :set_organization
   before_action :find_user,             only: [:edit, :update]
   before_action :user_can_be_retrieved, only: [:edit, :update]
   before_action :check_expiration,      only: [:edit, :update]
