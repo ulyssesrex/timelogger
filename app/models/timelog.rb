@@ -1,4 +1,5 @@
 class Timelog < ActiveRecord::Base
+
   belongs_to :user
   has_many   :time_allocations, inverse_of: :timelog
   has_many   :grantholdings,
@@ -9,9 +10,10 @@ class Timelog < ActiveRecord::Base
   validates  :user_id,    presence: true
   validates  :start_time, presence: true
   validates  :end_time,   presence: true
-  validate   :well_ordered_times
-  validate   :allocate_no_more_than_timelog
   validates_associated :time_allocations
+
+  validate   :well_ordered_times
+  validate   :allocate_no_more_than_timelog  
 
   # TODO: scope or default_scope?
   default_scope { order(end_time: :asc) }

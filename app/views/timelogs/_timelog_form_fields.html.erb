@@ -1,20 +1,21 @@
 <div class="form-group">
   <%= f.label :start_time, class: "col-lg-2 control-label" %>
   <div class="col-lg-10">
-    <%= f.text_field :start_time, class: 'form-control', value: start, placeholder: "example: 8:45 AM, 7-21-2015" %>
+    <%= f.datetime_select :start_time, class: 'form-control', value: timelog.start_time %>
   </div>
 </div>
 
 <div class="form-group">
   <%= f.label :end_time, class: "col-lg-2 control-label" %>
   <div class="col-lg-10">
-    <%= f.text_field :end_time, class: 'form-control', value: endd, placeholder: "example: 4:59 PM, 7-21-2015" %>
+    <%= f.datetime_select :end_time, class: 'form-control', value: timelog.end_time %>
   </div>
 </div>
 
-<div class="form-group">
+
+<!-- <div class="form-group">
   <%= f.label "General comments", class: "col-lg-2 control-label" %>
   <div class="col-lg-10">
     <%= f.text_area :comments, class: 'form-control', rows: 3, placeholder: "Comments" %>
   </div>
-</div>
+</div> -->

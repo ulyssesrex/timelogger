@@ -1,5 +1,10 @@
 module TimelogsHelper
 
+  def timelogs_owner_header(timelogs_owner)
+    name = current_user?(timelogs_owner) ? "My" : "#{timelogs_owner.first_name}'s"
+    "#{name} Timelogs"
+  end
+
 	# Returns string formatted version of float hours duration.
   def duration_to_hours_display(duration)
     duration = (duration * (60 * 60)).to_i

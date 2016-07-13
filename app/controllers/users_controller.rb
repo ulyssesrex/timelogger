@@ -3,8 +3,8 @@ class UsersController < ApplicationController
   
   before_action :logged_in,        
     except: [:new, :create]
-  before_action :set_organization, 
-    except: [:new, :create]
+  skip_before_action :set_organization, 
+    only: [:new, :create]
   before_action :find_user_by_id,  
     only: [:edit, :update, :destroy]
   before_action :is_current_user_or_admin, 

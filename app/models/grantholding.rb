@@ -1,4 +1,5 @@
 class Grantholding < ActiveRecord::Base
+
   attr_readonly :grant_id
   attr_readonly :user_id
   
@@ -8,6 +9,12 @@ class Grantholding < ActiveRecord::Base
     
   validates :grant_id, presence: true, uniqueness: { scope: :user_id }
   validates :user_id,  presence: true
+
+  after_initialize :set_default_required_hours
+
+  def set_default_required_hours
+    self.required_hours ||= 0.0
+  end
 
   # A grant can't be associated with a user more than once. 
 

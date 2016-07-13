@@ -11,9 +11,8 @@
   <% end %>
 
   <fieldset>
-    <legend>New Timelog</legend>
-    
-    <%= render partial: 'timelog_form_fields', locals: { f: f, start: @start, endd: @end } %>
+    <legend>New Timelog</legend>    
+    <%= render partial: 'timelog_form_fields', locals: { f: f, timelog: @timelog } %>
   </fieldset>
   <br>
 

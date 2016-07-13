@@ -1,7 +1,8 @@
 class OrganizationsController < ApplicationController
   
   before_action :logged_in,         except: [:new, :create]
-  before_action :set_organization,  except: [:new, :create]
+  skip_before_action :set_organization, only: [:new, :create]
+  #before_action :set_organization,  except: [:new, :create]
   before_action :admin,             except: [:new, :create, :show]
   before_action :find_organization, except: [:new, :create]
     

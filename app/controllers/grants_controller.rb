@@ -1,7 +1,7 @@
 class GrantsController < ApplicationController
   
   before_action :logged_in
-  before_action :set_organization
+  #before_action :set_organization
   before_action :admin
     
   def new
@@ -29,11 +29,8 @@ class GrantsController < ApplicationController
   
   def update
     @grant = Grant.find_by(params[:id])
-  end
-  
-  def update
     # unless params[:commit] == "Cancel"
-      if @grant.update(grant_params)
+      if @grant && @grant.update(grant_params)
         flash[:success] = "Grant updated."
         redirect_to grants_path and return
       else

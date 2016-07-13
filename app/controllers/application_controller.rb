@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   set_current_tenant_through_filter
+  before_action :set_organization
   protect_from_forgery with: :exception  
 
   include ApplicationHelper
@@ -39,6 +40,11 @@ class ApplicationController < ActionController::Base
       flash[:danger] = "Please log in."
       redirect_to login_path
     end
+  end
+
+  # Redirects user with JS.
+  def js_redirect_to(path)
+    render js: %(window.location.href='#{path}') and return
   end
 
   # Converts a UNIX timestamp string to H:MM:SS AM/PM, M-D-YYYY

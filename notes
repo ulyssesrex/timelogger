@@ -11,3 +11,29 @@
 * if 'finish timelog' is pressed, but timelog isn't filled out, the user needs to have the timelog presented to them the next time they log in (with incomplete fields highlighted) so that that info isn't lost
 * edit info, logout to the right, help down to footer (popup help?)
 * "demo point"
+
+------
+
+What am I proud of in this application?
+
+* Users can click on a timer button, close the browser window, and timer will continue to work until they open it up and click 'end.'
+* Dealing with nested forms.
+* Writing controller specs. Many don't do this, preferring to let the feature specs speak for themselves. I think it's easier to debug when you've got controller specs.
+* Writing my own AJAX requests.
+* Modeling an office hierarchy within the User model:
+	- Through Supervisions, Users can have supervisors and/or supervisees.
+	- Split Supervisions into aliases 'initiated_supervisions' and 'non_initiated_supervisions' to be able to call a User's supervisors and supervisees separately.
+	- Aliases 'initiated...' 'non_initiated...' refer to a layer of security wherein you can allow someone to see your own information (through 'Add Supervisor'), but you can't just say you are someone else's supervisor and therefore see that person's information (no 'Add Supervisee' button). An 'initiated supervision' refers to a Supervision wherein you are the supervisee and the other User is your supervisor, and vice versa with 'non-initiated.'
+
+
+What would I change for next time?
+
+* Restructure JS into separate files, with /init.js for on page:change trigger for initialization behavior, get rid of include tree . in application.js
+* Get time/date related methods out of models, application_controller, and include solely either in helpers or RubyObjects. This would also free me from having to instantiate model objects in timelog view files.
+* Implement a calendar selector as part of form so that I don't have to parse strings for date information. 
+* Convert all date info to UNIX timestamps.
+* Work with acts_as_tenant better; now I have to call set_organization before every action in every controller sans two UsersController methods (bc when you're creating a User or Organization you don't want the app trying to validate that you're part of a separate organization.)
+
+- 'carrboro coders': group of several area developers working on apps, meet regularly, various skills, design process through deployment and beyond. even though this was unpaid, i included this because I wanted to show my design process for my app and that I wasn't just coding in a vacuum the entire time -- I was working with a team to get stuff done.
+
+- 

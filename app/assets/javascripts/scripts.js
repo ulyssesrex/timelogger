@@ -171,7 +171,7 @@ $(document).ready(function() {
 
 	// Checks if cookie has been set.
 	function isCookie(cname) {
-		return !!getCookie()
+		return !!getCookie(cname);
 	}
 
 //////////////////////////////////////////////////////////////////////////////

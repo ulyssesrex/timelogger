@@ -1,23 +1,12 @@
 <% provide(:title, "View Timelogs") %>
 
-<h2>
-  <% if current_user?(@user) %>
-    <%= "My Timelogs" %>
-  <% else %>
-    <%= "#{@user.first_name}'s Timelogs" %>
-  <% end %>
-</h2>
-
+<h2><%= timelogs_owner_header(@user) %></h2>
 <br>
 
 <div id="timelogs-index">
-  <%= 
-    render partial: "tt_date_selectors", locals: { user: @user } 
-  %>
-
+  <%= render partial: "tt_date_selectors", locals: { user: @user } %>
   <div id="timelogs-table">
-    <%= 
-      render partial: "timelogs_table", 
+    <%= render partial: "timelogs_table", 
       locals: { 
         grantholdings: @grantholdings, 
         user: @user, 

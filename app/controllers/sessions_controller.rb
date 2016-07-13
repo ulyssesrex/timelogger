@@ -1,14 +1,14 @@
 class SessionsController < ApplicationController  
   
-  before_action :set_organization, except: [:new, :create]
+  skip_before_action :set_organization, only: [:new, :create]
 
   # The #create action is split into separate before_actions because each
   # tests for a separate condition, and if that condition is met, a unique
   # redirect happens. Only one redirect or render is allowed per controller
   # action, so the redirects have to 'hide' in separate private methods.
-  before_action :find_user,        only:   [:create]
-  before_action :valid_user,       only:   [:create]
-  before_action :activated_user,   only:   [:create]
+  before_action :find_user,      only: [:create]
+  before_action :valid_user,     only: [:create]
+  before_action :activated_user, only: [:create]
   
   def new
   end
