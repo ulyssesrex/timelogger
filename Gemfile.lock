@@ -5,6 +5,12 @@ GIT
     shoulda-matchers (3.1.0)
       activesupport (>= 4.0.0)
 
+GIT
+  remote: https://github.com/alexpeattie/heroku_secrets.git
+  revision: 717af8e0acf399bc88d2c8c1a7e230023942af0f
+  specs:
+    heroku_secrets (0.0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -298,6 +304,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   guard-rspec
+  heroku_secrets!
   jbuilder
   jquery-rails
   jquery-turbolinks
@@ -322,4 +329,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
