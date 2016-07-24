@@ -1,5 +1,5 @@
 class Organization < ActiveRecord::Base
-  attr_accessor :reset_token
+  attr_accessor :reset_token, :password_digest
   
   has_many :users,   dependent: :destroy
   has_many :grants,  dependent: :destroy
