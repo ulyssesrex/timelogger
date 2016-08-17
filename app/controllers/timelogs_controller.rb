@@ -16,10 +16,7 @@ class TimelogsController < ApplicationController
   end
 
   def end_from_button
-    query_string = { 
-      start_time:  params[:start_time], 
-      end_time:    params[:end_time] 
-    }.to_query
+    query_string = { start_time: params[:start_time], end_time: params[:end_time] }.to_query
     set_up_timelog_variables
     js_redirect_to(new_user_timelog_path(@user) + "?" + query_string)
   end
