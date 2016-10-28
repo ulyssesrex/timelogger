@@ -20,3 +20,7 @@ To be developed before deployment:
  * Should support grants that take percentage of employee's time.
 
 Questions? Comments? Email Dan Wichman-Buescher: danbuescher@gmail.com.
+
+<a href="http://example.com/" target="_blank">Try the demo here.</a>
+<button class="button-save large">Big Fat Button</button>
+
