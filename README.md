@@ -22,6 +22,6 @@ To be developed before deployment:
 Questions? Comments? Email Dan Wichman-Buescher: danbuescher@gmail.com.
 
 <a href="http://example.com/" target="_blank">Try the demo here.</a>
-<button type="button" class="btn btn-primary">Primary</button>
+
 
 
