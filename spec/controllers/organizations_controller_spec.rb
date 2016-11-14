@@ -167,7 +167,7 @@ describe OrganizationsController do
       put :update, id: organization.id, organization: { name: 'Different Name' } 
       organization.reload
     end
-  
+
     describe "#update" do
       before(:each) { log_in admin }      
       before(:each) do |spec|
@@ -176,20 +176,7 @@ describe OrganizationsController do
       
       context "successful update" do
         it "saves the changes to the record", :skip_update do
-          # puts "organization attributes: #{organization.attributes}"
-          # puts "@organization: #{assigns(:organization).attributes}"
-           puts "Sending :update request to OrganizationsController"
-           update_organization
-           puts controller.params
-           puts assigns(:organization).errors.full_messages
-          # puts "Params: #{controller.params}"
-          # puts "Organization params: #{controller.params[:organization]}"
-          # puts "@organization: #{assigns(:organization).attributes}"
-          # puts "Reloading organization from db"
-          # organization.reload
-          # puts "organization attributes: #{organization.attributes}"
-
-          #expect(organization.name).to eq('Different Name')
+          expect { update_organization }.to change { organization.name }.to("Different Name")
         end
         
         it "displays a flash success message" do

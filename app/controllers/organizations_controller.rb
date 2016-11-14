@@ -4,7 +4,7 @@ class OrganizationsController < ApplicationController
   skip_before_action :set_organization, only: [:new, :create]
   #before_action :set_organization,  except: [:new, :create]
   before_action :admin,             except: [:new, :create, :show]
-  before_action :find_organization, except: [:new, :create, :update]
+  before_action :find_organization, except: [:new, :create]
     
   def new
     @organization = Organization.new
@@ -40,7 +40,6 @@ class OrganizationsController < ApplicationController
   
   def update
     # unless params[:commit] == "Cancel"
-      @organization = Organization.find(params[:id])
       if @organization.update(organization_params)
         flash[:success] = "Your organization was successfully updated."
         redirect_to @organization and return
