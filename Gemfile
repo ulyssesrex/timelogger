@@ -34,7 +34,7 @@ group :development, :test do
   gem "rspec-rails"  
   gem "factory_girl_rails"
   gem "capybara"
-  gem "selenium-webdriver"
+  gem "selenium-webdriver", '3.0.1'
   gem "capybara-email"
 end
 
