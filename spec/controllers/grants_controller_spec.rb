@@ -18,7 +18,7 @@ describe GrantsController do
           session[:user_id] = nil
           get :new
         end
-        
+
         it "redirects to login page" do
           expect(response).to redirect_to(login_url)
         end

@@ -1,14 +1,13 @@
 class Organization < ActiveRecord::Base
-  attr_accessor :reset_token, :password_digest
-  
-  has_many :users,   dependent: :destroy
-  has_many :grants,  dependent: :destroy
-    
-  validates :name,     presence: true
-  validates :password, length: { minimum: 6 }, 
-                       allow_blank: true
+  attr_accessor :reset_token
   
   has_secure_password
+
+  has_many :users, dependent: :destroy
+  has_many :grants, dependent: :destroy    
+
+  validates :name, presence: true
+  validates :password, allow_blank: true, length: { minimum: 6 }
   validates_confirmation_of :password
   accepts_nested_attributes_for :users
   

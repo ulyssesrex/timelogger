@@ -224,9 +224,7 @@ describe KeywordResetsController, type: :controller do
         end
 
         before(:each) do |spec|
-          unless spec.metadata[:skip_update]
-            blank_keyword_reset
-          end
+          blank_keyword_reset unless spec.metadata[:skip_update]
         end
 
         it "renders :edit template" do
@@ -234,11 +232,9 @@ describe KeywordResetsController, type: :controller do
         end
 
         it "does not update organization keyword", :skip_update do
-          expect { 
-            blank_keyword_reset 
-          }.not_to change(
-            organization_a, :password_digest
-          )
+          old_password_digest = organization_a.password_digest
+          blank_keyword_reset
+          expect(organization_a.password_digest).to equal(old_password_digest)
         end
       end
 

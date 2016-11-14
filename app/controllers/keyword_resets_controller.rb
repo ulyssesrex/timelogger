@@ -43,7 +43,7 @@ class KeywordResetsController < ApplicationController
     end
     if @organization.keyword_reset_expired?
       flash[:danger] = "Password reset has expired."
-      redirect_to new_keyword_reset_url
+      redirect_to new_keyword_reset_path
     end  
     if params[:organization][:password].blank?
       flash.now[:danger] = "Keyword can't be blank."
