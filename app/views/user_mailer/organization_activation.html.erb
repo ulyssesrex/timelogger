@@ -12,7 +12,7 @@
 		As <%= @organization.name %>'s first user, you have been granted admin status. When you log in you'll be taken to a help screen that will tell you exactly what that means (in a nutshell, you have Timelogger superpowers). If you need help at any other time, just click 'Help' on the navigation bar on the upper right.
 	</li>	
 	<li>
-		<%= link_to "Click here to activate your Timelogger account and log in.", activate_organization_url(@admin, @organization, @organization_token) %>
+		<%= link_to "Click here to activate your Timelogger account and log in.", activate_organization_url(id: @admin.activation_token, organization: @organization, organization_token: @organization.activation_token) %>
 	</li>
 </ol>
 

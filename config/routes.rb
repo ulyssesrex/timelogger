@@ -27,8 +27,8 @@ Rails.application.routes.draw do
 
   resources :organizations, only: [:show]
   
-  get 'activate_organization', to: 'account_activations#edit_organization'
-  get 'activate_user', to: 'account_activations#edit_user'
+  get 'activate_organization/:id', to: 'account_activations#edit_organization', as: 'activate_organization'
+  get 'activate_user/:id', to: 'account_activations#edit_user', as: 'activate_user'
 
   get    'login',  to: 'sessions#new'
   post   'login',  to: 'sessions#create'

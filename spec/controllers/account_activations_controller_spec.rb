@@ -8,12 +8,12 @@ describe AccountActivationsController do
   describe 'GET #edit_organization' do
 
     def edit_organization
-      params = { 
-          id: admin.activation_token, 
-          email: admin.email, 
-          organization_name: organization.name, 
-          organization_token: organization.activation_token
-        } 
+      params = {
+        id: admin.activation_token, 
+        email: admin.email, 
+        organization_name: organization.name, 
+        organization_token: organization.activation_token
+      }
       get :edit_organization, params
     end
 
@@ -98,7 +98,7 @@ describe AccountActivationsController do
     let(:default_params) do 
       {
         id: user.activation_token, 
-        email: user.email, 
+        user_id: user.id, 
         organization_id: organization.id 
       }
     end
@@ -106,7 +106,7 @@ describe AccountActivationsController do
     let(:non_existent_user_params) do
       {
         id: user.activation_token, 
-        email: nil, 
+        user_id: nil, 
         organization_id: organization.id 
       }
     end
@@ -114,7 +114,7 @@ describe AccountActivationsController do
     let(:already_activated_user_params) do
       {
         id: user.activation_token,
-        email: user.email,
+        user_id: user.id,
         organization_id: organization.id
       }
     end
@@ -122,7 +122,7 @@ describe AccountActivationsController do
     let(:unidentified_user_params) do 
       {
         id: User.new_token, 
-        email: user.email, 
+        user_id: user.id, 
         organization_id: organization.id 
       }
     end

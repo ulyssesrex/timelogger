@@ -29,7 +29,7 @@ class UsersController < ApplicationController
       # TODO: does 'authenticated?' failure produce errors on object?
     end
     if @user.save
-      UserMailer.account_activation(@user, @organization).deliver_now
+      UserMailer.account_activation(@user).deliver_now
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url and return
     else

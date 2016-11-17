@@ -13,7 +13,8 @@ module SessionHelpers
     fill_in("user_organization_password", with: "password")
     click_button 'Sign up'
     open_email("example@test.com")
-    current_email.click_link "Activate Timelogger account"
+    #puts current_email.body
+    current_email.click_link "Activate your Timelogger account here"
   end
   
   def admin_signup

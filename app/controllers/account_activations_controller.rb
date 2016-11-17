@@ -11,19 +11,19 @@ class AccountActivationsController < ApplicationController
 
   def edit_user
     @organization = Organization.find(params[:organization_id])
-    @user = @organization.try(:users).try(:find_by, email: params[:email])
-    token = params[:id]
-    auth_activate_and_login_user(@user, token)
+    @user = @organization.try(:users).try(:find, params[:user_id]) if params[:user_id]
+    @user_token = params[:id]
+    auth_activate_and_login_user(@user, @user_token)
   end
 
   private
 
   def auth_activate_and_login_user(user, token)
     if user && !user.activated && user.authenticated?(:activation, token)
-      @user.activate
-      log_in @user
+      user.activate
+      log_in user
       flash[:success] = "Account activated. Welcome, #{@user.first_name}!"
-      redirect_to @user and return
+      redirect_to user and return
     else
       flash[:danger] = "Invalid activation link."
       redirect_to root_path and return
@@ -32,8 +32,8 @@ class AccountActivationsController < ApplicationController
 
   def auth_activate_and_login_admin(admin, admin_token, org, org_token)
     if admin && !admin.activated && admin.authenticated?(:activation, admin_token) && org.authenticated?(:activation, org_token)
-      @admin.activate
-      log_in @admin
+      admin.activate
+      log_in admin
       flash[:success] = "Account activated. Welcome, #{@admin.first_name}!"
       redirect_to admin_help_path and return
     else

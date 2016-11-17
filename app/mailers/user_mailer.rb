@@ -2,10 +2,11 @@ class UserMailer < ApplicationMailer
   helper :mail
   # TODO: password reset mailers.
 
-  def account_activation(user, organization)
+  def account_activation(user)
     @user = user
     @organization = @user.organization
-    #@organization.activation_token ||= Organization.new_token
+    # @organization_id = @user.organization.id
+    # @user_token = user_token
     @greeting = "Hello #{full_name(@user, last_first=false)},"    
     mail to: @user.email, subject: "Activate your Timelogger account"
   end

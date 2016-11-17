@@ -8,7 +8,7 @@ Thanks for enrolling your organization with Timelogger! Here's what you'll need 
 
 3. Visit the address below to activate your Timelogger account and log in.
 
-<%= activate_organization_url(@admin, @organization, @organization_token) %>
+<%= activate_organization_url(id: @admin.activation_token, organization: @organization, organization_token: @organization.activation_token) %>
 
 Happy Logging,
 Timelogger Staff
