@@ -11,7 +11,11 @@ class AccountActivationsController < ApplicationController
 
   def edit_user
     @organization = Organization.find(params[:organization_id])
-    @user = @organization.try(:users).try(:find, params[:user_id]) if params[:user_id]
+    if !params[:user_id].blank?
+      @user = @organization.try(:users).try(:find, params[:user_id])
+    else
+      @user = nil
+    end
     @user_token = params[:id]
     auth_activate_and_login_user(@user, @user_token)
   end
