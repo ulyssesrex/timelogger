@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   end
   
   resources :sessions,            only: [:new, :create, :destroy]
-  resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]  
 
   scope "/admin" do
@@ -28,6 +27,8 @@ Rails.application.routes.draw do
 
   resources :organizations, only: [:show]
   
+  get 'account_activations/:id/', to: 'account_activations#edit'
+
   get    'login',  to: 'sessions#new'
   post   'login',  to: 'sessions#create'
   delete 'logout', to: 'sessions#destroy' 

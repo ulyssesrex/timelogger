@@ -8,7 +8,7 @@ Thanks for enrolling your organization with Timelogger! Here's what you'll need 
 
 3. Visit the address below to activate your Timelogger account and log in.
 
-<%= edit_account_activation_url(@admin.activation_token, email: @admin.email) %>
+<%= account_activations_url(@admin, @organization, @organization_token) %>
 
 Happy Logging,
 Timelogger Staff

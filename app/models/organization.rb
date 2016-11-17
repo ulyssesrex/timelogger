@@ -1,5 +1,5 @@
 class Organization < ActiveRecord::Base
-  attr_accessor :reset_token
+  attr_accessor :reset_token, :activation_token
   
   has_secure_password
 
@@ -26,14 +26,30 @@ class Organization < ActiveRecord::Base
   end
 
   def create_reset_digest
-    self.reset_token = User.new_token
+    self.reset_token = Organization.new_token
     update_columns(
-      reset_digest:  User.digest(reset_token),
+      reset_digest:  Organization.digest(reset_token),
       reset_sent_at: Time.zone.now
     )
   end
 
+  def create_activation_digest
+    self.activation_token  = Organization.new_token
+    self.activation_digest = Organization.digest(activation_token)
+  end
+
   def keyword_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  def Organization.digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ?
+           BCrypt::Engine::MIN_COST :
+           BCrypt::Engine.cost
+    BCrypt::Password.create(string, cost: cost)
+  end
+
+  def Organization.new_token
+    SecureRandom.urlsafe_base64
   end
 end

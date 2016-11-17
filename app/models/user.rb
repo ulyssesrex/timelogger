@@ -111,8 +111,8 @@ class User < ActiveRecord::Base
     non_initiated_supervisions.find_by(supervisee_id: supervisee.id).destroy
   end
   
-  def send_user_activation_email
-    UserMailer.account_activation(self).deliver_now
+  def send_user_activation_email(organization)
+    UserMailer.account_activation(self, organization).deliver_now
   end
 
   def send_password_reset_email

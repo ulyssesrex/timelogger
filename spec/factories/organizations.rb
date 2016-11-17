@@ -5,10 +5,12 @@ FactoryGirl.define do
     name                  'Organization'
     password              'password'
     password_confirmation 'password'
-    password_digest       User.digest('password')
+    password_digest       User.digest('password')    
     
     after(:create) do |organization|
-      organization.users << create(:user, admin: true)      
+      organization.users << create(:user, admin: true)  
+      organization.activation_token  = Organization.new_token
+      organization.update(activation_digest: Organization.digest(organization.activation_token))
     end
     
     factory :organization_with_reset_info do

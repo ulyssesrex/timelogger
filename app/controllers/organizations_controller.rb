@@ -2,7 +2,6 @@ class OrganizationsController < ApplicationController
   
   before_action :logged_in,         except: [:new, :create]
   skip_before_action :set_organization, only: [:new, :create]
-  #before_action :set_organization,  except: [:new, :create]
   before_action :admin,             except: [:new, :create, :show]
   before_action :find_organization, except: [:new, :create]
     
@@ -19,14 +18,16 @@ class OrganizationsController < ApplicationController
       if @organization.save
         @admin = @organization.users.first
         @organization.grant_admin_status_to(@admin)
-        UserMailer.organization_activation(@organization, @admin).deliver_now   
-        msg  = "#{@organization.name} was created."
+        @organization.create_activation_digest && @organization.save
+        @organization_token = organization.activation_token
+        UserMailer.organization_activation(@organization, @admin, @organization_token).deliver_now   
+        msg  = "#{@organization.name} was created. "
         msg += "Please check your email to activate your account."    
         flash[:info] = msg
         redirect_to root_url and return
       else
-        @organization = Organization.new
-        @user = @organization.users.build
+        # @organization = Organization.new
+        # @user = @organization.users.build
         render 'new'
       end
     # end
