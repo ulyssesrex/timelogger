@@ -4,8 +4,7 @@ class UserMailer < ApplicationMailer
 
   def account_activation(user, organization)
     @user = user
-    @organization = organization
-    binding.pry
+    @organization = @user.organization
     #@organization.activation_token ||= Organization.new_token
     @greeting = "Hello #{full_name(@user, last_first=false)},"    
     mail to: @user.email, subject: "Activate your Timelogger account"

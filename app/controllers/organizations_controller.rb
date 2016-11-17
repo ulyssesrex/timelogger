@@ -19,7 +19,7 @@ class OrganizationsController < ApplicationController
         @admin = @organization.users.first
         @organization.grant_admin_status_to(@admin)
         @organization.create_activation_digest && @organization.save
-        @organization_token = organization.activation_token
+        @organization_token = @organization.activation_token
         UserMailer.organization_activation(@organization, @admin, @organization_token).deliver_now   
         msg  = "#{@organization.name} was created. "
         msg += "Please check your email to activate your account."    

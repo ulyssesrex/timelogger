@@ -20,17 +20,16 @@ class UsersController < ApplicationController
   
   def create
     @user = User.new(user_params)
-    @organizations = Organization.all || []
-    organization = Organization.find_by(id: params[:user][:organization_id])
-    if organization && 
-      organization.authenticated?(:password, params[:user][:organization_password])
-      @user.organization_id = organization.id
+    #@organizations = Organization.all || []
+    @organization = Organization.find_by(id: params[:user][:organization_id])
+    if @organization.try(:authenticated?, :password, params[:user][:organization_password])
+      @user.organization_id = @organization.id
     else
       render 'new' and return
       # TODO: does 'authenticated?' failure produce errors on object?
     end
     if @user.save
-      UserMailer.account_activation(@user, organization).deliver_now
+      UserMailer.account_activation(@user, @organization).deliver_now
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url and return
     else
