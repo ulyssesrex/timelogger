@@ -11,7 +11,7 @@ describe SupervisionsController do
     before(:each) do |spec|
       unless spec.metadata[:skip_before]
         log_in supervisee
-        post :create, user_id: current_user.id, supervisor_id: supervisor.id
+        post :create, params: { user_id: current_user.id, supervisor_id: supervisor.id }
       end
     end        
     
@@ -30,7 +30,7 @@ describe SupervisionsController do
     it "creates a supervision", :skip_before do
       log_in supervisee
       expect { 
-        post :create, user_id: current_user.id, supervisor_id: supervisor.id
+        post :create, params: { user_id: current_user.id, supervisor_id: supervisor.id }
       }.to change(Supervision, :count).by(1)
     end
     
@@ -69,7 +69,7 @@ describe SupervisionsController do
     
     before(:each) do |spec|
       unless spec.metadata[:skip_delete_supervisor]
-        delete :destroy, user_id: current_user.id, id: supervisor.id
+        delete :destroy, params: { user_id: current_user.id, id: supervisor.id }
       end
     end
     
@@ -86,7 +86,7 @@ describe SupervisionsController do
       
       before(:each) do
         log_in unsupervised
-        delete :destroy, user_id: current_user.id, id: supervisor.id
+        delete :destroy, params: { user_id: current_user.id, id: supervisor.id }
       end
       
       it "displays a danger flash", :skip_delete_supervisor do
@@ -101,7 +101,7 @@ describe SupervisionsController do
     it "finds the Supervision between 
       current_user and @user", :skip_delete_supervisor do     
       @boss = current_user.supervisors.first
-      delete :destroy, user_id: current_user.id, id: supervisor.id
+      delete :destroy, params: { user_id: current_user.id, id: supervisor.id }
       expect(assigns(:supervision).supervisor).to eq(@boss)
     end
     
@@ -111,9 +111,10 @@ describe SupervisionsController do
           
     it "destroys the supervision", :skip_delete_supervisor do
       expect { 
-        delete :destroy, 
+        delete :destroy, params: {
           user_id: current_user.id, 
           id: supervisor.id
+        }
       }.to change(Supervision, :count).by(-1)
     end
     

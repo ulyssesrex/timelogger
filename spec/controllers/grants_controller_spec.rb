@@ -89,11 +89,11 @@ describe GrantsController do
     
     describe "POST #create" do    
       def create_grant
-        post :create, grant: attributes_for(:grant)
+        post :create, params: { grant: attributes_for(:grant) }
       end  
 
       def attempt_to_create_invalid_grant
-        post :create, grant: attributes_for(:grant, name: nil)
+        post :create, params: { grant: attributes_for(:grant, name: nil) }
       end
       
       before(:each) do |spec| 
@@ -143,7 +143,7 @@ describe GrantsController do
     
     describe "GET #edit" do            
       it "renders the :edit template" do
-        get :edit, id: grant.id
+        get :edit, params: { id: grant.id }
         expect(response).to render_template(:edit)
       end
     end
@@ -151,7 +151,7 @@ describe GrantsController do
     describe "PUT #update" do            
       context "successful update" do
         def update_grant
-          put :update, id: grant.id, grant: { name: 'Updated Name' }
+          put :update, params: { id: grant.id, grant: { name: 'Updated Name' } }
           grant.reload
         end
 
@@ -174,7 +174,7 @@ describe GrantsController do
       
       context "unsuccessful update" do
         it "renders the :edit template" do
-          put :update, id: grant.id, grant: { name: nil }
+          put :update, params: { id: grant.id, grant: { name: nil } }
           expect(response).to render_template(:edit)
         end
       end
@@ -183,7 +183,7 @@ describe GrantsController do
     describe "DELETE #destroy" do
       def delete_grant
         grant
-        delete :destroy, id: grant.id
+        delete :destroy, params: { id: grant.id }
       end
 
       before(:each) { |spec| delete_grant unless spec.metadata[:skip_delete] }
@@ -191,7 +191,7 @@ describe GrantsController do
       it "destroys the grant record", :skip_delete do
         grant
         expect { 
-          delete :destroy, id: grant.id 
+          delete :destroy, params: { id: grant.id } 
         }.to change(Grant, :count).by(-1)
       end
       

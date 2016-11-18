@@ -14,7 +14,7 @@ describe AccountActivationsController do
         organization_name: organization.name, 
         organization_token: organization.activation_token
       }
-      get :edit_organization, params
+      get :edit_organization, params: params
     end
 
     before(:each) do |spec|
@@ -49,7 +49,7 @@ describe AccountActivationsController do
           organization_name: organization.name, 
           organization_token: organization.activation_token
         }  
-      get :edit_organization, params     
+      get :edit_organization, params: params     
       expect(flash[:danger]).to be_present
     end
     
@@ -66,7 +66,7 @@ describe AccountActivationsController do
         organization_name: organization.name, 
         organization_token: organization.activation_token
       } 
-      get :edit_organization, params
+      get :edit_organization, params: params
       expect(flash[:danger]).to be_present
     end
     
@@ -85,7 +85,7 @@ describe AccountActivationsController do
           organization: organization.name, 
           organization_token: organization.activation_token
         } 
-      get :edit_organization, params
+      get :edit_organization, params: params
       expect(response).to redirect_to(root_path)
     end
 
@@ -128,7 +128,7 @@ describe AccountActivationsController do
     end
 
     def edit_user(params)
-      get :edit_user, params
+      get :edit_user, params: params
     end
 
     it 'finds the correct organization from organization_id param' do

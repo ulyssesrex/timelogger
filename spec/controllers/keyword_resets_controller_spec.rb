@@ -8,7 +8,7 @@ describe KeywordResetsController, type: :controller do
 
 
   def edit_keyword_reset
-    get :edit, id: organization_a.reset_token, email: admin_a.email
+    get :edit, params: { id: organization_a.reset_token, email: admin_a.email }
   end
 
   before(:each) { organization; organization_a }
@@ -24,14 +24,14 @@ describe KeywordResetsController, type: :controller do
     describe "#valid_org_scenario" do
       context "@organization is nil" do 
         it "redirects to root" do
-          get :edit, id: organization_a.reset_token, email: 'invalid'
+          get :edit, params: { id: organization_a.reset_token, email: 'invalid' }
           expect(response).to redirect_to(root_path)
         end
       end
 
       context "can't authenticate reset token" do
         it "redirects to root" do
-          get :edit, id: 'invalid', email: admin_a.email
+          get :edit, params: { id: 'invalid', email: admin_a.email }
           expect(response).to redirect_to(root_path)
         end
       end
@@ -48,8 +48,7 @@ describe KeywordResetsController, type: :controller do
       context "reset was sent more than two hours ago" do
         let(:reset_token) { User.new_token }
         let(:org_with_expired_password_reset) do
-          create(
-            :organization, 
+          create(:organization, 
             reset_token: reset_token, 
             reset_digest: User.digest(reset_token), 
             reset_sent_at: 3.hours.ago
@@ -57,17 +56,17 @@ describe KeywordResetsController, type: :controller do
         end
 
         let(:admin_b) do 
-          create(
-            :user, 
+          create(:user, 
             admin: true, 
             organization: org_with_expired_password_reset
           )
         end
 
         before(:each) do
-          get :edit, 
+          get :edit, params: {
             id: org_with_expired_password_reset.reset_token, 
             email: admin_b.email
+          }
         end
 
         it "displays a danger flash" do
@@ -102,7 +101,7 @@ describe KeywordResetsController, type: :controller do
 
     describe "GET #create" do
       def create_keyword_reset
-        post :create, keyword_reset: { email: admin.email }
+        post :create, params: { keyword_reset: { email: admin.email } }
       end 
            
       it "sets an instance of User" do
@@ -128,11 +127,7 @@ describe KeywordResetsController, type: :controller do
         end
 
         it "sends an email to @admin", :skip_create do
-          expect {
-            create_keyword_reset
-          }.to change { 
-            ActionMailer::Base.deliveries.count 
-          }.by(1)
+          expect { create_keyword_reset }.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
 
         it "displays an info flash" do
@@ -146,7 +141,7 @@ describe KeywordResetsController, type: :controller do
 
       context "either/both @admin or @organization are nil" do
         def invalid_create
-          post :create, keyword_reset: { email: 'invalid' }
+          post :create, params: { keyword_reset: { email: 'invalid' } }
         end
 
         before(:each) do |spec|
@@ -180,7 +175,7 @@ describe KeywordResetsController, type: :controller do
 
     describe "GET #edit" do
       def edit_keyword_reset
-        get :edit, id: organization_a.reset_token, email: admin_a.email
+        get :edit, params: { id: organization_a.reset_token, email: admin_a.email }
       end
 
       it "sets @reset from id param" do
@@ -196,14 +191,14 @@ describe KeywordResetsController, type: :controller do
 
     describe "GET #update" do
       def update_keyword_reset
-        put :update, 
+        put :update, params: {
           id: organization_a.reset_token, 
           email: admin_a.email, 
-          organization: 
-          { 
+          organization: { 
             password: 'different', 
             password_confirmation: 'different' 
           }
+        }
       end      
 
       it "sets an instance of User" do
@@ -213,14 +208,14 @@ describe KeywordResetsController, type: :controller do
 
       context "user submits blank keyword" do
         def blank_keyword_reset
-          put :update, 
+          put :update, params: {
             id: organization_a.reset_token, 
             email: admin_a.email, 
-            organization: 
-            { 
+            organization: { 
               password: '', 
               password_confirmation: '' 
-            } 
+            }
+          }
         end
 
         before(:each) do |spec|
@@ -269,14 +264,14 @@ describe KeywordResetsController, type: :controller do
 
       context "update error" do
         def keyword_reset_update_error
-          put :update,   
+          put :update, params: {
             id: organization_a.reset_token, 
             email: admin_a.email, 
-            organization: 
-            { 
+            organization: { 
               password: 'short', 
               password_confirmation: 'short' 
             } 
+          }
         end
 
         it "does not update organization keyword" do

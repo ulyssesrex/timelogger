@@ -51,11 +51,11 @@ describe GrantholdingsController do
     
     describe "#create" do
       def successful_create
-        post :create, { user_id: user.id, grant_ids: [grant.id] }
+        post :create, params: { user_id: user.id, grant_ids: [grant.id] }
       end
       
       def unsuccessful_create
-        post :create, {user_id: user.id, grant_ids: 'invalid'}
+        post :create, params: { user_id: user.id, grant_ids: 'invalid' }
       end
       
       before(:each) do |spec|
@@ -102,7 +102,7 @@ describe GrantholdingsController do
     
     describe "#destroy" do
       def destroy_grantholding
-        delete :destroy, user_id: user.id, id: grantholding.id
+        delete :destroy, params: { user_id: user.id, id: grantholding.id }
       end
 
       before(:each) do |spec|

@@ -6,12 +6,12 @@ describe PasswordResetsController do
   describe 'filters' do
     describe '#valid_user' do     
       it "does not redirect a valid user" do
-        get :edit, id: user.reset_token, email: user.email
+        get :edit, params: { id: user.reset_token, email: user.email }
         expect(response).not_to redirect_to(root_url)
       end
       
       it "redirects an invalid user" do
-        get :edit, id: user.reset_token, email: 'invalid'
+        get :edit, params: { id: user.reset_token, email: 'invalid' }
         expect(response).to redirect_to(root_url)
       end
     end
@@ -23,9 +23,10 @@ describe PasswordResetsController do
         end
         
         def get_expired_reset
-          get :edit, 
-              id:    expired_reset_user.reset_token, 
-              email: expired_reset_user.email
+          get :edit, params: {
+            id: expired_reset_user.reset_token, 
+            email: expired_reset_user.email
+          }
         end
                                  
         it "displays a danger flash" do      
@@ -41,7 +42,7 @@ describe PasswordResetsController do
       
       context 'non-expired password_reset' do        
         it "does not redirect a non-expired password reset" do
-          get :edit, id: user.reset_token, email: user.email
+          get :edit, params: { id: user.reset_token, email: user.email }
           expect(response).not_to redirect_to(root_url)
         end          
       end
@@ -58,7 +59,7 @@ describe PasswordResetsController do
     
     describe 'POST #create' do 
       def create_password_reset
-        post :create, password_reset: { email: user.email }
+        post :create, params: { password_reset: { email: user.email } }
       end
       
       it "creates an instance of user" do
@@ -93,7 +94,7 @@ describe PasswordResetsController do
       
       context "invalid user instance" do
         let(:invalid_password_reset) do
-          post :create, password_reset: { email: 'invalid@wrong.com' }
+          post :create, params: { password_reset: { email: 'invalid@wrong.com' } }
         end
                 
         it "displays a danger flash" do
@@ -110,7 +111,7 @@ describe PasswordResetsController do
     
     describe 'GET #edit' do
       it 'renders the :edit template' do
-        get :edit, id: user.reset_token, email: user.email
+        get :edit, params: { id: user.reset_token, email: user.email }
         expect(response).to render_template(:edit)
       end
     end
@@ -119,13 +120,14 @@ describe PasswordResetsController do
       context "password is blank" do
         
         def user_submits_blank_password
-          post :update, 
-               id:    user.reset_token, 
-               email: user.email, 
-               user: { 
-                 password: '', 
-                 password_confirmation: 'password' 
-               }
+          post :update, params: {
+            id: user.reset_token, 
+            email: user.email, 
+            user: { 
+              password: '', 
+              password_confirmation: 'password' 
+            }
+          }
         end
                 
         it "displays a danger flash" do
@@ -142,13 +144,14 @@ describe PasswordResetsController do
       context "successfully updates password" do
         
         def update_password_reset
-          post :update, 
-               id: user.reset_token, 
-               email: user.email, 
-               user: { 
-                 password: 'new_password', 
-                 password_confirmation: 'new_password' 
-               }
+          post :update, params: {
+            id: user.reset_token, 
+            email: user.email, 
+            user: { 
+              password: 'new_password', 
+              password_confirmation: 'new_password' 
+            }
+          }
         end
                 
         it "updates user's password" do
@@ -176,7 +179,7 @@ describe PasswordResetsController do
       
       context "other error" do
         it "re-renders the :edit template" do
-          post :update, 
+          post :update, params: {
                id: user.reset_token, 
                email: user.email, 
                user: { 
@@ -184,6 +187,7 @@ describe PasswordResetsController do
                  password: 'error', 
                  password_confirmation: 'error'
                }
+              }
           expect(response).to render_template(:edit)
         end
       end
