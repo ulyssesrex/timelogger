@@ -26,6 +26,7 @@ gem 'bootswatch-rails'
 gem 'autoprefixer-rails'
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.14.30'
+gem 'js_cookie_rails'
 gem 'heroku_secrets', git: 'https://github.com/alexpeattie/heroku_secrets.git'
 
 group :development, :test do
