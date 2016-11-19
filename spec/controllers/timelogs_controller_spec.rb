@@ -38,15 +38,16 @@ describe TimelogsController do
   describe 'actions' do
     def new_timelog
       log_in user
-      get :new, user_id: user.id
+      get :new, params: { user_id: user.id }
     end
 
     def new_timelog_with_params
       log_in user
-      get :new, 
+      get :new, params: {
         user_id: user.id, 
         start_time: Time.zone.now, 
         end_time:   Time.zone.now
+      }
     end     
 
     describe 'GET #new' do            
@@ -104,7 +105,7 @@ describe TimelogsController do
       let(:timelog) { build(:timelog) }
       
       def create_timelog_for(user)
-        post :create, user_id: user.id, timelog: timelog_attributes
+        post :create, params: { user_id: user.id, timelog: timelog_attributes }
       end
       
       before(:each) { log_in user }
@@ -158,7 +159,7 @@ describe TimelogsController do
           # Raises validation error on Timelog.
           timelog_attributes[:start_time] = Time.zone.now
           timelog_attributes[:end_time]   = Time.zone.now - 2.hours
-          post :create, user_id: user.id, timelog: timelog_attributes
+          post :create, params: { user_id: user.id, timelog: timelog_attributes }
           expect(response).to render_template(:new)
         end
       end      
@@ -166,7 +167,7 @@ describe TimelogsController do
 
     describe "GET #index" do
       def get_index
-        get :index, user_id: user.id
+        get :index, params: { user_id: user.id }
       end
 
       before(:each) do 
@@ -206,18 +207,20 @@ describe TimelogsController do
 
     describe "POST #filter_index" do
       def index_ordered_old_first
-        post :filter_index, 
+        post :filter_index, params: {
           user_id: user.id, 
           order: 'oldfirst',
           format: :js
+        }
       end
 
       def index_filtered_by_date
-        post :filter_index, 
+        post :filter_index, params: {
           user_id: user.id, 
           start_date_table: '2/1/2014', 
           end_date_table: '2/10/2014',
           format: :js
+        }
       end
 
       it "converts start date param to a Time object" do
@@ -235,7 +238,7 @@ describe TimelogsController do
 
     describe "POST #day_index" do
       def post_day_index
-        post :day_index, user_id: user.id, date: '2014-2-5', format: :js
+        post :day_index, params: { user_id: user.id, date: '2014-2-5', format: :js }
       end
 
       before(:each) do
@@ -259,7 +262,7 @@ describe TimelogsController do
         
     describe 'DELETE #destroy' do        
       def destroy_timelog
-        delete :destroy, user_id: user.id, id: timelog.id
+        delete :destroy, params: { user_id: user.id, id: timelog.id }
       end
       
       before(:each) do

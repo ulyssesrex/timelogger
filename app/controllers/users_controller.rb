@@ -20,11 +20,10 @@ class UsersController < ApplicationController
   
   def create
     @user = User.new(user_params)
-    @organizations = Organization.all || []
-    organization = Organization.find_by(id: params[:user][:organization_id])
-    if organization && 
-      organization.authenticated?(:password, params[:user][:organization_password])
-      @user.organization_id = organization.id
+    #@organizations = Organization.all || []
+    @organization = Organization.find_by(id: params[:user][:organization_id])
+    if @organization.try(:authenticated?, :password, params[:user][:organization_password])
+      @user.organization_id = @organization.id
     else
       render 'new' and return
       # TODO: does 'authenticated?' failure produce errors on object?

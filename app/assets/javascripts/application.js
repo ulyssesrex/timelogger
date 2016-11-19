@@ -1,6 +1,6 @@
 //= require jquery
 //= require jquery.turbolinks
-//= require jquery.cookie
+//= require js.cookie
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require moment

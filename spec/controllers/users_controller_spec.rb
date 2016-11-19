@@ -30,7 +30,7 @@ describe UsersController do
     
     describe '#find_user_by_id' do      
       it "finds the correct user by id" do
-        get :edit, id: user.id
+        get :edit, params: { id: user.id }
         expect(assigns(:user).id).to eq(user.id)
       end
     end
@@ -51,7 +51,7 @@ describe UsersController do
       context "user is not logged in" do        
         before(:each) do
           log_out
-          get :show, id: user.id
+          get :show, params: { id: user.id }
         end
                 
         it 'stores the url of the attempted GET request' do
@@ -60,7 +60,7 @@ describe UsersController do
 
         it "does not store request's url unless it is a GET" do
           session[:forwarding_url] = nil
-          post :update, id: user.id, user: { first_name: 'Whippy' }
+          post :update, params: { id: user.id, user: { first_name: 'Whippy' } }
           expect(session[:forwarding_url]).to be_nil
         end
         
@@ -77,19 +77,19 @@ describe UsersController do
     describe '#is_user_or_admin' do      
       it "passes when current user is user" do
         log_in user
-        get :edit, id: user.id
+        get :edit, params: { id: user.id }
         expect(response).to render_template(:edit)
       end
       
       it "passes when current user is admin" do
         log_in admin
-        get :edit, id: user.id
+        get :edit, params: { id: user.id }
         expect(response).to render_template(:edit)
       end
 
       it "doesn't pass when current user is neither user nor admin" do
         log_in other_user
-        get :edit, id: user.id
+        get :edit, params: { id: user.id }
         expect(response).to redirect_to(user_path(other_user))
       end
     end
@@ -124,7 +124,7 @@ describe UsersController do
   
     describe "POST #create" do        
       def create_user
-        post :create, user: attributes_for(:user, organization_id: organization.id)
+        post :create, params: { user: attributes_for(:user, organization_id: organization.id) }
       end
           
       before(:each) do |spec|
@@ -159,7 +159,7 @@ describe UsersController do
 
       context "unsuccessful user creation" do              
         it "renders the :new template" do
-          post :create, user: attributes_for(:user, :new, password: nil)
+          post :create, params: { user: attributes_for(:user, :new, password: nil) }
           expect(response).to render_template :new
         end
       end
@@ -187,7 +187,7 @@ describe UsersController do
       before(:each) do 
         user
         log_in user
-        get :edit, id: user.id
+        get :edit, params: { id: user.id }
       end
     
       it "assigns the requested user to @user" do
@@ -206,7 +206,7 @@ describe UsersController do
       end
       
       def update_user
-        put :update, id: user.id, user: { first_name: 'Different' }
+        put :update, params: { id: user.id, user: { first_name: 'Different' } }
       end      
     
       it "assigns the requested user to @user" do
@@ -234,7 +234,7 @@ describe UsersController do
     
       context "unsuccessful attributes update" do        
         def update_user_unsuccessfully
-          put :update, id: user.id, user: { first_name: nil }
+          put :update, params: { id: user.id, user: { first_name: nil } }
           user.reload
         end
       
@@ -256,7 +256,7 @@ describe UsersController do
         unless spec.metadata[:skip_show]
           user 
           log_in user
-          get :show, id: user.id
+          get :show, params: { id: user.id }
         end
       end
     
@@ -274,18 +274,18 @@ describe UsersController do
             
       it "destroys the requested user" do
         expect {
-          delete :destroy, { id: user.id }
+          delete :destroy, params: { id: user.id }
         }.to change(User, :count).by(-1)
       end
     
       it "displays a success flash" do
-        delete :destroy, { id: user.id }
+        delete :destroy, params: { id: user.id }
         expect(flash[:success]).not_to be_empty
       end
       
       it "redirects to root_url" do
         # Delete your own profile.
-        delete :destroy, { id: user.id }
+        delete :destroy, params: { id: user.id }
         expect(response).to redirect_to(root_url)
       end
     end
@@ -332,7 +332,7 @@ describe UsersController do
     describe "DELETE #delete_other_user" do
       def delete_other_user
         admin; user; log_in admin
-        delete :delete_other_user, user_ids: [user.id]
+        delete :delete_other_user, params: { user_ids: [user.id] }
       end
 
       before(:each) do |spec|
@@ -349,7 +349,7 @@ describe UsersController do
         admin; user
         log_in admin
         expect do 
-          delete :delete_other_user, user_ids: [user.id]
+          delete :delete_other_user, params: { user_ids: [user.id] }
         end.to change(User, :count).by(-1)
       end
 
@@ -365,13 +365,13 @@ describe UsersController do
         it "does not delete user", :skip_delete do
           expect do
             user; log_in user
-            delete :delete_other_user, user_ids: [other_user.id]
+            delete :delete_other_user, params: { user_ids: [other_user.id] }
           end.not_to change(User, :all)
         end
 
         it "redirects to user page", :skip_delete do
           user; other_user; log_in user
-          delete :delete_other_user, user_ids: [other_user.id]
+          delete :delete_other_user, params: { user_ids: [other_user.id] }
           expect(response).to redirect_to(user_path(current_user))
         end
       end
@@ -379,12 +379,12 @@ describe UsersController do
       context "no users selected" do
         it "does not delete any users" do
           expect { 
-            delete :delete_other_user, user_ids: [] 
+            delete :delete_other_user, params: { user_ids: [] }
           }.not_to change(User, :count)
         end
 
         it "redirects to delete other user page" do
-          delete :delete_other_user, user_ids: []
+          delete :delete_other_user, params: { user_ids: [] }
           expect(response).to redirect_to(delete_user_path)
         end
       end
@@ -428,7 +428,7 @@ describe UsersController do
     describe "PUT #make_admin" do
       def grant_admin_status_to(user)
         admin; user; log_in admin
-        put :make_admin, user_ids: [user.id]
+        put :make_admin, params: { user_ids: [user.id] }
         user.reload
       end
 
@@ -451,7 +451,7 @@ describe UsersController do
       context "current user is not admin" do
         def no_admin_for_you
           user; log_in user
-          put :make_admin, user_ids: [user.id]
+          put :make_admin, params: { user_ids: [user.id] }
           user.save
         end
 

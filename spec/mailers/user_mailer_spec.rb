@@ -16,7 +16,7 @@ RSpec.describe UserMailer, type: :mailer do
   end
   
   describe "#account_activation" do
-    let(:mail) { UserMailer.account_activation(user) }
+    let(:mail) { UserMailer.account_activation(user, organization) }
     
     before(:each) do |spec|
       mail unless spec.metadata[:skip_before]

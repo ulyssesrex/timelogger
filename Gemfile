@@ -20,11 +20,13 @@ gem 'nested_form'
 gem 'jquery-turbolinks'
 gem 'browser-timezone-rails'
 gem 'cocoon'
+gem 'pry-rails'
 gem 'bootstrap-sass'
 gem 'bootswatch-rails'
 gem 'autoprefixer-rails'
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.14.30'
+gem 'js_cookie_rails'
 gem 'heroku_secrets', git: 'https://github.com/alexpeattie/heroku_secrets.git'
 
 group :development, :test do
@@ -34,8 +36,9 @@ group :development, :test do
   gem "rspec-rails"  
   gem "factory_girl_rails"
   gem "capybara"
-  gem "selenium-webdriver"
+  gem "selenium-webdriver", '3.0.1'
   gem "capybara-email"
+  gem 'rails-controller-testing'
 end
 
 group :development do 

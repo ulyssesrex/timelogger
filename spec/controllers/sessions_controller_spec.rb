@@ -5,20 +5,23 @@ describe SessionsController do
   let(:user) { create(:user, :with_remembering, organization: organization) }
   
   def create_session(user)
-    post :create, session: { 
-                    email: user.email, 
-                    password:    'password', 
-                    remember_me: '0' 
-                  }
+    post :create, params: {
+      session: { 
+        email: user.email, 
+        password: 'password', 
+        remember: '0' 
+      }
+    }
   end
 
   before(:each) { organization }
   
-  describe 'filters' do          
-    describe 'find_user' do      
+  describe 'filters' do
+    describe 'find_user' do
       before(:each) { create_session(user) }
       
       it 'finds a user based on the email param' do
+        #binding.pry
         expect(assigns(:user).email).to eq(user.email)
       end
       
@@ -35,11 +38,13 @@ describe SessionsController do
         
       context "invalid user" do        
         def create_session_badly
-          post :create, session: { 
-                          email: 'invalid', 
-                          password: 'password', 
-                          remember_me: '0' 
-                        }
+          post :create, params: {
+            session: { 
+              email: 'invalid', 
+              password: 'password', 
+              remember_me: '0' 
+            }
+          }
         end
         
         before(:each) { create_session_badly }
@@ -94,13 +99,13 @@ describe SessionsController do
       
       context "remember me is checked" do
         it "remembers the user" do
-          post :create, 
-            session: 
-            { 
+          post :create, params: {
+            session: { 
               email: user.email, 
               password: 'password', 
               remember: '1' 
             }
+          }
           expect(cookies[:remember_token]).not_to be_nil
         end          
       end

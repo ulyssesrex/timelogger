@@ -217,7 +217,7 @@ describe User do
       context '#send_user_activation_email' do
         it 'sends an email to the user' do
           expect { 
-            user.send_user_activation_email 
+            user.send_user_activation_email(user.organization) 
           }.to change { ActionMailer::Base.deliveries.size }.by(1)
         end
       end

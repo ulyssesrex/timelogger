@@ -1,10 +1,11 @@
 require 'rails_helper'
 
-feature "Home page", logins: :available do
-  let(:user_info) { page.find('#user-blurb') }
-  
+feature "Home page", logins: :available do  
+
   feature "User info blurb" do
-    before(:each) { general_signup }    
+    let(:user_info) { page.find('#user-blurb') }
+    before(:each) { general_signup }   
+    #it { puts page.html } 
     it { expect(user_info).to have_css("img[src*='gravatar']") }
     it { expect(user_info).to have_content(/Van User/) }
     it { expect(user_info).to have_content(/Worker/) }
@@ -14,10 +15,9 @@ feature "Home page", logins: :available do
   feature "Admin info blurb" do
     before(:each) do
       admin_signup 
-      click_link 'Home'
     end
     
-    it { expect(user_info).to have_content(/Admin/) }
+    it { puts page.text }
   end
   
   feature "Grants table" do

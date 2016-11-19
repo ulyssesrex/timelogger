@@ -4,7 +4,7 @@
 	Thanks for signing up for Timelogger! Click on the link below to activate your account:
 </p>
 
-<%= link_to "Activate Timelogger account", edit_account_activation_url(@user.activation_token, email: @user.email) %>
+<%= link_to "Activate your Timelogger account here", activate_user_url(id: @user.activation_token, user_id: @user.id, organization_id: @organization.id) %>
 
 <p>
 	Happy logging,

@@ -12,9 +12,7 @@ Rails.application.routes.draw do
   end
   
   resources :sessions,            only: [:new, :create, :destroy]
-  resources :account_activations, only: [:edit]
-  resources :password_resets,     only: [:new, :create, :edit, :update]
-  resources :organizations,       only: [:show]
+  resources :password_resets,     only: [:new, :create, :edit, :update]  
 
   scope "/admin" do
     get    'admin_help',  to: 'static_pages#admin_help'
@@ -26,7 +24,12 @@ Rails.application.routes.draw do
     resources :grants,         except: [:show]
     resources :organizations,  except: [:show, :index]
   end
+
+  resources :organizations, only: [:show]
   
+  get 'activate_organization/:id', to: 'account_activations#edit_organization', as: 'activate_organization'
+  get 'activate_user/:id', to: 'account_activations#edit_user', as: 'activate_user'
+
   get    'login',  to: 'sessions#new'
   post   'login',  to: 'sessions#create'
   delete 'logout', to: 'sessions#destroy' 

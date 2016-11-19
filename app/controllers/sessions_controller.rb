@@ -33,7 +33,7 @@ class SessionsController < ApplicationController
     def valid_user
       unless @user && @user.authenticate(params[:session][:password])
         flash.now[:danger] = "Invalid email and/or password."
-        render 'new'
+        render 'new' and return
       end
     end
     
@@ -45,7 +45,7 @@ class SessionsController < ApplicationController
         # TODO: Perhaps add a link here to generate another activation email instead.
         # This would most likely be a POST UsersController#create action.
         flash[:warning] = message
-        redirect_to root_url
+        redirect_to root_url and return
       end
     end
 end

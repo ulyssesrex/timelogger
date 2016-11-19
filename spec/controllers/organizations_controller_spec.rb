@@ -29,7 +29,7 @@ describe OrganizationsController do
   end
   
   def create_organization
-    post :create, organization: organization_attributes
+    post :create, params: { organization: organization_attributes }
   end
   
   def show_organization
@@ -40,13 +40,10 @@ describe OrganizationsController do
     get :edit, id: organization.id
   end
   
-  def update_organization
-    put :update, id: organization.id, organization: { name: 'Different Name' } 
-    organization.reload
-  end
+
   
   def delete_organization
-    delete :destroy, id: organization.id
+    delete :destroy, params: { id: organization.id }
   end
   
   describe "filters" do
@@ -130,7 +127,7 @@ describe OrganizationsController do
 
       context "unsuccessful save" do
         def invalid_create
-          post :create, organization: invalid_attributes
+          post :create, params: { organization: invalid_attributes }
         end
 
         it "does not save a new Organization record" do
@@ -166,6 +163,11 @@ describe OrganizationsController do
       end
     end
     
+    def update_organization
+      put :update, params: { id: organization.id, organization: { name: 'Different Name' } } 
+      organization.reload
+    end
+
     describe "#update" do
       before(:each) { log_in admin }      
       before(:each) do |spec|
@@ -174,9 +176,7 @@ describe OrganizationsController do
       
       context "successful update" do
         it "saves the changes to the record", :skip_update do
-          expect {
-            update_organization
-          }.to change(organization, :name).to('Different Name')
+          expect { update_organization }.to change { organization.name }.to("Different Name")
         end
         
         it "displays a flash success message" do
@@ -190,11 +190,10 @@ describe OrganizationsController do
       
       context "unsuccessful update" do
         let(:unsuccessful_update) do
-          put :update, 
+          put :update, params: {
             id: organization.id, 
-            organization: { 
-              name: '' 
-            }
+            organization: { name: '' }
+          }
         end
         
         it "does not save the changes to the record", :skip_update do

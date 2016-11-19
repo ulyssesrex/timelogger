@@ -27,7 +27,7 @@ describe Organization do
   
   describe "validations" do
     let(:no_name_org)     { build(:organization, name: nil) }
-    let(:no_password_org) { build(:organization, password: nil) }  
+    let(:no_password_org) { build(:organization, password: nil) }
   
     it "requires presence of name" do
       expect(no_name_org).not_to be_valid
@@ -35,6 +35,12 @@ describe Organization do
     
     it "requires presence of keyword" do
       expect(no_password_org).not_to be_valid
+    end
+
+    it "does not require password upon update" do
+      updated_params = { name: "Different Name" }
+      org.update(updated_params)
+      expect(org).to be_valid
     end
   end
 end
